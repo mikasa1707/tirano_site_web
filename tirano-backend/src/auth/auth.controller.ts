@@ -1,0 +1,33 @@
+import { Controller, Post, Body, Get } from '@nestjs/common';
+import { AuthService } from './auth.service';
+import { LoginDto } from './dto/login.dto';
+import { Public } from './decorators/public.decorator';
+import { CurrentUser } from './decorators/current-user.decorator';
+import { RefreshTokenDto } from './dto/refresh-token.dto';
+
+@Controller('auth')
+export class AuthController {
+  constructor(private authService: AuthService) {}
+
+  @Public()
+  @Post('login')
+  login(@Body() dto: LoginDto) {
+    return this.authService.login(dto);
+  }
+
+  @Get('me')
+  me(@CurrentUser() user: any) {
+    return this.authService.me(user);
+  }
+
+  @Post('refresh')
+  @Public()
+  refresh(@Body() dto: RefreshTokenDto) {
+    return this.authService.refreshToken(dto.refresh_token);
+  }
+
+  @Post('logout')
+  logout(@CurrentUser() user: any) {
+    return this.authService.logout(user.id);
+  }
+}
