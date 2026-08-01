@@ -1,9 +1,13 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 @Component({
   selector: 'app-video-player',
-  imports: [],
+
+  standalone: true,
+
   templateUrl: './video-player.html',
-  styleUrl: './video-player.scss',
 })
-export class VideoPlayer {}
+export class VideoPlayer {
+  @Input()
+  url = '';
+}

@@ -1,0 +1,13 @@
+<ul class="list-group">
+  @for (item of items; track item) {
+    <li class="list-group-item">
+      <strong>
+        {{ item.date }}
+      </strong>
+
+      <br />
+
+      {{ item.title }}
+    </li>
+  }
+</ul>

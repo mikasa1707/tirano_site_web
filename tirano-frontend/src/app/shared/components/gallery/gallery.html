@@ -1,1 +1,42 @@
-<p>gallery works!</p>
+<div class="row g-3">
+  @for (item of items; track item.id) {
+    <div class="col-6 col-md-4 col-lg-3">
+      <div class="card h-100 shadow-sm" (click)="select.emit(item)" style="cursor: pointer">
+        @if (item.type === 'IMAGE') {
+          <img
+            [src]="item.url"
+            [alt]="item.title ?? 'Image'"
+            class="card-img-top"
+            style="height: 220px; object-fit: cover"
+          />
+        }
+
+        @if (item.type === 'VIDEO') {
+          <div
+            class="d-flex justify-content-center align-items-center bg-light"
+            style="height: 220px"
+          >
+            <i class="fa-solid fa-video fa-3x text-primary"></i>
+          </div>
+        }
+
+        @if (item.type === 'PDF') {
+          <div
+            class="d-flex justify-content-center align-items-center bg-light"
+            style="height: 220px"
+          >
+            <i class="fa-solid fa-file-pdf fa-3x text-danger"></i>
+          </div>
+        }
+
+        @if (item.title) {
+          <div class="card-body p-2">
+            <p class="mb-0 small text-muted">
+              {{ item.title }}
+            </p>
+          </div>
+        }
+      </div>
+    </div>
+  }
+</div>

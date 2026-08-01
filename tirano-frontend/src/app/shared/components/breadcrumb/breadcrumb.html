@@ -1,0 +1,18 @@
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    @for (item of items; track item.label) {
+      <li class="breadcrumb-item" [class.active]="$last">
+        @if (item.url && !$last) {
+          <a [routerLink]="item.url">
+            {{ item.label }}
+          </a>
+
+        } @else {
+          <span>
+            {{ item.label }}
+          </span>
+        }
+      </li>
+    }
+  </ol>
+</nav>

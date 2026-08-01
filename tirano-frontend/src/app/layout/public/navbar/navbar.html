@@ -1,0 +1,63 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
+  <div class="container">
+    <!-- LOGO -->
+
+    <a class="navbar-brand fw-bold" routerLink="/">
+      <i class="fa-solid fa-building text-primary me-2"></i>
+
+      Tirano
+    </a>
+
+    <!-- MOBILE BUTTON -->
+
+    <button
+      class="navbar-toggler"
+      type="button"
+      data-bs-toggle="collapse"
+      data-bs-target="#publicNavbar"
+    >
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <!-- MENU -->
+
+    <div class="collapse navbar-collapse" id="publicNavbar">
+      <ul class="navbar-nav ms-auto">
+        <li class="nav-item">
+          <a
+            class="nav-link"
+            routerLink="/"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+          >
+            Accueil
+          </a>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/services" routerLinkActive="active"> Services </a>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/projects" routerLinkActive="active"> Projets </a>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/products" routerLinkActive="active"> Produits </a>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/articles" routerLinkActive="active"> Actualités </a>
+        </li>
+
+        <li class="nav-item ms-lg-3">
+          <a class="btn btn-primary" routerLink="/contact">
+            <i class="fa-solid fa-envelope me-2"></i>
+
+            Contact
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>

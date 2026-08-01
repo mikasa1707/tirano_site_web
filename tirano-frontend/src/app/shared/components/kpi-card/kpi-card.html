@@ -1,0 +1,48 @@
+<div class="card shadow-sm border-0 h-100">
+  <div class="card-body">
+    <div class="d-flex justify-content-between align-items-start">
+      <div>
+        <small class="text-muted">
+          {{ title }}
+        </small>
+
+        <h2 class="fw-bold mt-2 mb-1">
+          {{ value }}
+        </h2>
+
+        @if (subtitle) {
+          <small class="text-muted">
+            {{ subtitle }}
+          </small>
+        }
+      </div>
+
+      <div>
+        <span class="fs-3" [class]="'text-' + color">
+          <i class="fa-solid" [class]="icon"> </i>
+        </span>
+      </div>
+    </div>
+
+    @if (trend !== undefined) {
+      <hr />
+
+      <small>
+        @if (trend >= 0) {
+          <span class="text-success">
+            <i class="fa-solid fa-arrow-trend-up me-1"></i>
+
+            +{{ trend }}%
+          </span>
+
+        } @else {
+          <span class="text-danger">
+            <i class="fa-solid fa-arrow-trend-down me-1"></i>
+
+            {{ trend }}%
+          </span>
+        }
+      </small>
+    }
+  </div>
+</div>

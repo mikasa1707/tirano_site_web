@@ -1,1 +1,39 @@
-<p>entity-picker works!</p>
+<button type="button" class="btn btn-outline-primary" (click)="open()">
+  <i class="fa-solid fa-user-plus"></i>
+  {{ config.title }}
+</button>
+
+<app-modal [title]="config.title" [show]="showModal" (closed)="close()">
+  @if (loading) {
+    <div class="text-center p-4">
+      <div class="spinner-border"></div>
+    </div>
+  } @else {
+    <app-data-table
+      [columns]="config.columns"
+      [data]="items"
+      [selectable]="true"
+      [selectionMode]="config.multiple ? 'multiple' : 'single'"
+      [selected]="selected"
+      (selectedChange)="selected = $event"
+    >
+    </app-data-table>
+
+    <app-pagination
+      [page]="page"
+      [totalPages]="totalPages"
+      [total]="total"
+      [limit]="limit"
+      (pageChange)="changePage($event)"
+      (limitChange)="changeLimit($event)"
+    >
+    </app-pagination>
+  }
+
+  <ng-content></ng-content>
+
+  <div modal-footer>
+    <button type="button" class="btn btn-secondary" (click)="close()">Annuler</button>
+    <button type="button" class="btn btn-primary" (click)="validate()">Valider</button>
+  </div>
+</app-modal>

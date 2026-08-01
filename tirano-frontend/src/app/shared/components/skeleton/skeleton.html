@@ -1,0 +1,87 @@
+@if (type === 'card') {
+  <div class="card">
+    <div class="placeholder-glow">
+      <div class="placeholder col-12" style="height: 220px"></div>
+    </div>
+
+    <div class="card-body">
+      <p class="placeholder-glow">
+        <span class="placeholder col-8"></span>
+      </p>
+
+      <p class="placeholder-glow">
+        <span class="placeholder col-12"></span>
+
+        <span class="placeholder col-10"></span>
+
+        <span class="placeholder col-7"></span>
+      </p>
+    </div>
+  </div>
+}
+
+@if (type === 'table') {
+  <table class="table">
+    <tbody>
+      @for (row of [].constructor(rows); track $index) {
+        <tr>
+          <td>
+            <span class="placeholder col-12"></span>
+          </td>
+
+          <td>
+            <span class="placeholder col-12"></span>
+          </td>
+
+          <td>
+            <span class="placeholder col-8"></span>
+          </td>
+        </tr>
+      }
+    </tbody>
+  </table>
+}
+
+@if (type === 'text') {
+  @for (row of [].constructor(rows); track $index) {
+    <p class="placeholder-glow">
+      <span class="placeholder col-12"></span>
+    </p>
+  }
+}
+
+@if (type === 'avatar') {
+  <div class="d-flex align-items-center gap-3">
+    <div class="placeholder rounded-circle" style="width: 60px; height: 60px"></div>
+
+    <div class="flex-grow-1">
+      <p class="placeholder-glow">
+        <span class="placeholder col-8"></span>
+      </p>
+
+      <p class="placeholder-glow">
+        <span class="placeholder col-5"></span>
+      </p>
+    </div>
+  </div>
+}
+
+@if (type === 'dashboard') {
+  <div class="row g-3">
+    @for (card of [1, 2, 3, 4]; track card) {
+      <div class="col-md-3">
+        <div class="card">
+          <div class="card-body">
+            <p class="placeholder-glow">
+              <span class="placeholder col-6"></span>
+            </p>
+
+            <h2 class="placeholder-glow">
+              <span class="placeholder col-8"></span>
+            </h2>
+          </div>
+        </div>
+      </div>
+    }
+  </div>
+}

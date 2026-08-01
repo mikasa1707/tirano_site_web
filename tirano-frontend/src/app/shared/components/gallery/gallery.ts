@@ -1,9 +1,14 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Media } from '../../../core/models/media';
 
 @Component({
   selector: 'app-gallery',
-  imports: [],
+  standalone: true,
   templateUrl: './gallery.html',
-  styleUrl: './gallery.scss',
 })
-export class Gallery {}
+export class Gallery {
+  @Input()
+  items: Media[] = [];
+  @Output()
+  select = new EventEmitter<Media>();
+}

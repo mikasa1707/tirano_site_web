@@ -1,27 +1,49 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 
+import { ApiService } from './api.service';
+
+const TOKEN_KEY = 'token_tirano';
+
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  constructor(private router: Router) {}
+  constructor(
+    private api: ApiService,
+    private router: Router,
+  ) {}
+
+  login(data: any) {
+    return this.api.post<any>('auth/login', data);
+  }
 
   saveToken(token: string) {
-    localStorage.setItem('token', token);
+    if (typeof window === 'undefined') {
+      return;
+    }
+
+    window.localStorage.setItem(TOKEN_KEY, token);
   }
 
-  getToken() {
-    return localStorage.getItem('token');
+  getToken(): string | null {
+    if (typeof window === 'undefined') {
+      return null;
+    }
+
+    return window.localStorage.getItem(TOKEN_KEY);
   }
 
-  isAuthenticated() {
-    return !!this.getToken();
+  isAuthenticated(): boolean {
+    const token = this.getToken();
+    return !!token;
   }
 
   logout() {
-    localStorage.removeItem('token');
+    if (typeof window !== 'undefined') {
+      window.localStorage.removeItem(TOKEN_KEY);
+    }
 
-    this.router.navigate(['/login']);
+    this.router.navigate(['/admin/login']);
   }
 }

@@ -1,0 +1,13 @@
+<div class="mb-5" [class.text-center]="centered">
+  <h2 class="fw-bold">
+    {{ title }}
+  </h2>
+
+  @if (subtitle) {
+    <p class="text-muted lead">
+      {{ subtitle }}
+    </p>
+  }
+
+  <div class="border-bottom border-primary mx-auto" style="width: 80px"></div>
+</div>

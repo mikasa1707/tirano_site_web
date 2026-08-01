@@ -1,0 +1,21 @@
+<div class="container">
+  @if (content.image) {
+    <img class="img-fluid rounded mb-4 w-100" [src]="content.image" />
+  }
+
+  <h1 class="mb-3">
+    {{ content.title }}
+  </h1>
+
+  <div class="text-muted mb-4">
+    {{ content.createdAt }}
+  </div>
+
+  <app-rich-viewer [html]="content.content ?? ''"> </app-rich-viewer>
+
+  @if (content.medias?.length) {
+    <hr />
+
+    <app-gallery [items]="content.medias"> </app-gallery>
+  }
+</div>

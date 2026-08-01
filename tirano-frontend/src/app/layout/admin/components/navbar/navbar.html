@@ -1,10 +1,11 @@
-<nav class="navbar navbar-expand bg-white border-bottom px-4">
-  <span class="navbar-brand mb-0"> Administration </span>
+<nav class="navbar navbar-expand bg-white shadow-sm p-0">
+  <div class="container-fluid">
+    <span class="navbar-brand">
+      <i class="fa-solid fa-gauge"></i>
 
-  <div class="ms-auto">
-    <button class="btn btn-outline-danger btn-sm">
-      <i class="fa-solid fa-right-from-bracket me-2"></i>
-      Déconnexion
-    </button>
+      Administration
+    </span>
+
+    <button class="btn btn-sm btn-outline-danger border-0" (click)="logout()"><i class="fas fa-sign-out"></i></button>
   </div>
 </nav>

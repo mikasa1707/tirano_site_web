@@ -1,1 +1,183 @@
-<p>data-table works!</p>
+<div class="card shadow-sm border-0">
+  <div class="table-responsive">
+    <table class="table table-hover align-middle mb-0">
+      <thead class="table-primary">
+        <tr>
+          @if (selectable) {
+            <th></th>
+          }
+          @for (column of columns; track column.field) {
+            <th (click)="sort(column.field)" style="cursor: pointer">
+              {{ column.label }}
+              @if (sortField === column.field) {
+                <i class="fa ms-2" [ngClass]="sortDirection === 'asc' ? 'fa-sort-up' : 'fa-sort-down'"></i>
+              }
+            </th>
+          }
+          @if (!selectable) {
+            @if (canAction) {
+              <th width="130">Actions</th>
+            }
+          }
+        </tr>
+      </thead>
+
+      <tbody>
+        @if (loading) {
+          <tr>
+            <td [attr.colspan]="columns.length + 1" class="text-center py-5">
+              <div class="spinner-border text-primary"></div>
+            </td>
+          </tr>
+        } @else if (data.length === 0) {
+          <tr>
+            <td [attr.colspan]="columns.length + 1" class="text-center py-5 text-muted">
+              <i class="fa-solid fa-folder-open fs-3"></i>
+              <br />
+              Aucune donnée
+            </td>
+          </tr>
+        } @else {
+          @for (row of displayedData; track row.id) {
+            <tr
+              [ngClass]="{
+                'stock-danger': isLowStock(row),
+                'table-primary': selectable && isSelected(row),
+              }"
+              (click)="selectable && toggle(row)">
+              @if (selectable) {
+                <td>
+                  <input type="checkbox" [checked]="isSelected(row)" (click)="$event.stopPropagation(); toggle(row)" />
+                </td>
+              }
+              @for (col of columns; track col.field) {
+                <td>
+                  @if (col.type === 'badge') {
+                    @if (col.field === 'nbUnites') {
+                      <span
+                        class="badge fs-6 px-3"
+                        [class.bg-primary]="!row.hasLowStockUnit"
+                        [class.bg-danger]="row.hasLowStockUnit"
+                        [class.blink-badge]="row.hasLowStockUnit">
+                        <i class="fa-solid fa-box me-1"></i>
+                        {{ getValue(row, col.field) }}
+                      </span>
+                    } @else if (col.field === 'type') {
+                      <span
+                        class="badge"
+                        [class.bg-success]="row.type === 'IN'"
+                        [class.bg-danger]="row.type === 'OUT'"
+                        [class.bg-warning]="row.type === 'ADJUST'"
+                        [class.bg-info]="row.type === 'TRANSFER'">
+                        <i
+                          class="fa-solid me-1"
+                          [class.fa-arrow-down]="row.type === 'IN'"
+                          [class.fa-arrow-up]="row.type === 'OUT'"
+                          [class.fa-sliders]="row.type === 'ADJUST'"
+                          [class.fa-right-left]="row.type === 'TRANSFER'"></i>
+
+                        {{ row.type }}
+                      </span>
+                    } @else {
+                      <span class="badge fs-6 px-3 py-2" [ngClass]="col.badgeClass ? col.badgeClass(row) : 'bg-primary'">
+                        {{ getValue(row, col.field) }}
+                      </span>
+                    }
+                  } @else if (col.type === 'currency') {
+                    <span class="fw-semibold">
+                      {{ getValue(row, col.field) | currency: 'Ar' : 'symbol' : '1.0-0' }}
+                    </span>
+                  } @else if (col.type === 'datehour') {
+                    {{ getValue(row, col.field) | date: 'dd/MM/yyyy HH:mm' : 'Indian/Antananarivo' }}
+                  } @else if (col.type === 'input-number') {
+                    <input
+                      type="number"
+                      min="0.001"
+                      step="0.001"
+                      class="form-control text-end"
+                      style="width: 120px"
+                      [(ngModel)]="row[col.field]"
+                      (ngModelChange)="onCellChange(row, col.field, $event)" />
+                  } @else if (col.type === 'timemn') {
+                    <span class="badge bg-secondary fs-6">{{ getValue(row, col.field) }} mn</span>
+                  } @else if (col.type === 'timehr') {
+                    <span class="badge bg-secondary fs-6">{{ getValue(row, col.field) }} h</span>
+                  } @else if (col.type === 'color') {
+                    <div
+                      class="rounded-circle border shadow-sm"
+                      style="width: 24px; height: 24px"
+                      [style.background]="getValue(row, col.field)"
+                      [title]="getValue(row, col.field)"></div>
+                  } @else if (col.type === 'boolean') {
+                    @if (getValue(row, col.field)) {
+                      <span class="badge bg-success fs-6 px-3">
+                        <i class="fa-solid fa-check me-1"></i>
+                        Actif
+                      </span>
+                    } @else {
+                      <span class="badge bg-danger fs-6 px-3 blink-badge">
+                        <i class="fa-solid fa-triangle-exclamation me-1"></i>
+                        Inactif
+                      </span>
+                    }
+                  } @else {
+                    {{ getValue(row, col.field) }}
+                  }
+                </td>
+              }
+              @if (!selectable) {
+                @if (canAction) {
+                  <td class="text-end">
+                    <div class="btn-group btn-group-sm">
+                      @if (showUnitButton) {
+                        <button class="btn btn-outline-info" (click)="openUnites.emit(row)" title="Gérer les unités">
+                          <i class="fa-solid fa-box"></i>
+                        </button>
+                      }
+                      @if (showViewButton) {
+                        <button class="btn btn-outline-info" (click)="view.emit(row)" title="Voir">
+                          <i class="fa-solid fa-eye"></i>
+                        </button>
+                      }
+                      @if (showRecipeButton) {
+                        <button class="btn btn-outline-primary" (click)="recipe.emit(row)" title="Gérer la recette">
+                          <i class="fa-solid fa-flask"></i>
+                        </button>
+                      }
+                      @if (canEdit) {
+                        <button class="btn btn-outline-warning" (click)="edit.emit(row)" title="Modifier" [disabled]="row.valide ? true : false">
+                          <i class="fa-solid fa-pen"></i>
+                        </button>
+                      }
+                      @if (canDelete) {
+                        <button class="btn btn-outline-danger" (click)="delete.emit(row)" title="Supprimer" [disabled]="row.valide ? true : false">
+                          <i class="fa-solid fa-trash"></i>
+                        </button>
+                      }
+                    </div>
+                  </td>
+                }
+              }
+            </tr>
+          }
+        }
+      </tbody>
+    </table>
+  </div>
+
+  <!-- PAGINATION
+
+  @if (totalPages > 1) {
+    <nav class="p-3">
+      <ul class="pagination justify-content-end mb-0">
+        @for (page of getPages(); track page) {
+          <li class="page-item" [class.active]="page === page">
+            <button class="page-link" (click)="changePage(page)">
+              {{ page }}
+            </button>
+          </li>
+        }
+      </ul>
+    </nav>
+  } -->
+</div>

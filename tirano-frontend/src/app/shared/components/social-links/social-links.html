@@ -1,0 +1,25 @@
+<div class="d-flex gap-2">
+  @if (facebook) {
+    <a class="btn btn-outline-primary" [target]="'_blank'" [href]="facebook">
+      <i class="fab fa-facebook-f"></i>
+    </a>
+  }
+
+  @if (linkedin) {
+    <a class="btn btn-outline-primary" [target]="'_blank'" [href]="linkedin">
+      <i class="fab fa-linkedin"></i>
+    </a>
+  }
+
+  @if (youtube) {
+    <a class="btn btn-outline-danger" [target]="'_blank'" [href]="youtube">
+      <i class="fab fa-youtube"></i>
+    </a>
+  }
+
+  @if (instagram) {
+    <a class="btn btn-outline-dark" [target]="'_blank'" [href]="instagram">
+      <i class="fab fa-instagram"></i>
+    </a>
+  }
+</div>

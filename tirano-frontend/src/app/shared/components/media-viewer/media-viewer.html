@@ -1,0 +1,11 @@
+@if (media.type === 'IMAGE') {
+  <img class="img-fluid" [src]="media.url" />
+}
+
+@if (media.type === 'VIDEO') {
+  <app-video-player [url]="media.url"> </app-video-player>
+}
+
+@if (media.type === 'PDF') {
+  <app-pdf-viewer [url]="media.url"> </app-pdf-viewer>
+}

@@ -1,0 +1,21 @@
+<div class="py-5 text-center">
+  <div class="display-1 text-secondary mb-4">
+    <i class="fa-solid" [class]="defaultIcon"></i>
+  </div>
+
+  <h3 class="fw-bold">
+    {{ defaultTitle }}
+  </h3>
+
+  @if (message) {
+    <p class="text-muted">
+      {{ message }}
+    </p>
+  }
+
+  @if (buttonText) {
+    <button class="btn btn-primary mt-3" (click)="action.emit()">
+      {{ buttonText }}
+    </button>
+  }
+</div>

@@ -1,0 +1,35 @@
+<div class="card h-100 shadow-sm">
+  @if (image) {
+    <img [src]="image" class="card-img-top" style="height: 250px; object-fit: cover" />
+  }
+
+  <div class="card-body">
+    @if (badge) {
+      <span class="badge text-bg-primary mb-3">
+        {{ badge }}
+      </span>
+    }
+
+    <h5 class="card-title">
+      {{ title }}
+    </h5>
+
+    @if (subtitle) {
+      <p class="text-muted">
+        {{ subtitle }}
+      </p>
+    }
+
+    <p>
+      {{ description }}
+    </p>
+  </div>
+
+  <div class="card-footer bg-white border-0">
+    <a class="btn btn-outline-primary w-100" [routerLink]="route">
+      <i class="fa-solid fa-arrow-right me-2"></i>
+
+      {{ buttonText }}
+    </a>
+  </div>
+</div>
