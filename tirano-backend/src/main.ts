@@ -16,7 +16,19 @@ async function bootstrap() {
   );
 
   app.enableCors({
-    origin: process.env.FRONTEND_URL,
+    origin: (origin, callback) => {
+      const allowedOrigins = [
+        'http://localhost:4200',
+        process.env.FRONTEND_URL,
+      ];
+
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+        return;
+      }
+
+      callback(new Error('Not allowed by CORS'));
+    },
     credentials: true,
   });
 

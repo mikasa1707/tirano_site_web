@@ -32,8 +32,8 @@ export const ADMIN_ROUTES: Routes = [
         path: 'services',
 
         loadComponent: () =>
-          import('../features/services/service-list-page/service-list-page').then(
-            (m) => m.ServiceListPage,
+          import('../features/services/admin-service-list-page/admin-service-list-page').then(
+            (m) => m.AdminServiceListPage,
           ),
       },
 

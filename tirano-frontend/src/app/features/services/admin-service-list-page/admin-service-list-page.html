@@ -1,26 +1,21 @@
-
-<app-page-header t></app-page-header><div class="container-fluid">
-  <div class="d-flex justify-content-between align-items-center mb-3">
-    <h3>
-      <i class="fa-solid fa-briefcase"></i>
-      Services
-    </h3>
-
-    <button class="btn btn-primary">
+<app-page-header title="Services" subtitle="Gestion des services proposees" icon="fa-solid fa-users">
+  <div class="d-flex gap-2 flex-wrap">
+    <div class="search-wrapper">
+      <app-search-bar (searchChange)="onSearch($event)"></app-search-bar>
+    </div>
+    <button class="btn btn-sm btn-primary">
       <i class="fa-solid fa-plus"></i>
-
       Ajouter
     </button>
   </div>
+</app-page-header>
 
-  <app-search-bar (searchChange )="onSearch($event)"> </app-search-bar>
-
+<div class="container-fluid">
   @if (loading) {
     <app-loading></app-loading>
   } @else {
     @if (services.length) {
-      <app-data-table 
-      ></app-data-table>
+      <app-data-table></app-data-table>
 
       <app-pagination
         [page]="page"

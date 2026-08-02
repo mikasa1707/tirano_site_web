@@ -1,1 +1,5 @@
-<p>file-selector works!</p>
+<input type="file" class="form-control" accept="image/*" (change)="change($event)" />
+
+@if (preview) {
+  <img [src]="preview" class="img-thumbnail mt-2" style="max-height: 150px" />
+}

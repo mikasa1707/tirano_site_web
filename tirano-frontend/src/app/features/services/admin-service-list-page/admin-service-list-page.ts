@@ -1,16 +1,16 @@
-import { Component, OnInit, Service } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, Service } from '@angular/core';
 import { ServiceApi } from '../../../core/api/service.api';
-import { SearchBarComponent } from '../../../shared/components/search-bar/search-bar';
 import { PaginationComponent } from '../../../shared/components/pagination/pagination';
 import { StateView } from "../../../shared/components/state-view/state-view";
 import { DataTableComponent } from "../../../shared/components/data-table/data-table";
 import { Loading } from "../../../shared/components/loading/loading";
 import { PageHeaderComponent } from "../../../shared/components/page-header/page-header";
+import { SearchBarComponent } from "../../../shared/components/search-bar/search-bar";
 
 @Component({
   selector: 'app-admin-service-list-page',
   standalone: true,
-  imports: [SearchBarComponent, PaginationComponent, StateView, DataTableComponent, Loading, PageHeaderComponent],
+  imports: [PaginationComponent, StateView, DataTableComponent, Loading, PageHeaderComponent, SearchBarComponent],
   templateUrl: './admin-service-list-page.html',
 })
 export class AdminServiceListPage implements OnInit {
@@ -22,7 +22,7 @@ export class AdminServiceListPage implements OnInit {
   limit = 10;
   total = 0;
 
-  constructor(private serviceApi: ServiceApi) {}
+  constructor(private serviceApi: ServiceApi, private cdr: ChangeDetectorRef) {}
 
   ngOnInit(): void {
     this.load();
@@ -34,10 +34,9 @@ export class AdminServiceListPage implements OnInit {
     this.serviceApi.findAll().subscribe({
       next: (response: any) => {
         this.services = response.data ?? response;
-
         this.total = response.total ?? this.services.length;
-
         this.loading = false;
+        this.cdr.detectChanges();
       },
 
       error: () => {

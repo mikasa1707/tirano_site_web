@@ -6,7 +6,8 @@
         [class.col-md-3]="field.col === 3"
         [class.col-md-4]="field.col === 4"
         [class.col-md-6]="field.col === 6 || (!field.col && field.type !== 'textarea')"
-        [class.col-md-12]="field.col === 12 || (!field.col && field.type === 'textarea')">
+        [class.col-md-12]="field.col === 12 || (!field.col && field.type === 'textarea')"
+      >
         <label class="form-label fw-semibold mb-1">
           {{ field.label }}
 
@@ -19,7 +20,12 @@
           @case ('text') {
             @if (field.currency === true) {
               <div class="input-group">
-                <input type="text" class="form-control text-end" readonly [formControlName]="field.key" />
+                <input
+                  type="text"
+                  class="form-control text-end"
+                  readonly
+                  [formControlName]="field.key"
+                />
                 <span class="input-group-text fw-bold">Ar</span>
               </div>
             } @else {
@@ -50,7 +56,23 @@
           }
 
           @case ('color') {
-            <input type="color" class="form-control form-control-color" [formControlName]="field.key" />
+            <input
+              type="color"
+              class="form-control form-control-color"
+              [formControlName]="field.key"
+            />
+          }
+
+          @case ('image') {
+            <app-file-selector [formControlName]="field.key"> </app-file-selector>
+          }
+
+          @case ('gallery') {
+            <app-gallery-selector [formControlName]="field.key"> </app-gallery-selector>
+          }
+
+          @case ('editor') {
+            <textarea rows="10" class="form-control" [formControlName]="field.key"> </textarea>
           }
 
           @case ('select') {

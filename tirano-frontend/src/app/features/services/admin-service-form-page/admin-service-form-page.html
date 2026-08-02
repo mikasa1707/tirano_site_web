@@ -1,1 +1,10 @@
-<p>admin-service-form-page works!</p>
+<app-form-builder [form]="form" [fields]="fields" [showSave]="false"> </app-form-builder>
+
+<app-file-selector (selected)="uploadMedia($event)"> </app-file-selector>
+
+<div class="d-flex justify-content-end mt-3">
+  <button class="btn btn-primary" [disabled]="loading" (click)="submit()">
+    <i class="fa-solid fa-floppy-disk me-2"></i>
+    Enregistrer
+  </button>
+</div>

@@ -1,5 +1,6 @@
-import { Injectable, Service } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { ApiService } from './api.service';
+import { Service } from '../models/service';
 
 @Injectable({
   providedIn: 'root',
@@ -8,22 +9,28 @@ export class ServiceApi {
   constructor(private api: ApiService) {}
 
   findAll() {
-    return this.api.get<Service[]>('services');
+    return this.api.get<Service[]>('site-services');
   }
 
   findOne(id: number) {
-    return this.api.get<Service>(`services/${id}`);
+    return this.api.get<Service>(`site-services/${id}`);
   }
 
   create(data: Partial<Service>) {
-    return this.api.post<Service>('services', data);
+    return this.api.post<Service>('site-services', data);
   }
 
   update(id: number, data: Partial<Service>) {
-    return this.api.put<Service>(`services`, id, data);
+    return this.api.put<Service>('site-services', id, data);
+  }
+
+  uploadMedia(id: number, file: File) {
+    const formData = new FormData();
+    formData.append('file', file);
+    return this.api.post(`site-services/${id}/media`, formData);
   }
 
   delete(id: number) {
-    return this.api.delete(`services/${id}`);
+    return this.api.delete(`site-services/${id}`);
   }
 }
