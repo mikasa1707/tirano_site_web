@@ -1,0 +1,32 @@
+.gallery-card {
+  overflow: hidden;
+  cursor: pointer;
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+.gallery-card:hover {
+  transform: scale(1.01);
+}
+
+.gallery-media {
+  width: 100%;
+  height: 220px;
+  object-fit: cover;
+}
+
+.video-overlay {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.pdf-box {
+  height: 220px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f8f9fa;
+}

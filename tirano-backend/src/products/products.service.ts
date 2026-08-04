@@ -14,12 +14,16 @@ import { ResponseUtil } from '../common/utils/response.util';
 
 import { MediaService } from '../media/media.service';
 import { ProductResponseDto } from './dto/product-response.dto';
+import { Media } from 'src/media/entities/media.entity';
 
 @Injectable()
 export class ProductsService extends BaseService<Product> {
   constructor(
     @InjectRepository(Product)
     repository: Repository<Product>,
+
+    @InjectRepository(Media)
+    private mediaRepository: Repository<Media>,
 
     private mediaService: MediaService,
   ) {
@@ -70,16 +74,26 @@ export class ProductsService extends BaseService<Product> {
     );
   }
 
-  async addMedia(id: number, file: any) {
-    const product = await super.findOne(id);
+  async addMedia(id: number, files: Express.Multer.File[]) {
+    const product = await this.findOne(id);
+    const medias: Media[] = [];
 
-    return this.mediaService.attach(
-      file,
-      'products',
-      (media) => {
-        media.product = product;
-      },
-      product.name,
-    );
+    for (const file of files) {
+      const media = this.mediaService.create(
+        file,
+        {
+          description: 'Product',
+        },
+        'products',
+      );
+
+      media.product = product;
+
+      const saved = await this.mediaRepository.save(media);
+
+      medias.push(saved);
+    }
+
+    return medias;
   }
 }

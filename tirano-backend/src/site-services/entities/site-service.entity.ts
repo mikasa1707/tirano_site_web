@@ -1,4 +1,4 @@
-import { Entity, Column, OneToMany, ManyToOne } from 'typeorm';
+import { Entity, Column, OneToMany } from 'typeorm';
 import { BaseEntity } from '../../common/entities/base.entity';
 import { Media } from 'src/media/entities/media.entity';
 
@@ -22,8 +22,6 @@ export class SiteService extends BaseEntity {
   })
   active!: boolean;
 
-  @OneToMany(() => Media, (media) => media.siteService, {
-    cascade: true,
-  })
+  @OneToMany(() => Media, (media) => media.siteService)
   medias!: Media[];
 }

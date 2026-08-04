@@ -17,12 +17,16 @@ import { SortDto } from '../common/dto/sort.dto';
 import { ResponseUtil } from '../common/utils/response.util';
 
 import { MediaService } from '../media/media.service';
+import { Media } from 'src/media/entities/media.entity';
 
 @Injectable()
 export class ProjectsService extends BaseService<Project> {
   constructor(
     @InjectRepository(Project)
     repository: Repository<Project>,
+
+    @InjectRepository(Media)
+    private mediaRepository: Repository<Media>,
 
     private mediaService: MediaService,
   ) {
@@ -92,25 +96,66 @@ OR project.client LIKE :search
   // MEDIA
   // ===============================
 
-  async addMedia(id: number, file: any) {
-    const project = await this.findOne(
-      id,
+  // async addMedia(id: number, file: Express.Multer.File[]) {
+  //   const project = await this.findOne(
+  //     id,
 
-      {
-        medias: true,
-      },
-    );
+  //     {
+  //       medias: true,
+  //     },
+  //   );
 
-    return this.mediaService.attach(
-      file,
+  //   for (const file of files) {
+  //     const media = this.mediaService.create(
+  //       file,
+  //       {
+  //         description: 'Service',
+  //       },
+  //       'services',
+  //     );
 
-      'projects',
+  //     const medias: Media[] = [];
 
-      (media) => {
-        media.project = project;
-      },
+  //     media.siteService = service;
 
-      project.title,
-    );
+  //     const saved = await this.mediaRepository.save(media);
+
+  //     medias.push(saved);
+  //   }
+
+  //   return this.mediaService.attach(
+  //     file,
+
+  //     'projects',
+
+  //     (media) => {
+  //       media.project = project;
+  //     },
+
+  //     project.title,
+  //   );
+  // }
+
+  async addMedia(id: number, files: Express.Multer.File[]) {
+    const project = await this.findOne(id);
+    const medias: Media[] = [];
+
+    for (const file of files) {
+      const media = this.mediaService.create(
+        file,
+        {
+          description: 'Project',
+        },
+        'projects',
+      );
+
+      media.project = project;
+
+      const saved = await this.mediaRepository.save(media);
+
+      medias.push(saved);
+    }
+
+    return medias;
   }
 }

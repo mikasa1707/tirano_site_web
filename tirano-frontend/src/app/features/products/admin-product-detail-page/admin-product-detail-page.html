@@ -1,0 +1,6 @@
+<app-detail-view [data]="product" [fields]="fields" (mediaSelected)="openMedia($event)">
+</app-detail-view>
+
+@if (showMedia) {
+  <app-media-viewer [media]="selectedMedia" (closed)="closeMedia()"> </app-media-viewer>
+}

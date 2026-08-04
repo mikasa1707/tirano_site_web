@@ -8,8 +8,14 @@ import { Service } from '../models/service';
 export class ServiceApi {
   constructor(private api: ApiService) {}
 
-  findAll() {
-    return this.api.get<Service[]>('site-services');
+  findAll(params?: {
+    page?: number;
+    limit?: number;
+    search?: string;
+    sortBy?: string;
+    sortOrder?: string;
+  }) {
+    return this.api.get<any>('site-services', params);
   }
 
   findOne(id: number) {
@@ -22,12 +28,6 @@ export class ServiceApi {
 
   update(id: number, data: Partial<Service>) {
     return this.api.put<Service>('site-services', id, data);
-  }
-
-  uploadMedia(id: number, file: File) {
-    const formData = new FormData();
-    formData.append('file', file);
-    return this.api.post(`site-services/${id}/media`, formData);
   }
 
   delete(id: number) {

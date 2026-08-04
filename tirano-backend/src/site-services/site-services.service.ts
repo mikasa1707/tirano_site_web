@@ -1,19 +1,30 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+
 import { Repository } from 'typeorm';
+
 import { SiteService } from './entities/site-service.entity';
+
 import { BaseService } from '../common/services/base.service';
+
 import { PaginationDto } from '../common/dto/pagination.dto';
 import { SearchDto } from '../common/dto/search.dto';
 import { SortDto } from '../common/dto/sort.dto';
+
 import { ResponseUtil } from '../common/utils/response.util';
+
 import { MediaService } from '../media/media.service';
+import { Media } from 'src/media/entities/media.entity';
 
 @Injectable()
 export class SiteServicesService extends BaseService<SiteService> {
   constructor(
     @InjectRepository(SiteService)
     repository: Repository<SiteService>,
+
+    @InjectRepository(Media)
+    private mediaRepository: Repository<Media>,
+
     private mediaService: MediaService,
   ) {
     super(repository, 'Service');
@@ -21,10 +32,13 @@ export class SiteServicesService extends BaseService<SiteService> {
 
   async findAll(pagination: PaginationDto, search: SearchDto, sort: SortDto) {
     const page = pagination.page ?? 1;
+
     const limit = pagination.limit ?? 10;
 
     const query = this.repository
+
       .createQueryBuilder('service')
+
       .leftJoinAndSelect('service.medias', 'media');
 
     if (search.search) {
@@ -32,7 +46,7 @@ export class SiteServicesService extends BaseService<SiteService> {
         `
         service.title LIKE :search
         OR service.description LIKE :search
-      `,
+        `,
         {
           search: `%${search.search}%`,
         },
@@ -45,6 +59,7 @@ export class SiteServicesService extends BaseService<SiteService> {
     );
 
     query.skip((page - 1) * limit);
+
     query.take(limit);
 
     const [data, total] = await query.getManyAndCount();
@@ -67,16 +82,27 @@ export class SiteServicesService extends BaseService<SiteService> {
     });
   }
 
-  async addMedia(id: number, file: any) {
+  async addMedia(id: number, files: Express.Multer.File[]) {
     const service = await this.findOne(id);
 
-    return this.mediaService.attach(
-      file,
-      'services',
-      (media) => {
-        media.siteService = service;
-      },
-      service.title,
-    );
+    const medias: Media[] = [];
+
+    for (const file of files) {
+      const media = this.mediaService.create(
+        file,
+        {
+          description: 'Service',
+        },
+        'services',
+      );
+
+      media.siteService = service;
+
+      const saved = await this.mediaRepository.save(media);
+
+      medias.push(saved);
+    }
+
+    return medias;
   }
 }

@@ -7,15 +7,23 @@ import {
   Body,
   Param,
   Query,
-  UploadedFile,
   UseInterceptors,
+  UploadedFiles,
 } from '@nestjs/common';
 
 import { SiteServicesService } from './site-services.service';
 import { CreateSiteServiceDto } from './dto/create-site-service.dto';
 import { UpdateSiteServiceDto } from './dto/update-site-service.dto';
-import { FileInterceptor } from '@nestjs/platform-express';
+import { FilesInterceptor } from '@nestjs/platform-express';
 import { ResponseUtil } from 'src/common/utils/response.util';
+
+interface SiteServiceQuery {
+  page?: string;
+  limit?: string;
+  search?: string;
+  sortBy?: string;
+  sortOrder?: 'ASC' | 'DESC';
+}
 
 @Controller('site-services')
 export class SiteServicesController {
@@ -29,36 +37,49 @@ export class SiteServicesController {
   }
 
   @Get()
-  findAll(@Query() pagination: any) {
-    return this.service.findAll(pagination, pagination, pagination);
+  findAll(@Query() query: SiteServiceQuery) {
+    return this.service.findAll(
+      {
+        page: Number(query.page ?? 1),
+        limit: Number(query.limit ?? 10),
+      },
+      {
+        search: query.search ?? '',
+      },
+      {
+        sortBy: query.sortBy ?? 'created_at',
+        sortOrder: query.sortOrder ?? 'DESC',
+      },
+    );
   }
 
   @Get(':id')
-  async findOne(@Param('id') id: number) {
-    const data = await this.service.findOne(+id);
+  async findOne(@Param('id') id: string) {
+    const data = await this.service.findOne(Number(id));
 
     return ResponseUtil.success(data);
   }
 
   @Put(':id')
-  async update(@Param('id') id: number, @Body() dto: UpdateSiteServiceDto) {
-    const data = await this.service.update(+id, dto);
+  async update(@Param('id') id: string, @Body() dto: UpdateSiteServiceDto) {
+    const data = await this.service.update(Number(id), dto);
 
     return ResponseUtil.success(data, 'Service modifié');
   }
 
   @Delete(':id')
-  remove(@Param('id') id: number) {
-    return this.service.remove(+id);
+  remove(@Param('id') id: string) {
+    return this.service.remove(Number(id));
   }
 
   @Post(':id/media')
-  @UseInterceptors(FileInterceptor('file'))
+  @UseInterceptors(FilesInterceptor('files', 10))
   addMedia(
-    @Param('id') id: number,
-    @UploadedFile()
-    file: any,
+    @Param('id') id: string,
+    @UploadedFiles() files: Express.Multer.File[],
   ) {
-    return this.service.addMedia(+id, file);
+    console.log('SERVICE ID:', id);
+    console.log('FILES:', files);
+    return this.service.addMedia(Number(id), files);
   }
 }

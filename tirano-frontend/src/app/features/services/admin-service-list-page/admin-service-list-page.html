@@ -1,10 +1,15 @@
-<app-page-header title="Services" subtitle="Gestion des services proposees" icon="fa-solid fa-users">
+<app-page-header
+  title="Services"
+  subtitle="Gestion des services proposées"
+  icon="fa-solid fa-gears"
+>
   <div class="d-flex gap-2 flex-wrap">
     <div class="search-wrapper">
       <app-search-bar (searchChange)="onSearch($event)"></app-search-bar>
     </div>
-    <button class="btn btn-sm btn-primary">
-      <i class="fa-solid fa-plus"></i>
+
+    <button class="btn btn-sm btn-primary" (click)="openCreate()">
+      <i class="fa-solid fa-plus me-1"></i>
       Ajouter
     </button>
   </div>
@@ -14,8 +19,21 @@
   @if (loading) {
     <app-loading></app-loading>
   } @else {
-    @if (services.length) {
-      <app-data-table></app-data-table>
+    <!-- <h1>ADMIN SERVICE LIST CHARGE {{ services.length }}</h1> -->
+    @if (services.length > 0) {
+      <app-data-table
+        [columns]="columns"
+        [data]="services"
+        [loading]="loading"
+        [page]="page"
+        [totalPages]="totalPages"
+        (pageChange)="onPageChange($event)"
+        [showViewButton]="true"
+        (edit)="edit($event)"
+        (view)="detail($event)"
+        (delete)="delete($event)"
+      >
+      </app-data-table>
 
       <app-pagination
         [page]="page"
@@ -29,3 +47,22 @@
     }
   }
 </div>
+
+<app-modal
+  size="xl"
+  [show]="show_modal"
+  title="{{ selectedService ? 'Modifier service' : 'Ajouter service' }}"
+  (closed)="closeModal()"
+>
+  <app-admin-service-form-page [service]="selectedService" (saved)="onSaved()">
+  </app-admin-service-form-page>
+</app-modal>
+
+<app-modal
+  size="xl"
+  [show]="show_detail"
+  title="{{ selectedService?.title }}"
+  (closed)="closeModal()"
+>
+  <app-admin-service-detail-page [service]="selectedService"></app-admin-service-detail-page>
+</app-modal>

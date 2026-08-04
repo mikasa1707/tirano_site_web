@@ -7,21 +7,25 @@ import {
   Body,
   Param,
   Query,
-  UploadedFile,
   UseInterceptors,
+  UploadedFiles,
 } from '@nestjs/common';
 
-import { FileInterceptor } from '@nestjs/platform-express';
+import { FilesInterceptor } from '@nestjs/platform-express';
 
 import { ProductsService } from './products.service';
 
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
-
-import { PaginationDto } from '../common/dto/pagination.dto';
-import { SearchDto } from '../common/dto/search.dto';
-import { SortDto } from '../common/dto/sort.dto';
 import { ResponseUtil } from 'src/common/utils/response.util';
+
+interface QueryDto {
+  page?: string;
+  limit?: string;
+  search?: string;
+  sortBy?: string;
+  sortOrder?: 'ASC' | 'DESC';
+}
 
 @Controller('products')
 export class ProductsController {
@@ -33,12 +37,20 @@ export class ProductsController {
   }
 
   @Get()
-  findAll(
-    @Query() pagination: PaginationDto,
-    @Query() search: SearchDto,
-    @Query() sort: SortDto,
-  ) {
-    return this.service.findAll(pagination, search, sort);
+  findAll(@Query() query: QueryDto) {
+    return this.service.findAll(
+      {
+        page: Number(query.page ?? 1),
+        limit: Number(query.limit ?? 10),
+      },
+      {
+        search: query.search ?? '',
+      },
+      {
+        sortBy: query.sortBy ?? 'created_at',
+        sortOrder: query.sortOrder ?? 'DESC',
+      },
+    );
   }
 
   @Get(':id')
@@ -59,8 +71,11 @@ export class ProductsController {
   }
 
   @Post(':id/media')
-  @UseInterceptors(FileInterceptor('file'))
-  addMedia(@Param('id') id: number, @UploadedFile() file: any) {
-    return this.service.addMedia(+id, file);
+  @UseInterceptors(FilesInterceptor('files'))
+  addMedia(
+    @Param('id') id: number,
+    @UploadedFiles() files: Express.Multer.File[],
+  ) {
+    return this.service.addMedia(+id, files);
   }
 }

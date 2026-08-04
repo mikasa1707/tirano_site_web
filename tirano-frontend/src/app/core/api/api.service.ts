@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { environment } from '../../../environments/environments';
 
 @Injectable({
@@ -10,8 +10,22 @@ export class ApiService {
 
   constructor(private http: HttpClient) {}
 
-  get<T>(endpoint: string) {
-    return this.http.get<T>(`${this.url}/${endpoint}`);
+  get<T>(endpoint: string, params?: any) {
+    let httpParams = new HttpParams();
+
+    if (params) {
+      Object.keys(params).forEach((key) => {
+        const value = params[key];
+
+        if (value !== undefined && value !== null && value !== '') {
+          httpParams = httpParams.set(key, value);
+        }
+      });
+    }
+
+    return this.http.get<T>(`${this.url}/${endpoint}`, {
+      params: httpParams,
+    });
   }
 
   post<T>(endpoint: string, data: any) {

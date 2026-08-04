@@ -1,5 +1,4 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-
 import { InjectRepository } from '@nestjs/typeorm';
 
 import { Repository } from 'typeorm';
@@ -20,31 +19,29 @@ export class MediaService {
   ) {}
 
   // =========================
-  // CREATE + UPLOAD
+  // CREATE MEDIA ENTITY
   // =========================
 
-  async create(
-    file: any,
+  create(
+    file: Express.Multer.File,
     dto: CreateMediaDto,
     folder = 'general',
-  ) {
+  ): Media {
     const uploaded = this.storage.upload(file, folder);
 
-    const media = this.repository.create({
+    return this.repository.create({
       ...uploaded,
 
       description: dto.description,
     });
-
-    return this.repository.save(media);
   }
 
   // =========================
-  // ATTACH MEDIA TO ENTITY
+  // CREATE + ATTACH
   // =========================
 
   async attach(
-    file: any,
+    file: Express.Multer.File,
 
     folder: string,
 
@@ -52,18 +49,24 @@ export class MediaService {
 
     description?: string,
   ) {
-    const media = await this.create(
+    const media = this.create(
       file,
-
       {
         description,
       },
-
       folder,
     );
 
     assign(media);
 
+    return this.repository.save(media);
+  }
+
+  // =========================
+  // SAVE
+  // =========================
+
+  async save(media: Media) {
     return this.repository.save(media);
   }
 
@@ -101,11 +104,7 @@ export class MediaService {
   // UPDATE
   // =========================
 
-  async update(
-    id: number,
-
-    data: Partial<Media>,
-  ) {
+  async update(id: number, data: Partial<Media>) {
     const media = await this.findOne(id);
 
     Object.assign(media, data);
@@ -126,6 +125,7 @@ export class MediaService {
 
     return {
       success: true,
+
       message: 'Média supprimé',
     };
   }

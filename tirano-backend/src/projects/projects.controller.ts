@@ -7,17 +7,22 @@ import {
   Body,
   Param,
   Query,
-  UploadedFile,
   UseInterceptors,
+  UploadedFiles,
 } from '@nestjs/common';
-import { FileInterceptor } from '@nestjs/platform-express';
+import { FilesInterceptor } from '@nestjs/platform-express';
 import { ProjectsService } from './projects.service';
 import { CreateProjectDto } from './dto/create-project.dto';
 import { UpdateProjectDto } from './dto/update-project.dto';
-import { PaginationDto } from '../common/dto/pagination.dto';
-import { SearchDto } from '../common/dto/search.dto';
-import { SortDto } from '../common/dto/sort.dto';
 import { ResponseUtil } from '../common/utils/response.util';
+
+interface QueryDto {
+  page?: string;
+  limit?: string;
+  search?: string;
+  sortBy?: string;
+  sortOrder?: 'ASC' | 'DESC';
+}
 
 @Controller('projects')
 export class ProjectsController {
@@ -31,14 +36,20 @@ export class ProjectsController {
   }
 
   @Get()
-  findAll(
-    @Query() pagination: PaginationDto,
-
-    @Query() search: SearchDto,
-
-    @Query() sort: SortDto,
-  ) {
-    return this.service.findAll(pagination, search, sort);
+  findAll(@Query() query: QueryDto) {
+    return this.service.findAll(
+      {
+        page: Number(query.page ?? 1),
+        limit: Number(query.limit ?? 10),
+      },
+      {
+        search: query.search ?? '',
+      },
+      {
+        sortBy: query.sortBy ?? 'created_at',
+        sortOrder: query.sortOrder ?? 'DESC',
+      },
+    );
   }
 
   @Get(':id')
@@ -67,13 +78,11 @@ export class ProjectsController {
   }
 
   @Post(':id/media')
-  @UseInterceptors(FileInterceptor('file'))
+  @UseInterceptors(FilesInterceptor('files'))
   addMedia(
     @Param('id') id: number,
-
-    @UploadedFile()
-    file: any,
+    @UploadedFiles() files: Express.Multer.File[],
   ) {
-    return this.service.addMedia(+id, file);
+    return this.service.addMedia(+id, files);
   }
 }

@@ -1,1 +1,68 @@
-<p>admin-project-list-page works!</p>
+<app-page-header
+  title="Projets"
+  subtitle="Gestion des projets"
+  icon="fa-solid fa-gears"
+>
+  <div class="d-flex gap-2 flex-wrap">
+    <div class="search-wrapper">
+      <app-search-bar (searchChange)="onSearch($event)"></app-search-bar>
+    </div>
+
+    <button class="btn btn-sm btn-primary" (click)="openCreate()">
+      <i class="fa-solid fa-plus me-1"></i>
+      Ajouter
+    </button>
+  </div>
+</app-page-header>
+
+<div class="container-fluid">
+  @if (loading) {
+    <app-loading></app-loading>
+  } @else {
+    <!-- <h1>ADMIN SERVICE LIST CHARGE {{ projects.length }}</h1> -->
+    @if (projects.length > 0) {
+      <app-data-table
+        [columns]="columns"
+        [data]="projects"
+        [loading]="loading"
+        [page]="page"
+        [totalPages]="totalPages"
+        (pageChange)="onPageChange($event)"
+        [showViewButton]="true"
+        (edit)="edit($event)"
+        (view)="detail($event)"
+        (delete)="delete($event)"
+      >
+      </app-data-table>
+
+      <app-pagination
+        [page]="page"
+        [total]="total"
+        [limit]="limit"
+        (pageChange)="onPageChange($event)"
+      >
+      </app-pagination>
+    } @else {
+      <app-state-view type="empty"> </app-state-view>
+    }
+  }
+</div>
+
+<app-modal
+  size="xl"
+  [show]="show_modal"
+  title="{{ selected ? 'Modifier projet' : 'Ajouter projet' }}"
+  (closed)="closeModal()"
+>
+  <app-admin-project-form-page [project]="selected" (saved)="onSaved()">
+  </app-admin-project-form-page>
+</app-modal>
+
+<app-modal
+  size="xl"
+  [show]="show_detail"
+  title="{{ selected?.title }}"
+  (closed)="closeModal()"
+>
+  <app-admin-project-detail-page [project]="selected"></app-admin-project-detail-page>
+</app-modal>

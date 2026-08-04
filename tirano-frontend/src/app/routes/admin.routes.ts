@@ -41,8 +41,8 @@ export const ADMIN_ROUTES: Routes = [
         path: 'projects',
 
         loadComponent: () =>
-          import('../features/projects/project-list-page/project-list-page').then(
-            (m) => m.ProjectListPage,
+          import('../features/projects/admin-project-list-page/admin-project-list-page').then(
+            (m) => m.AdminProjectListPage,
           ),
       },
 
@@ -50,8 +50,8 @@ export const ADMIN_ROUTES: Routes = [
         path: 'products',
 
         loadComponent: () =>
-          import('../features/products/product-list-page/product-list-page').then(
-            (m) => m.ProductListPage,
+          import('../features/products/admin-product-list-page/admin-product-list-page').then(
+            (m) => m.AdminProductListPage,
           ),
       },
 

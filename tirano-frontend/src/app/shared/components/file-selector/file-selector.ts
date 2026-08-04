@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 @Component({
   selector: 'app-file-selector',
@@ -8,10 +8,11 @@ import { Component, EventEmitter, Output } from '@angular/core';
   templateUrl: './file-selector.html',
 })
 export class FileSelector {
-  @Output()
-  selected = new EventEmitter<File>();
+  @Input() multiple = false;
 
-  preview: string | null = null;
+  @Output() selected = new EventEmitter<File[]>();
+
+  previews: string[] = [];
 
   change(event: Event) {
     const input = event.target as HTMLInputElement;
@@ -20,10 +21,12 @@ export class FileSelector {
       return;
     }
 
-    const file = input.files[0];
+    const files = Array.from(input.files);
 
-    this.preview = URL.createObjectURL(file);
+    this.previews.forEach((url) => URL.revokeObjectURL(url));
 
-    this.selected.emit(file);
+    this.previews = files.map((file) => URL.createObjectURL(file));
+
+    this.selected.emit(files);
   }
 }

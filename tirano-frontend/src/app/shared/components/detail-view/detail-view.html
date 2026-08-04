@@ -1,0 +1,40 @@
+@if (data) {
+  <div class="row g-3">
+    @for (field of fields; track field.key) {
+      <div [class]="field.col ?? 'col-md-6'">
+        <label class="fw-bold mb-1">
+          {{ field.label }}
+        </label>
+
+        @switch (field.type) {
+          @case ('html') {
+            <div [innerHTML]="data[field.key] ?? ''"></div>
+          }
+
+          @case ('badge') {
+            @if (data[field.key]) {
+              <span class="badge bg-success">Actif</span>
+            } @else {
+              <span class="badge bg-secondary">Inactif</span>
+            }
+          }
+
+          @case ('gallery') {
+            <div class="card p-2">
+              @if (data[field.key]?.length > 0) {
+                <app-gallery [items]="data[field.key]" [removable]="false" (select)="open($event)">
+                </app-gallery>
+              }
+            </div>
+          }
+
+          @default {
+            <p class="mb-0">
+              {{ data[field.key] ?? '-' }}
+            </p>
+          }
+        }
+      </div>
+    }
+  </div>
+}

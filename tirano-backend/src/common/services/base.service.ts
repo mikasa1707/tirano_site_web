@@ -5,6 +5,7 @@ import {
   DeepPartial,
   ObjectLiteral,
   FindOptionsRelations,
+  FindOptionsWhere,
 } from 'typeorm';
 
 export abstract class BaseService<T extends ObjectLiteral> {
@@ -16,15 +17,16 @@ export abstract class BaseService<T extends ObjectLiteral> {
   async create(data: DeepPartial<T>): Promise<T> {
     const entity = this.repository.create(data);
 
-    return this.repository.save(entity);
+    return await this.repository.save(entity);
   }
 
   async findOne(id: number, relations?: FindOptionsRelations<T>): Promise<T> {
-    const entity = await this.repository.findOne({
-      where: {
-        id,
-      } as any,
+    const where = {
+      id,
+    } as unknown as FindOptionsWhere<T>;
 
+    const entity = await this.repository.findOne({
+      where,
       relations,
     });
 
@@ -40,17 +42,14 @@ export abstract class BaseService<T extends ObjectLiteral> {
 
     Object.assign(entity, data);
 
-    return this.repository.save(entity);
+    return await this.repository.save(entity);
   }
 
-  async remove(id: number) {
+  async remove(id: number): Promise<T> {
     const entity = await this.findOne(id);
 
     await this.repository.remove(entity);
 
-    return {
-      success: true,
-      message: `${this.entityName} supprimé`,
-    };
+    return entity;
   }
 }

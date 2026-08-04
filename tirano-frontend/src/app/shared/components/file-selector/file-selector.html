@@ -1,5 +1,13 @@
-<input type="file" class="form-control" accept="image/*" (change)="change($event)" />
+<input type="file" class="form-control" [multiple]="multiple" (change)="change($event)" />
 
-@if (preview) {
-  <img [src]="preview" class="img-thumbnail mt-2" style="max-height: 150px" />
+@if (previews.length) {
+  <div class="d-flex gap-2 flex-wrap mt-3">
+    @for (preview of previews; track preview) {
+      <img
+        [src]="preview"
+        class="img-thumbnail"
+        style="width: 120px; height: 120px; object-fit: cover"
+      />
+    }
+  </div>
 }

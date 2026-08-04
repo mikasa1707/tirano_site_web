@@ -14,11 +14,7 @@ export class ResponseUtil {
     };
   }
 
-  static paginate<T>(
-    data: T[],
-    meta: PaginationMeta,
-    message = 'Success',
-  ) {
+  static paginate<T>(data: T[], meta: PaginationMeta, message = 'Success') {
     return {
       success: true,
       message,

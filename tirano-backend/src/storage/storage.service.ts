@@ -1,30 +1,32 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
-import { existsSync, mkdirSync, unlinkSync } from 'fs';
+import { existsSync, mkdirSync, unlinkSync, writeFileSync } from 'fs';
 import { join, extname } from 'path';
 import { v4 as uuid } from 'uuid';
+
 import { STORAGE_CONFIG } from './constants/storage.constant';
-import { MediaType } from 'express';
 import { MediasType } from 'src/media/enums/media-type.enum';
 
 @Injectable()
 export class StorageService {
-  private root = 'uploads';
+  private root = join(process.cwd(), 'uploads');
 
-  upload(file: any, folder = 'general') {
+  upload(file: Express.Multer.File, folder = 'general') {
     if (!file) {
       throw new BadRequestException('Aucun fichier reçu');
     }
 
-    const extension = extname(file.originalname).replace('.', '').toLowerCase();
+    const extension = extname(file.originalname).slice(1).toLowerCase();
 
-    const allowed = [
+    const allowedExtensions = [
       ...STORAGE_CONFIG.image.extensions,
       ...STORAGE_CONFIG.video.extensions,
       ...STORAGE_CONFIG.document.extensions,
-    ];
+    ].map((ext) => ext.toLowerCase());
 
-    if (!allowed.includes(extension)) {
-      throw new BadRequestException('Format fichier non supporté');
+    if (!allowedExtensions.includes(extension)) {
+      throw new BadRequestException(
+        `Format fichier non supporté: ${extension}`,
+      );
     }
 
     if (file.size > STORAGE_CONFIG.maxSize) {
@@ -40,15 +42,24 @@ export class StorageService {
     }
 
     const filename = `${uuid()}.${extension}`;
+
     const filepath = join(folderPath, filename);
+
+    writeFileSync(filepath, file.buffer);
 
     return {
       filename,
+
       originalName: file.originalname,
+
       mimeType: file.mimetype,
+
       size: file.size,
+
       path: filepath,
-      url: `/${filepath.replaceAll('\\', '/')}`,
+
+      url: `${process.env.BACKEND_URL ?? 'http://localhost:3000'}/uploads/${folder}/${filename}`,
+
       type: this.getType(extension),
     };
   }
@@ -58,13 +69,21 @@ export class StorageService {
       unlinkSync(path);
     }
   }
-  
+
   private getType(extension: string): MediasType {
-    if (STORAGE_CONFIG.image.extensions.includes(extension)) {
+    if (
+      STORAGE_CONFIG.image.extensions
+        .map((e) => e.toLowerCase())
+        .includes(extension)
+    ) {
       return MediasType.IMAGE;
     }
 
-    if (STORAGE_CONFIG.video.extensions.includes(extension)) {
+    if (
+      STORAGE_CONFIG.video.extensions
+        .map((e) => e.toLowerCase())
+        .includes(extension)
+    ) {
       return MediasType.VIDEO;
     }
 

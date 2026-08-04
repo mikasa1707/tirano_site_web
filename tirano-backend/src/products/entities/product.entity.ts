@@ -15,7 +15,7 @@ export class Product extends BaseEntity {
 
   @Column({ default: true })
   active!: boolean;
-  
+
   @Column({ default: 0 })
   price!: number;
 
