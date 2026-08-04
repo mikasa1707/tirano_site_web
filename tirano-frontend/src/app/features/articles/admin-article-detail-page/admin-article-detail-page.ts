@@ -1,41 +1,55 @@
 import { Component, Input } from '@angular/core';
 import { DetailField } from '../../../core/models/detail-field';
 import { Media } from '../../../core/models/media';
-import { Testimonial } from '../../../core/models/testimonial';
+import { Article } from '../../../core/models/article';
 import { DetailViewComponent } from "../../../shared/components/detail-view/detail-view";
 import { MediaViewer } from "../../../shared/components/media-viewer/media-viewer";
 
 @Component({
-  selector: 'app-admin-testimonial-detail-page',
+  selector: 'app-admin-article-detail-page',
   imports: [DetailViewComponent, MediaViewer],
-  templateUrl: './admin-testimonial-detail-page.html',
-  styleUrl: './admin-testimonial-detail-page.scss',
+  templateUrl: './admin-article-detail-page.html',
+  styleUrl: './admin-article-detail-page.scss',
 })
-export class AdminTestimonialDetailPage {
+export class AdminArticleDetailPage {
   @Input()
-  testimonial?: Testimonial;
+  article?: Article;
 
   selectedMedia?: Media;
   showMedia = false;
 
   fields: DetailField[] = [
     {
-      key: 'name',
-      label: 'Nom',
+      key: 'title',
+      label: 'Titre',
       type: 'text',
       col: 'col-6',
     },
 
     {
-      key: 'role',
-      label: 'Fonction',
+      key: 'client',
+      label: 'Client',
       type: 'text',
       col: 'col-6',
     },
 
     {
-      key: 'message',
-      label: 'Message',
+      key: 'location',
+      label: 'Localisation',
+      type: 'text',
+      col: 'col-6',
+    },
+
+    {
+      key: 'realizationDate',
+      label: 'Date de réalisation',
+      type: 'date',
+      col: 'col-6',
+    },
+
+    {
+      key: 'description',
+      label: 'Description',
       type: 'html',
       col: 'col-12',
     },

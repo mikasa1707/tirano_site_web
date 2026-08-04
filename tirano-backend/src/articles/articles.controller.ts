@@ -7,16 +7,24 @@ import {
   Body,
   Param,
   Query,
-  UploadedFile,
   UseInterceptors,
+  UploadedFiles,
 } from '@nestjs/common';
 
-import { FileInterceptor } from '@nestjs/platform-express';
+import { FilesInterceptor } from '@nestjs/platform-express';
 
 import { ArticlesService } from './articles.service';
 
 import { CreateArticleDto } from './dto/create-article.dto';
 import { UpdateArticleDto } from './dto/update-article.dto';
+
+interface SiteServiceQuery {
+  page?: string;
+  limit?: string;
+  search?: string;
+  sortBy?: string;
+  sortOrder?: 'ASC' | 'DESC';
+}
 
 @Controller('articles')
 export class ArticlesController {
@@ -28,8 +36,20 @@ export class ArticlesController {
   }
 
   @Get()
-  findAll(@Query() pagination: any, @Query() search: any, @Query() sort: any) {
-    return this.service.findAll(pagination, search, sort);
+  findAll(@Query() query: SiteServiceQuery) {
+    return this.service.findAll(
+      {
+        page: Number(query.page ?? 1),
+        limit: Number(query.limit ?? 10),
+      },
+      {
+        search: query.search ?? '',
+      },
+      {
+        sortBy: query.sortBy ?? 'created_at',
+        sortOrder: query.sortOrder ?? 'DESC',
+      },
+    );
   }
 
   @Get(':id')
@@ -50,8 +70,11 @@ export class ArticlesController {
   }
 
   @Post(':id/media')
-  @UseInterceptors(FileInterceptor('file'))
-  addMedia(@Param('id') id: number, @UploadedFile() file: any) {
-    return this.service.addMedia(+id, file);
+  @UseInterceptors(FilesInterceptor('files', 10))
+  addMedia(
+    @Param('id') id: string,
+    @UploadedFiles() files: Express.Multer.File[],
+  ) {
+    return this.service.addMedia(Number(id), files);
   }
 }

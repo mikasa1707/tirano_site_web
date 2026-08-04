@@ -7,19 +7,23 @@ import {
   Post,
   Put,
   Query,
-  UploadedFile,
+  UploadedFiles,
   UseInterceptors,
 } from '@nestjs/common';
-import { FileInterceptor } from '@nestjs/platform-express';
+import { FilesInterceptor } from '@nestjs/platform-express';
 
 import { TestimonialsService } from './testimonials.service';
 
 import { CreateTestimonialDto } from './dto/create-testimonial.dto';
 import { UpdateTestimonialDto } from './dto/update-testimonial.dto';
 
-import { PaginationDto } from '../common/dto/pagination.dto';
-import { SearchDto } from '../common/dto/search.dto';
-import { SortDto } from '../common/dto/sort.dto';
+interface SiteServiceQuery {
+  page?: string;
+  limit?: string;
+  search?: string;
+  sortBy?: string;
+  sortOrder?: 'ASC' | 'DESC';
+}
 
 @Controller('testimonials')
 export class TestimonialsController {
@@ -31,12 +35,20 @@ export class TestimonialsController {
   }
 
   @Get()
-  findAll(
-    @Query() pagination: PaginationDto,
-    @Query() search: SearchDto,
-    @Query() sort: SortDto,
-  ) {
-    return this.service.findAll(pagination, search, sort);
+  findAll(@Query() query: SiteServiceQuery) {
+    return this.service.findAll(
+      {
+        page: Number(query.page ?? 1),
+        limit: Number(query.limit ?? 10),
+      },
+      {
+        search: query.search ?? '',
+      },
+      {
+        sortBy: query.sortBy ?? 'created_at',
+        sortOrder: query.sortOrder ?? 'DESC',
+      },
+    );
   }
 
   @Get(':id')
@@ -55,8 +67,13 @@ export class TestimonialsController {
   }
 
   @Post(':id/media')
-  @UseInterceptors(FileInterceptor('file'))
-  addMedia(@Param('id') id: number, @UploadedFile() file: any) {
-    return this.service.addMedia(+id, file);
+  @UseInterceptors(FilesInterceptor('files', 10))
+  addMedia(
+    @Param('id') id: string,
+    @UploadedFiles() files: Express.Multer.File[],
+  ) {
+    console.log('SERVICE ID:', id);
+    console.log('FILES:', files);
+    return this.service.addMedia(Number(id), files);
   }
 }

@@ -9,12 +9,16 @@ import { SortDto } from '../common/dto/sort.dto';
 import { ResponseUtil } from '../common/utils/response.util';
 import { MediaService } from '../media/media.service';
 import { TestimonialResponseDto } from './dto/testimonial-response.dto';
+import { Media } from 'src/media/entities/media.entity';
 
 @Injectable()
 export class TestimonialsService extends BaseService<Testimonial> {
   constructor(
     @InjectRepository(Testimonial)
     repository: Repository<Testimonial>,
+
+    @InjectRepository(Media)
+    private mediaRepository: Repository<Media>,
 
     private mediaService: MediaService,
   ) {
@@ -64,16 +68,27 @@ export class TestimonialsService extends BaseService<Testimonial> {
     );
   }
 
-  async addMedia(id: number, file: any) {
-    const testimonial = await super.findOne(id);
+  async addMedia(id: number, files: Express.Multer.File[]) {
+    const testimonial = await this.findOne(id);
 
-    return this.mediaService.attach(
-      file,
-      'testimonials',
-      (media) => {
-        media.testimonial = testimonial;
-      },
-      testimonial.name,
-    );
+    const medias: Media[] = [];
+
+    for (const file of files) {
+      const media = this.mediaService.create(
+        file,
+        {
+          description: 'Testimonial',
+        },
+        'testimonials',
+      );
+
+      media.testimonial = testimonial;
+
+      const saved = await this.mediaRepository.save(media);
+
+      medias.push(saved);
+    }
+
+    return medias;
   }
 }

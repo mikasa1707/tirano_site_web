@@ -1,23 +1,24 @@
 @if (media) {
-  <div class="media-overlay" (click)="close()">
-    <button class="btn btn-sm btn-outline-danger border-0 btn-close-viewer" (click)="close(); $event.stopPropagation()">
-      <i class="fa-solid fa-xmark"></i>
-    </button>
+  @if (media.type === 'IMAGE') {
+    <img [src]="media.url" class="w-100" style="max-height: 90vh; object-fit: contain" />
 
-    <div class="media-content" (click)="$event.stopPropagation()">
-      @if (media.type === 'IMAGE') {
-        <img [src]="media.url" [alt]="media.title ?? 'Image'" class="media-image" />
-      }
+  } @else if (media.type === 'VIDEO') {
+    <video controls autoplay class="w-100" style="max-height: 90vh">
+      <source [src]="media.url" />
+    </video>
 
-      @if (media.type === 'VIDEO') {
-        <video class="media-video" controls autoplay>
-          <source [src]="media.url" />
-        </video>
-      }
+  } @else {
+    <div class="text-center p-5">
+      <i class="fa-solid fa-file fa-5x mb-4"></i>
 
-      @if (media.type === 'PDF') {
-        <iframe [src]="media.url" class="media-pdf"> </iframe>
-      }
+      <h5>
+        {{ media.filename ?? media.title }}
+      </h5>
+
+      <a class="btn btn-primary mt-3" [href]="media.url" target="_blank">
+        <i class="fa-solid fa-folder-open me-2"></i>
+        Ouvrir le document
+      </a>
     </div>
-  </div>
+  }
 }

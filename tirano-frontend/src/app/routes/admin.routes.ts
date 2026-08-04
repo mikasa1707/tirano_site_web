@@ -59,8 +59,8 @@ export const ADMIN_ROUTES: Routes = [
         path: 'articles',
 
         loadComponent: () =>
-          import('../features/articles/article-list-page/article-list-page').then(
-            (m) => m.ArticleListPage,
+          import('../features/articles/admin-article-list-page/admin-article-list-page').then(
+            (m) => m.AdminArticleListPage,
           ),
       },
 

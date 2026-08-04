@@ -1,57 +1,63 @@
 <div class="row g-3">
   @for (item of items; track item.id) {
-    @if (item) {
-      <div class="col-6 col-md-4 col-lg-3">
-        <div class="card h-100 shadow-sm gallery-card" (click)="select.emit(item)">
-          @if (removable) {
-            <button
-              type="button"
-              class="btn btn-danger btn-sm position-absolute top-0 end-0 m-2 z-1"
-              (click)="onRemove(item); $event.stopPropagation()"
-            >
-              <i class="fa-solid fa-trash"></i>
-            </button>
-          }
+    <div class="col-6 col-md-4 col-lg-3">
+      <div
+        class="card h-100 shadow-sm position-relative"
+        (click)="select.emit(item)"
+        style="cursor: pointer"
+      >
+        @if (removable) {
+          <button
+            type="button"
+            class="btn btn-danger btn-sm position-absolute top-0 end-0 m-2 z-1"
+            (click)="onRemove(item); $event.stopPropagation()"
+          >
+            <i class="fa-solid fa-trash"></i>
+          </button>
+        }
 
-          @if (item.type === 'IMAGE') {
-            <img
+        <!-- IMAGE -->
+        @if (item.type === 'IMAGE') {
+          <img
+            [src]="item.url"
+            [alt]="item.filename ?? item.title ?? 'Document'"
+            class="card-img-top"
+            style="height: 220px; object-fit: cover"
+          />
+        }
+
+        <!-- VIDEO -->
+        @else if (item.type === 'VIDEO') {
+          <div
+            class="position-relative d-flex align-items-center justify-content-center bg-dark"
+            style="height: 220px"
+          >
+            <video
               [src]="item.url"
-              [alt]="item.title ?? 'Image'"
-              class="card-img-top gallery-media"
-            />
-          }
+              muted
+              preload="metadata"
+              class="w-100 h-100"
+              style="object-fit: cover"
+            ></video>
 
-          @if (item.type === 'VIDEO') {
-            <div class="position-relative">
-              <video
-                [src]="item.url"
-                muted
-                preload="none"
-                playsinline
-                class="gallery-media"
-              ></video>
+            <i class="fa-solid fa-circle-play fa-3x text-white position-absolute"></i>
+          </div>
+        }
 
-              <div class="video-overlay">
-                <i class="fa-solid fa-circle-play fa-3x text-dark"></i>
-              </div>
-            </div>
-          }
+        <!-- DOCUMENT -->
+        @else {
+          <div
+            class="d-flex flex-column justify-content-center align-items-center bg-light"
+            style="height: 220px"
+          >
+            <i class="fa-solid fa-file-lines fa-3x text-secondary mb-3"></i>
 
-          @if (item.type === 'PDF') {
-            <div class="pdf-box">
-              <i class="fa-solid fa-file-pdf fa-3x text-danger"></i>
-            </div>
-          }
-
-          @if (item.title) {
-            <div class="card-body p-2">
-              <p class="mb-0 small text-muted">
-                {{ item.title }}
-              </p>
-            </div>
-          }
-        </div>
+            <span class="text-center small px-2 text-break">
+              {{ item.filename ?? item.title ?? 'Document' }}
+            </span>
+          </div>
+        }
       </div>
-    }
+    </div>
   }
 </div>

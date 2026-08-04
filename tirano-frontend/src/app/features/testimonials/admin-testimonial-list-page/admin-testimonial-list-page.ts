@@ -1,13 +1,27 @@
-import { Component } from '@angular/core';
+import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
+import { TestimonialApi } from '../../../core/api/testimonial.api';
+import { Subject, Subscription, debounceTime, distinctUntilChanged } from 'rxjs';
+import { TableColumn } from '../../../core/models/table-column';
+import { Testimonial } from '../../../core/models/testimonial';
+import { ToastService } from '../../../core/services/toast';
+import { PageHeaderComponent } from "../../../shared/components/page-header/page-header";
+import { SearchBarComponent } from "../../../shared/components/search-bar/search-bar";
+import { Loading } from "../../../shared/components/loading/loading";
+import { DataTableComponent } from "../../../shared/components/data-table/data-table";
+import { PaginationComponent } from "../../../shared/components/pagination/pagination";
+import { StateView } from "../../../shared/components/state-view/state-view";
+import { ModalComponent } from "../../../shared/components/modal/modal";
+import { AdminTestimonialFormPage } from "../admin-testimonial-form-page/admin-testimonial-form-page";
+import { AdminTestimonialDetailPage } from "../admin-testimonial-detail-page/admin-testimonial-detail-page";
 
 @Component({
   selector: 'app-admin-testimonial-list-page',
-  imports: [],
+  imports: [PageHeaderComponent, SearchBarComponent, Loading, DataTableComponent, PaginationComponent, StateView, ModalComponent, AdminTestimonialFormPage, AdminTestimonialDetailPage],
   templateUrl: './admin-testimonial-list-page.html',
   styleUrl: './admin-testimonial-list-page.scss',
 })
-export class AdminTestimonialListPage  implements OnInit, OnDestroy {
-  products: Product[] = [];
+export class AdminTestimonialListPage implements OnInit, OnDestroy {
+  testimonials: Testimonial[] = [];
 
   loading = true;
   search = '';
@@ -19,7 +33,7 @@ export class AdminTestimonialListPage  implements OnInit, OnDestroy {
   show_modal = false;
   show_detail = false;
 
-  selected?: Product;
+  selected?: Testimonial;
 
   columns: TableColumn[] = [
     {
@@ -28,14 +42,13 @@ export class AdminTestimonialListPage  implements OnInit, OnDestroy {
     },
 
     {
-      field: 'reference',
-      label: 'Référence',
+      field: 'role',
+      label: 'Fonction',
     },
 
     {
-      field: 'price',
-      label: 'Prix',
-      type: 'currency',
+      field: 'message',
+      label: 'Message',
     },
 
     {
@@ -49,7 +62,7 @@ export class AdminTestimonialListPage  implements OnInit, OnDestroy {
   private searchSubscription!: Subscription;
 
   constructor(
-    private api: ProductApi,
+    private api: TestimonialApi,
     private cdr: ChangeDetectorRef,
     private toast: ToastService,
   ) {}
@@ -84,7 +97,7 @@ export class AdminTestimonialListPage  implements OnInit, OnDestroy {
       })
       .subscribe({
         next: (response: any) => {
-          this.products = response.data.data;
+          this.testimonials = response.data.data;
           this.page = response.data.meta.page;
           this.limit = response.data.meta.limit;
           this.total = response.data.meta.total;
@@ -117,8 +130,8 @@ export class AdminTestimonialListPage  implements OnInit, OnDestroy {
     this.show_modal = true;
   }
 
-  edit(project: Product) {
-    this.selected = project;
+  edit(testimonial: Testimonial) {
+    this.selected = testimonial;
     this.show_modal = true;
   }
 
@@ -133,12 +146,12 @@ export class AdminTestimonialListPage  implements OnInit, OnDestroy {
     this.load();
   }
 
-  delete(project: Product) {
-    if (!confirm(`Supprimer le produit "${project.name}" ?`)) {
+  delete(testimonial: Testimonial) {
+    if (!confirm(`Supprimer le produit "${testimonial.name}" ?`)) {
       return;
     }
 
-    this.api.delete(project.id).subscribe({
+    this.api.delete(testimonial.id).subscribe({
       next: () => {
         this.toast.success('Produit supprimé');
         this.load();
@@ -149,9 +162,8 @@ export class AdminTestimonialListPage  implements OnInit, OnDestroy {
     });
   }
 
-  detail(project: Product) {
-    this.selected = project;
+  detail(testimonial: Testimonial) {
+    this.selected = testimonial;
     this.show_detail = true;
   }
 }
-

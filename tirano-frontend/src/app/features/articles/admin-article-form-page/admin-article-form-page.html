@@ -1,1 +1,14 @@
-<p>admin-article-form-page works!</p>
+<app-form-builder [form]="form" [fields]="fields" [showSave]="false"> </app-form-builder>
+
+@if (medias.length > 0) {
+  <app-gallery [items]="medias" [removable]="true" (remove)="removeMedia($event)"></app-gallery>
+}
+
+<app-file-selector (selected)="uploadMedia($event)" [multiple]="true"> </app-file-selector>
+
+<div class="d-flex justify-content-end mt-3">
+  <button class="btn btn-primary" [disabled]="loading" (click)="submit()">
+    <i class="fa-solid fa-floppy-disk me-2"></i>
+    Enregistrer
+  </button>
+</div>

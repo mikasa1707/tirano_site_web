@@ -1,20 +1,19 @@
 import { Injectable } from '@nestjs/common';
-
 import { InjectRepository } from '@nestjs/typeorm';
-
 import { Repository } from 'typeorm';
-
 import { BaseService } from '../common/services/base.service';
-
 import { Article } from './entities/article.entity';
-
 import { MediaService } from '../media/media.service';
+import { Media } from 'src/media/entities/media.entity';
 
 @Injectable()
 export class ArticlesService extends BaseService<Article> {
   constructor(
     @InjectRepository(Article)
     repository: Repository<Article>,
+
+    @InjectRepository(Media)
+    private mediaRepository: Repository<Media>,
 
     private readonly mediaService: MediaService,
   ) {
@@ -65,18 +64,21 @@ export class ArticlesService extends BaseService<Article> {
     };
   }
 
-  async addMedia(id: number, file: any) {
-    const article = await this.findOne(id, {
-      medias: true,
-    });
-
-    return this.mediaService.attach(
-      file,
-      'articles',
-      (media) => {
-        media.article = article;
-      },
-      'Article',
-    );
+  async addMedia(id: number, files: Express.Multer.File[]) {
+    const article = await this.findOne(id);
+    const medias: Media[] = [];
+    for (const file of files) {
+      const media = this.mediaService.create(
+        file,
+        {
+          description: 'Article',
+        },
+        'articles',
+      );
+      media.article = article;
+      const saved = await this.mediaRepository.save(media);
+      medias.push(saved);
+    }
+    return medias;
   }
 }

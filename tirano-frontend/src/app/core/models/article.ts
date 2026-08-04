@@ -33,3 +33,26 @@ export enum ArticleType {
   ADVERTISEMENT = 'ADVERTISEMENT',
   OTHER = 'OTHER',
 }
+
+export const ARTICLE_TYPE_OPTIONS = [
+  {
+    label: 'Actualité',
+    value: 'NEWS',
+  },
+  {
+    label: 'Presse',
+    value: 'PRESS',
+  },
+  {
+    label: 'Événement',
+    value: 'EVENT',
+  },
+  {
+    label: 'Publicité',
+    value: 'ADVERTISEMENT',
+  },
+  {
+    label: 'Autre',
+    value: 'OTHER',
+  },
+];
