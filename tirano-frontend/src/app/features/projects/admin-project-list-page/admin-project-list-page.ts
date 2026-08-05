@@ -66,12 +66,6 @@ export class AdminProjectListPage implements OnInit, OnDestroy {
       label: 'Date réalisation',
       type: 'date',
     },
-
-    {
-      field: 'active',
-      label: 'Statut',
-      type: 'badge',
-    },
   ];
 
   private searchSubject = new Subject<string>();

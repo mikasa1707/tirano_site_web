@@ -75,6 +75,10 @@
             <textarea rows="5" class="form-control" [formControlName]="field.key"> </textarea>
           }
 
+          @case ('date') {
+            <app-date-field [form]="form" [field]="field"> </app-date-field>
+          }
+
           @case ('select') {
             <select class="form-select" [formControlName]="field.key">
               <option [ngValue]="null">Sélectionner...</option>

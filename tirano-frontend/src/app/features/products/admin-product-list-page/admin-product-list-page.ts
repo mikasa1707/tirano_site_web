@@ -51,12 +51,6 @@ export class AdminProductListPage implements OnInit, OnDestroy {
       label: 'Prix',
       type: 'currency',
     },
-
-    {
-      field: 'active',
-      label: 'Statut',
-      type: 'badge',
-    },
   ];
 
   private searchSubject = new Subject<string>();

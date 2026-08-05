@@ -28,6 +28,10 @@
             </div>
           }
 
+          @case ('currency') {
+            <p class="fw-semibold">{{ data[field.key] ?? 0  | currency: 'Ar' : 'symbol' : '1.0-0' }}</p>
+          }
+
           @default {
             <p class="mb-0">
               {{ data[field.key] ?? '-' }}

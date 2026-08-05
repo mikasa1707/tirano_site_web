@@ -46,8 +46,10 @@
 
         <!-- DOCUMENT -->
         @else {
-          <div
-            class="d-flex flex-column justify-content-center align-items-center bg-light"
+          <a
+            class="btn btn-light d-flex flex-column justify-content-center align-items-center"
+            [href]="item.url"
+            target="_blank"
             style="height: 220px"
           >
             <i class="fa-solid fa-file-lines fa-3x text-secondary mb-3"></i>
@@ -55,7 +57,7 @@
             <span class="text-center small px-2 text-break">
               {{ item.filename ?? item.title ?? 'Document' }}
             </span>
-          </div>
+          </a>
         }
       </div>
     </div>

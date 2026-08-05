@@ -103,7 +103,7 @@ export class AdminTestimonialFormPage implements OnChanges {
         const testimonial = response.data?.data ?? response.data;
         this.toast.success('Testimonial créer avec succés');
         if (this.mediaFiles.length > 0) {
-          this.mediaApi.upload('projects', testimonial.id, this.mediaFiles).subscribe({
+          this.mediaApi.upload('testimonials', testimonial.id, this.mediaFiles).subscribe({
             next: () => {
               this.finishSave();
             },

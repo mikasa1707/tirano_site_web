@@ -41,13 +41,6 @@ export class AdminTestimonialDetailPage {
     },
 
     {
-      key: 'active',
-      label: 'Statut',
-      type: 'badge',
-      col: 'col-6',
-    },
-
-    {
       key: 'medias',
       label: 'Galerie',
       type: 'gallery',

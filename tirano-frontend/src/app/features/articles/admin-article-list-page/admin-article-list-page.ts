@@ -9,10 +9,10 @@ import { PaginationComponent } from "../../../shared/components/pagination/pagin
 import { DataTableComponent } from "../../../shared/components/data-table/data-table";
 import { StateView } from "../../../shared/components/state-view/state-view";
 import { ModalComponent } from "../../../shared/components/modal/modal";
-import { ArticleApi } from '../../../core/api/article.api';
 import { AdminArticleFormPage } from "../admin-article-form-page/admin-article-form-page";
 import { AdminArticleDetailPage } from "../admin-article-detail-page/admin-article-detail-page";
 import { Article } from '../../../core/models/article';
+import { ArticleApi } from '../../../core/api/article.api';
 
 @Component({
   selector: 'app-admin-article-list-page',
@@ -50,12 +50,6 @@ export class AdminArticleListPage implements OnInit, OnDestroy {
       field: 'publishedAt',
       label: 'Publication',
       type: 'date',
-    },
-
-    {
-      field: 'active',
-      label: 'Statut',
-      type: 'badge',
     },
   ];
 

@@ -36,7 +36,7 @@ export class AdminProductDetailPage {
     {
       key: 'price',
       label: 'Prix',
-      type: 'number',
+      type: 'currency',
       col: 'col-6',
     },
 
@@ -45,13 +45,6 @@ export class AdminProductDetailPage {
       label: 'Description',
       type: 'html',
       col: 'col-12',
-    },
-
-    {
-      key: 'active',
-      label: 'Statut',
-      type: 'badge',
-      col: 'col-6',
     },
 
     {

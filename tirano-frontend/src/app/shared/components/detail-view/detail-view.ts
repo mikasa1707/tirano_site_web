@@ -1,11 +1,12 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Gallery } from '../gallery/gallery';
 import { Media } from '../../../core/models/media';
+import { CurrencyPipe } from '@angular/common';
 
 @Component({
   selector: 'app-detail-view',
   standalone: true,
-  imports: [Gallery],
+  imports: [Gallery, CurrencyPipe],
   templateUrl: './detail-view.html',
 })
 export class DetailViewComponent {
