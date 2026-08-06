@@ -1,1 +1,3 @@
-<p>admin-message-detail-page works!</p>
+@if (message) {
+  <app-detail-view [data]="message" [fields]="fields"> </app-detail-view>
+}

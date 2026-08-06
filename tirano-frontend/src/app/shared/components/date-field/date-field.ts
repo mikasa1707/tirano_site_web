@@ -1,9 +1,12 @@
-import { AfterViewInit, Component, ElementRef, Input, ViewChild } from '@angular/core';
-
-import { FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { Component, ElementRef, Input, ViewChild, AfterViewInit } from '@angular/core';
+import {
+  ControlContainer,
+  FormGroup,
+  FormGroupDirective,
+  ReactiveFormsModule,
+} from '@angular/forms';
 
 import flatpickr from 'flatpickr';
-
 import { French } from 'flatpickr/dist/l10n/fr';
 
 @Component({
@@ -11,33 +14,29 @@ import { French } from 'flatpickr/dist/l10n/fr';
   standalone: true,
   imports: [ReactiveFormsModule],
   templateUrl: './date-field.html',
+  viewProviders: [
+    {
+      provide: ControlContainer,
+      useExisting: FormGroupDirective,
+    },
+  ],
 })
 export class DateField implements AfterViewInit {
-  @Input()
-  form!: FormGroup;
+  @Input() form!: FormGroup;
 
-  @Input()
-  field!: any;
+  @Input() field!: any;
 
   @ViewChild('input')
-  input!: ElementRef;
+  input!: ElementRef<HTMLInputElement>;
 
   ngAfterViewInit() {
     flatpickr(this.input.nativeElement, {
       locale: French,
-
       dateFormat: 'd/m/Y',
-
       allowInput: true,
-
       defaultDate: this.form.get(this.field.key)?.value,
-
       onChange: (dates) => {
-        if (dates.length) {
-          this.form.patchValue({
-            [this.field.key]: dates[0],
-          });
-        }
+        this.form.get(this.field.key)?.setValue(dates[0] ?? null);
       },
     });
   }

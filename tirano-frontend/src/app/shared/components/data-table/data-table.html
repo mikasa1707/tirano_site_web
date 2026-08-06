@@ -89,6 +89,17 @@
 
                         {{ row.type }}
                       </span>
+                    } @else if (col.field === 'isRead') {
+                      <span
+                        class="badge fs-6 px-3 py-2"
+                        [ngClass]="col.badgeClass ? col.badgeClass(row) : 'bg-primary'"
+                      >
+                        @if (getValue(row, col.field)) {
+                          Lu
+                        } @else {
+                          Non lu
+                        }
+                      </span>
                     } @else {
                       <span
                         class="badge fs-6 px-3 py-2"

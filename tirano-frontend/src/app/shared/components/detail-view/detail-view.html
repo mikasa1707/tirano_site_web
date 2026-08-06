@@ -11,7 +11,18 @@
             <div [innerHTML]="data[field.key] ?? ''"></div>
           }
 
+          @case ('date') {
+            {{ data[field.key] | date: 'dd/MM/yyyy HH:mm' : 'Indian/Antananarivo' }}
+          }
+
           @case ('badge') {
+            @if (data[field.key] === 'isRead') {
+              @if (data[field.key]) {
+                <span class="badge bg-success">Lu</span>
+              } @else {
+                <span class="badge bg-secondary">Non lu</span>
+              }
+            }
             @if (data[field.key]) {
               <span class="badge bg-success">Actif</span>
             } @else {
@@ -29,7 +40,9 @@
           }
 
           @case ('currency') {
-            <p class="fw-semibold">{{ data[field.key] ?? 0  | currency: 'Ar' : 'symbol' : '1.0-0' }}</p>
+            <p class="fw-semibold">
+              {{ data[field.key] ?? 0 | currency: 'Ar' : 'symbol' : '1.0-0' }}
+            </p>
           }
 
           @default {

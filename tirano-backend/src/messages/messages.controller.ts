@@ -1,46 +1,36 @@
-import {
-  Body,
-  Controller,
-  Delete,
-  Get,
-  Param,
-  Patch,
-  Post,
-  Put,
-  Query,
-  UploadedFile,
-  UseInterceptors,
-} from '@nestjs/common';
-
-import { FileInterceptor } from '@nestjs/platform-express';
+import { Controller, Get, Param, Query, Delete, Put } from '@nestjs/common';
 
 import { MessagesService } from './messages.service';
 
-import { CreateMessageDto } from './dto/create-message.dto';
-import { UpdateMessageDto } from './dto/update-message.dto';
-
-import { PaginationDto } from '../common/dto/pagination.dto';
-import { SearchDto } from '../common/dto/search.dto';
-import { SortDto } from '../common/dto/sort.dto';
-
 import { ResponseUtil } from '../common/utils/response.util';
+
+interface SiteServiceQuery {
+  page?: string;
+  limit?: string;
+  search?: string;
+  sortBy?: string;
+  sortOrder?: 'ASC' | 'DESC';
+}
 
 @Controller('messages')
 export class MessagesController {
-  constructor(private readonly service: MessagesService) {}
-
-  @Post()
-  create(@Body() dto: CreateMessageDto) {
-    return this.service.create(dto);
-  }
+  constructor(private service: MessagesService) {}
 
   @Get()
-  findAll(
-    @Query() pagination: PaginationDto,
-    @Query() search: SearchDto,
-    @Query() sort: SortDto,
-  ) {
-    return this.service.findAll(pagination, search, sort);
+  findAll(@Query() query: SiteServiceQuery) {
+    return this.service.findAll(
+      {
+        page: Number(query.page ?? 1),
+        limit: Number(query.limit ?? 10),
+      },
+      {
+        search: query.search ?? '',
+      },
+      {
+        sortBy: query.sortBy ?? 'created_at',
+        sortOrder: query.sortOrder ?? 'DESC',
+      },
+    );
   }
 
   @Get(':id')
@@ -50,25 +40,24 @@ export class MessagesController {
     return ResponseUtil.success(data);
   }
 
-  @Put(':id')
-  async update(@Param('id') id: number, @Body() dto: UpdateMessageDto) {
-    const data = await this.service.update(+id, dto);
+  @Put(':id/read')
+  async read(@Param('id') id: number) {
+    const data = await this.service.markAsRead(+id);
 
-    return ResponseUtil.success(data, 'Message modifié');
+    return ResponseUtil.success(data, 'Message marqué comme lu');
+  }
+
+  @Put(':id/unread')
+  async unread(@Param('id') id: number) {
+    const data = await this.service.markAsUnread(+id);
+
+    return ResponseUtil.success(data, 'Message marqué comme non lu');
   }
 
   @Delete(':id')
-  remove(@Param('id') id: number) {
-    return this.service.remove(+id);
-  }
+  async remove(@Param('id') id: number) {
+    const data = await this.service.remove(+id);
 
-  @Patch(':id/read')
-  markAsRead(@Param('id') id: number) {
-    return this.service.markAsRead(+id);
-  }
-
-  @Patch(':id/unread')
-  markAsUnread(@Param('id') id: number) {
-    return this.service.markAsUnread(+id);
+    return data;
   }
 }

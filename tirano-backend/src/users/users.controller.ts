@@ -19,22 +19,32 @@ import { SortDto } from 'src/common/dto/sort.dto';
 import { ResponseUtil } from 'src/common/utils/response.util';
 import { PaginationUtil } from 'src/common/utils/pagination.util';
 
+interface QueryDto {
+  page?: string;
+  limit?: string;
+  search?: string;
+  sortBy?: string;
+  sortOrder?: 'ASC' | 'DESC';
+}
+
 @Controller('users')
 export class UsersController {
   constructor(private readonly service: UsersService) {}
 
   @Get()
-  async findAll(
-    @Query() pagination: PaginationDto,
-    @Query() search: SearchDto,
-    @Query() sort: SortDto,
-  ) {
-    const result = await this.service.findAll(pagination, search, sort);
-
-    return ResponseUtil.paginate(
-      result.users,
-      PaginationUtil.createMeta(result.total, result.page, result.limit),
-      'Liste des utilisateurs',
+  findAll(@Query() query: QueryDto) {
+    return this.service.findAll(
+      {
+        page: Number(query.page ?? 1),
+        limit: Number(query.limit ?? 10),
+      },
+      {
+        search: query.search ?? '',
+      },
+      {
+        sortBy: query.sortBy ?? 'created_at',
+        sortOrder: query.sortOrder ?? 'DESC',
+      },
     );
   }
 

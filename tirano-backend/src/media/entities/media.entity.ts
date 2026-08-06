@@ -9,6 +9,7 @@ import { Product } from 'src/products/entities/product.entity';
 import { Testimonial } from 'src/testimonials/entities/testimonial.entity';
 import { Setting } from 'src/settings/entities/setting.entity';
 import { Article } from 'src/articles/entities/article.entity';
+import { User } from 'src/users/entities/user.entity';
 
 @Entity('media')
 export class Media extends BaseEntity {
@@ -80,4 +81,10 @@ export class Media extends BaseEntity {
     onDelete: 'CASCADE',
   })
   article?: Article;
+
+  @ManyToOne(() => User, (user) => user.medias, {
+    nullable: true,
+    onDelete: 'CASCADE',
+  })
+  user?: User;
 }

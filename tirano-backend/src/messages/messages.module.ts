@@ -4,9 +4,10 @@ import { MessagesController } from './messages.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Message } from './entities/message.entity';
 import { MediaModule } from 'src/media/media.module';
+import { NotificationsModule } from 'src/notifications/notifications.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Message]), MediaModule],
+  imports: [TypeOrmModule.forFeature([Message]), MediaModule, NotificationsModule],
   controllers: [MessagesController],
   providers: [MessagesService],
 })

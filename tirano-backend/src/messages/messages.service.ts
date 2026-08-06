@@ -1,32 +1,30 @@
-import { Injectable } from "@nestjs/common";
-import { InjectRepository } from "@nestjs/typeorm";
-import { PaginationDto } from "src/common/dto/pagination.dto";
-import { SearchDto } from "src/common/dto/search.dto";
-import { SortDto } from "src/common/dto/sort.dto";
-import { BaseService } from "src/common/services/base.service";
-import { ResponseUtil } from "src/common/utils/response.util";
-import { MediaService } from "src/media/media.service";
-import { Repository } from "typeorm";
-import { MessageResponseDto } from "./dto/mesage-response.dto";
-import { Message } from "./entities/message.entity";
+import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { PaginationDto } from 'src/common/dto/pagination.dto';
+import { SearchDto } from 'src/common/dto/search.dto';
+import { SortDto } from 'src/common/dto/sort.dto';
+import { BaseService } from 'src/common/services/base.service';
+import { ResponseUtil } from 'src/common/utils/response.util';
+import { Repository } from 'typeorm';
+import { MessageResponseDto } from './dto/mesage-response.dto';
+import { Message } from './entities/message.entity';
+import { NotificationsService } from 'src/notifications/notifications.service';
 
 @Injectable()
 export class MessagesService extends BaseService<Message> {
   constructor(
     @InjectRepository(Message)
     repository: Repository<Message>,
-    private readonly mediaService: MediaService,
+    notifications: NotificationsService,
   ) {
-    super(repository, 'Message');
+    super(repository, 'Message', notifications);
   }
 
   async findAll(pagination: PaginationDto, search: SearchDto, sort: SortDto) {
     const page = pagination.page ?? 1;
     const limit = pagination.limit ?? 10;
 
-    const query = this.repository
-      .createQueryBuilder('message')
-      .leftJoinAndSelect('message.medias', 'media');
+    const query = this.repository.createQueryBuilder('message');
 
     if (search.search) {
       query.where(

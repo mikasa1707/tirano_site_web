@@ -1,1 +1,58 @@
-<p>admin-message-list-page works!</p>
+<app-page-header title="Messages" icon="fa-solid fa-envelope">
+  <app-search-bar (searchChange)="onSearch($event)"> </app-search-bar>
+</app-page-header>
+
+<!-- <app-data-table
+  [columns]="columns"
+  [data]="messages"
+  [loading]="loading"
+  (action)="onAction($event)"
+>
+</app-data-table>
+
+<app-pagination [page]="page" [totalPages]="totalPages" (pageChange)="onPageChange($event)">
+</app-pagination> -->
+
+<div class="container-fluid">
+  @if (loading) {
+    <app-loading></app-loading>
+  } @else {
+    <!-- <h1>ADMIN SERVICE LIST CHARGE {{ testimonials.length }}</h1> -->
+    @if (messages.length > 0) {
+      <app-data-table
+        [columns]="columns"
+        [data]="messages"
+        [loading]="loading"
+        [page]="page"
+        [totalPages]="totalPages"
+        (pageChange)="onPageChange($event)"
+        [showViewButton]="true"
+        [canEdit]="false"
+        [canDelete]="false"
+        (view)="open($event)"
+        (delete)="delete($event)"
+      >
+      </app-data-table>
+
+      <app-pagination
+        [page]="page"
+        [total]="total"
+        [limit]="limit"
+        (pageChange)="onPageChange($event)"
+      >
+      </app-pagination>
+    } @else {
+      <app-state-view type="empty"> </app-state-view>
+    }
+  }
+</div>
+
+
+<app-modal
+  size="xl"
+  [show]="show"
+  title="{{ selected?.fullname }}"
+  (closed)="show = false"
+>
+  <app-admin-message-detail-page [message]="selected"></app-admin-message-detail-page>
+</app-modal>

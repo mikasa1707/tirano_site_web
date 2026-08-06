@@ -30,6 +30,7 @@ import { RolesGuard } from './auth/guards/roles.guard';
 import { SeedModule } from './database/seed/seed.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
+import { NotificationsModule } from './notifications/notifications.module';
 
 @Module({
   imports: [
@@ -70,6 +71,7 @@ import { join } from 'path';
 
     AuthModule,
     SeedModule,
+    NotificationsModule,
   ],
 
   controllers: [AppController],

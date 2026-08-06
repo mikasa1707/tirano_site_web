@@ -1,1 +1,58 @@
-<p>user-list-page works!</p>
+<app-page-header
+  title="Services"
+  subtitle="Gestion des services proposées"
+  icon="fa-solid fa-gears"
+>
+  <div class="d-flex gap-2 flex-wrap">
+    <div class="search-wrapper">
+      <app-search-bar (searchChange)="onSearch($event)"></app-search-bar>
+    </div>
+
+    <button class="btn btn-sm btn-primary" (click)="openCreate()">
+      <i class="fa-solid fa-plus me-1"></i>
+      Ajouter
+    </button>
+  </div>
+</app-page-header>
+
+<div class="container-fluid">
+  @if (loading) {
+    <app-loading></app-loading>
+  } @else {
+    <!-- <h1>ADMIN SERVICE LIST CHARGE {{ services.length }}</h1> -->
+    @if (users.length > 0) {
+      <app-data-table
+        [columns]="columns"
+        [data]="users"
+        [loading]="loading"
+        [page]="page"
+        [totalPages]="totalPages"
+        (pageChange)="onPageChange($event)"
+        [showViewButton]="false"
+        (edit)="edit($event)"
+        (delete)="delete($event)"
+      >
+      </app-data-table>
+
+      <app-pagination
+        [page]="page"
+        [total]="total"
+        [limit]="limit"
+        (pageChange)="onPageChange($event)"
+      >
+      </app-pagination>
+    } @else {
+      <app-state-view type="empty"> </app-state-view>
+    }
+  }
+</div>
+
+<app-modal
+  size="xl"
+  [show]="show_modal"
+  title="{{ selected ? 'Modifier utilisateur' : 'Ajouter utilisateur' }}"
+  (closed)="closeModal()"
+>
+  <app-user-form-page [user]="selected" (saved)="onSaved()">
+  </app-user-form-page>
+</app-modal>
