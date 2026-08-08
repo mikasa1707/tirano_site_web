@@ -1,6 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '../../../../core/api/auth.api';
+import { SiteSettingsService } from '../../../../core/services/site-settings.service';
 
 @Component({
   selector: 'app-navbar',
@@ -8,7 +9,7 @@ import { AuthService } from '../../../../core/api/auth.api';
   templateUrl: './navbar.html',
 })
 export class NavbarComponent {
-  constructor(private readonly authService: AuthService) {}
+  constructor(private readonly authService: AuthService, public settings: SiteSettingsService,) {}
   private router = inject(Router);
 
   logout() {

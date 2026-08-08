@@ -3,31 +3,18 @@ import {
   NotFoundException,
   ConflictException,
 } from '@nestjs/common';
-
 import { InjectRepository } from '@nestjs/typeorm';
-
 import { Repository } from 'typeorm';
-
 import * as bcrypt from 'bcrypt';
-
 import { User } from './entities/user.entity';
-
 import { CreateUserDto } from './dto/create-user.dto';
-
 import { UpdateUserDto } from './dto/update-user.dto';
-
 import { UserResponseDto } from './dto/user-response.dto';
-
 import { PaginationDto } from '../common/dto/pagination.dto';
-
 import { SearchDto } from '../common/dto/search.dto';
-
 import { SortDto } from '../common/dto/sort.dto';
-
 import { ResponseUtil } from '../common/utils/response.util';
-
 import { Media } from '../media/entities/media.entity';
-
 import { MediaService } from '../media/media.service';
 
 @Injectable()
@@ -80,13 +67,7 @@ export class UsersService {
   // LIST
   // ============================
 
-  async findAll(
-    pagination: PaginationDto,
-
-    search: SearchDto,
-
-    sort: SortDto,
-  ) {
+  async findAll(pagination: PaginationDto, search: SearchDto, sort: SortDto) {
     const page = pagination.page ?? 1;
 
     const limit = pagination.limit ?? 10;
@@ -224,7 +205,7 @@ OR user.email LIKE :search
     const medias: Media[] = [];
 
     for (const file of files) {
-      const media = await this.mediaService.create(
+      const media = this.mediaService.create(
         file,
 
         {

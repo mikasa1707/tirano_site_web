@@ -7,17 +7,15 @@ import {
   Param,
   Body,
   Query,
+  UploadedFiles,
+  UseInterceptors,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { Roles } from '../auth/decorators/roles.decorator';
 import { UserRole } from './entities/user.entity';
-import { PaginationDto } from 'src/common/dto/pagination.dto';
-import { SearchDto } from 'src/common/dto/search.dto';
-import { SortDto } from 'src/common/dto/sort.dto';
-import { ResponseUtil } from 'src/common/utils/response.util';
-import { PaginationUtil } from 'src/common/utils/pagination.util';
+import { FilesInterceptor } from '@nestjs/platform-express';
 
 interface QueryDto {
   page?: string;
@@ -72,5 +70,16 @@ export class UsersController {
   @Roles(UserRole.ADMIN)
   remove(@Param('id') id: number) {
     return this.service.remove(+id);
+  }
+
+  @Post(':id/media')
+  @UseInterceptors(FilesInterceptor('files', 10))
+  async addMedia(
+    @Param('id') id: number,
+
+    @UploadedFiles()
+    files: Express.Multer.File[],
+  ) {
+    return this.service.addMedia(+id, files);
   }
 }

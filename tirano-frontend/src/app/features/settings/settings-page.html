@@ -1,1 +1,23 @@
-<p>settings-page works!</p>
+<div class="card shadow-sm">
+  <div class="card-header">
+    <h5>Paramètres du site</h5>
+  </div>
+
+  <div class="card-body">
+    <app-form-builder [form]="form" [fields]="fields" (save)="submit()"> </app-form-builder>
+
+    <hr />
+
+    <h5>Logo / Favicon / Médias</h5>
+
+    <app-file-selector [multiple]="true" (selected)="uploadFiles($event)"> </app-file-selector>
+
+    <button class="btn btn-primary mt-3" (click)="uploadMedia()" [disabled]="!mediaFiles.length">
+      Ajouter les fichiers
+    </button>
+
+    <hr />
+
+    <app-gallery [items]="medias"> </app-gallery>
+  </div>
+</div>

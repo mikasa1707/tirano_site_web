@@ -4,20 +4,29 @@ import { User } from '../../../core/models/user';
 import { TableColumn } from '../../../core/models/table-column';
 import { debounceTime, distinctUntilChanged, Subject, Subscription } from 'rxjs';
 import { ToastService } from '../../../core/services/toast';
-import { PageHeaderComponent } from "../../../shared/components/page-header/page-header";
-import { SearchBarComponent } from "../../../shared/components/search-bar/search-bar";
-import { Loading } from "../../../shared/components/loading/loading";
-import { DataTableComponent } from "../../../shared/components/data-table/data-table";
-import { PaginationComponent } from "../../../shared/components/pagination/pagination";
-import { StateView } from "../../../shared/components/state-view/state-view";
-import { ModalComponent } from "../../../shared/components/modal/modal";
-import { UserFormPage } from "../user-form-page/user-form-page";
+import { PageHeaderComponent } from '../../../shared/components/page-header/page-header';
+import { SearchBarComponent } from '../../../shared/components/search-bar/search-bar';
+import { Loading } from '../../../shared/components/loading/loading';
+import { DataTableComponent } from '../../../shared/components/data-table/data-table';
+import { PaginationComponent } from '../../../shared/components/pagination/pagination';
+import { StateView } from '../../../shared/components/state-view/state-view';
+import { ModalComponent } from '../../../shared/components/modal/modal';
+import { UserFormPage } from '../user-form-page/user-form-page';
 
 @Component({
   selector: 'app-admin-user-list-page',
   standalone: true,
   templateUrl: './user-list-page.html',
-  imports: [PageHeaderComponent, SearchBarComponent, Loading, DataTableComponent, PaginationComponent, StateView, ModalComponent, UserFormPage],
+  imports: [
+    PageHeaderComponent,
+    SearchBarComponent,
+    Loading,
+    DataTableComponent,
+    PaginationComponent,
+    StateView,
+    ModalComponent,
+    UserFormPage,
+  ],
 })
 export class UserListPage implements OnInit, OnDestroy {
   users: User[] = [];
@@ -36,13 +45,18 @@ export class UserListPage implements OnInit, OnDestroy {
 
   columns: TableColumn[] = [
     {
-      field: 'firstName',
+      field: 'firstname',
       label: 'Prénom',
     },
 
     {
-      field: 'lastName',
+      field: 'lastname',
       label: 'Nom',
+    },
+
+    {
+      field: 'job',
+      label: 'Fonction',
     },
 
     {
@@ -52,13 +66,13 @@ export class UserListPage implements OnInit, OnDestroy {
 
     {
       field: 'role',
-      label: 'Rôle',
+      label: 'Accès',
     },
 
     {
-      field: 'active',
-      label: 'Statut',
-      type: 'badge',
+      field: 'created_at',
+      label: 'Créé le',
+      type: 'date',
     },
   ];
   private searchSubject = new Subject<string>();
@@ -142,7 +156,7 @@ export class UserListPage implements OnInit, OnDestroy {
   }
 
   delete(user: User) {
-    if (!confirm(`Supprimer l utilisateur "${user.firstName}" ?`)) {
+    if (!confirm(`Supprimer l utilisateur "${user.firstname}" ?`)) {
       return;
     }
 

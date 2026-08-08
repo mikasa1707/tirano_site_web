@@ -6,15 +6,17 @@ import {
   Post,
   UploadedFile,
   UseInterceptors,
+  UploadedFiles,
 } from '@nestjs/common';
 
-import { FileInterceptor } from '@nestjs/platform-express';
+import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
 
 import { SettingsService } from './settings.service';
 
 import { UpdateSettingDto } from './dto/update-setting.dto';
 
 import { ResponseUtil } from '../common/utils/response.util';
+import { Media } from 'src/media/entities/media.entity';
 
 @Controller('settings')
 export class SettingsController {
@@ -38,7 +40,7 @@ export class SettingsController {
   @UseInterceptors(FileInterceptor('file'))
   addLogo(
     @UploadedFile()
-    file: any,
+    file: Express.Multer.File,
   ) {
     return this.service.addLogo(file);
   }
@@ -47,8 +49,17 @@ export class SettingsController {
   @UseInterceptors(FileInterceptor('file'))
   addFavicon(
     @UploadedFile()
-    file: any,
+    file: Express.Multer.File,
   ) {
     return this.service.addFavicon(file);
+  }
+
+  @Post('media')
+  @UseInterceptors(FilesInterceptor('files', 10))
+  async addMedia(
+    @UploadedFiles()
+    files: Express.Multer.File[],
+  ): Promise<Media[]> {
+    return await this.service.addMedia(files);
   }
 }

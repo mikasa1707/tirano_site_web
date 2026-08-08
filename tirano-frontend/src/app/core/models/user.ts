@@ -1,15 +1,35 @@
+import { Media } from './media';
+
+export enum UserRole {
+  ADMIN = 'ADMIN',
+  EDITOR = 'EDITOR',
+  USER = 'USER',
+}
+
+export enum UserJob {
+  DIRECTOR = 'DIRECTEUR',
+  MANAGER = 'MANAGER',
+  SECRETARY = 'SECRETAIRE',
+  ACCOUNTANT = 'COMPTABLE',
+  COMMERCIAL = 'COMMERCIAL',
+  TECHNICIAN = 'TECHNICIEN',
+  DRIVER = 'CHAUFFEUR',
+  OPERATOR = 'OPERATEUR',
+  OTHER = 'AUTRE',
+}
+
 export interface User {
   id: number;
-
-  firstName: string;
-
-  lastName: string;
-
+  firstname: string;
+  lastname: string;
   email: string;
-
-  role: string;
-
+  password?: string;
+  photo?: string;
+  role: UserRole;
+  job: UserJob;
+  refreshToken?: string;
+  medias?: Media[];
   active: boolean;
-
-  medias?: any[];
+  created_at?: string;
+  updated_at?: string;
 }

@@ -16,11 +16,11 @@ interface MenuItem {
 })
 export class SidebarComponent {
   menus: MenuItem[] = [
-    {
-      label: 'Dashboard',
-      icon: 'fa-solid fa-gauge',
-      link: '/admin',
-    },
+    // {
+    //   label: 'Dashboard',
+    //   icon: 'fa-solid fa-gauge',
+    //   link: '/admin',
+    // },
 
     {
       label: 'Utilisateurs',

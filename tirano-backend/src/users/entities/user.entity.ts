@@ -9,6 +9,18 @@ export enum UserRole {
   USER = 'USER',
 }
 
+export enum UserJob {
+  DIRECTOR = 'DIRECTEUR',
+  MANAGER = 'MANAGER',
+  SECRETARY = 'SECRETAIRE',
+  ACCOUNTANT = 'COMPTABLE',
+  COMMERCIAL = 'COMMERCIAL',
+  TECHNICIAN = 'TECHNICIEN',
+  DRIVER = 'CHAUFFEUR',
+  OPERATOR = 'OPERATEUR',
+  OTHER = 'AUTRE',
+}
+
 @Entity('users')
 export class User extends BaseEntity {
   @Column()
@@ -36,6 +48,13 @@ export class User extends BaseEntity {
     default: UserRole.USER,
   })
   role!: UserRole;
+
+  @Column({
+    type: 'enum',
+    enum: UserJob,
+    default: UserJob.OTHER,
+  })
+  job!: UserJob;
 
   @Column({
     nullable: true,
