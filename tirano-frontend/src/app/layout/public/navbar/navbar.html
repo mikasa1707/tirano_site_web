@@ -1,133 +1,55 @@
-<nav
-  class="navbar navbar-expand-lg fixed-top
-         mt-3 mx-3
-         rounded-4
-         shadow-sm
-         bg-opacity-75
-         "
-  style="backdrop-filter: blur(12px)"
->
+<nav class="navbar navbar-expand-lg fixed-top">
   <div class="container">
+    <!-- LOGO / NOM -->
+    <a class="navbar-brand fw-bold" routerLink="/">
+      <i class="fa-solid fa-building text-primary me-2"></i>
 
-    <!-- LOGO -->
-    <a
-      class="navbar-brand d-flex align-items-center gap-2 fw-bold"
-      href="#accueil"
-    >
-
-      @if (settings.logo?.url) {
-
-        <img
-          [src]="settings.logo.url"
-          [alt]="settings.siteName"
-          width="42"
-          height="42"
-          class="rounded-3 object-fit-contain"
-        />
-
-      } @else {
-
-        <span
-          class="d-flex align-items-center justify-content-center
-                 bg-primary bg-opacity-10
-                 text-primary
-                 rounded-3"
-          style="width:42px;height:42px"
-        >
-          <i class="fa-solid fa-building"></i>
-        </span>
-
-      }
-
-      <span>
-        {{ settings.siteName }}
-      </span>
-
+      {{ settings.siteName }}
     </a>
-
 
     <!-- MOBILE -->
     <button
-      class="navbar-toggler border-0 shadow-none"
+      class="navbar-toggler"
       type="button"
       data-bs-toggle="collapse"
       data-bs-target="#publicNavbar"
+      aria-controls="publicNavbar"
+      aria-expanded="false"
+      aria-label="Navigation"
     >
       <span class="navbar-toggler-icon"></span>
     </button>
 
-
     <!-- MENU -->
-    <div
-      class="collapse navbar-collapse"
-      id="publicNavbar"
-    >
-
-      <ul
-        class="navbar-nav mx-auto
-               my-3 my-lg-0
-               align-items-lg-center
-               gap-lg-1"
-      >
-
+    <div class="collapse navbar-collapse" id="publicNavbar">
+      <ul class="navbar-nav mx-auto">
         <li class="nav-item">
-          <a
-            class="nav-link rounded-3 px-3"
-            href="#accueil"
-          >
-            Accueil
-          </a>
+          <a class="nav-link" href="#accueil"> Accueil </a>
         </li>
 
         <li class="nav-item">
-          <a
-            class="nav-link rounded-3 px-3"
-            href="#services"
-          >
-            Services
-          </a>
+          <a class="nav-link" href="#services"> Services </a>
         </li>
 
         <li class="nav-item">
-          <a
-            class="nav-link rounded-3 px-3"
-            href="#projets"
-          >
-            Projets
-          </a>
+          <a class="nav-link" href="#projets"> Projets </a>
         </li>
 
         <li class="nav-item">
-          <a
-            class="nav-link rounded-3 px-3"
-            href="#produits"
-          >
-            Produits
-          </a>
+          <a class="nav-link" href="#produits"> Produits </a>
         </li>
 
         <li class="nav-item">
-          <a
-            class="nav-link rounded-3 px-3"
-            href="#actualites"
-          >
-            Actualités
-          </a>
+          <a class="nav-link" href="#actualites"> Actualités </a>
         </li>
-
       </ul>
 
-
       <!-- CONTACT -->
-      <a
-        href="#contact"
-        class="btn btn-primary rounded-3 px-4"
-      >
+      <a href="#contact" class="btn btn-primary px-4">
         <i class="fa-solid fa-envelope me-2"></i>
+
         Contact
       </a>
-
     </div>
-
   </div>
 </nav>

@@ -1,21 +1,18 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
+
+import { RouterLink, RouterLinkActive } from '@angular/router';
+
 import { SiteSettingsService } from '../../../core/services/site-settings.service';
 
 @Component({
   selector: 'app-public-navbar',
   standalone: true,
-  imports: [],
+
+  imports: [RouterLink, RouterLinkActive],
+
   templateUrl: './navbar.html',
   styleUrl: './navbar.scss',
 })
-export class Navbar implements OnInit{
-
-  constructor(public readonly settings: SiteSettingsService) {
-  }
-
-  ngOnInit(): void {
-    console.log(this.settings.setting);
-  }
-
-
+export class Navbar {
+  constructor(public readonly settings: SiteSettingsService) {}
 }
