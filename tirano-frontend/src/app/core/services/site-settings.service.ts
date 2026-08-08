@@ -16,7 +16,8 @@ export class SiteSettingsService {
   load() {
     this.api.findOne().subscribe({
       next: (res: any) => {
-        this.settingSubject.next(res.data);
+        this.settingSubject.next(res.data.data);
+        console.log(res.data.data);
       },
     });
   }
@@ -46,6 +47,7 @@ export class SiteSettingsService {
   }
 
   get logo() {
+    console.log(this.setting?.medias);
     return this.setting?.medias?.find((m) => m.title === 'Logo');
   }
 

@@ -17,11 +17,13 @@ import { UpdateSettingDto } from './dto/update-setting.dto';
 
 import { ResponseUtil } from '../common/utils/response.util';
 import { Media } from 'src/media/entities/media.entity';
+import { Public } from 'src/auth/decorators/public.decorator';
 
 @Controller('settings')
 export class SettingsController {
   constructor(private readonly service: SettingsService) {}
-
+  
+  @Public()
   @Get()
   async findOne() {
     const data = await this.service.getSettings();
