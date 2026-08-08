@@ -8,31 +8,28 @@ import { FileSelector } from '../../shared/components/file-selector/file-selecto
 import { FormBuilderComponent } from '../../shared/components/form-builder/form-builder';
 import { Gallery } from '../../shared/components/gallery/gallery';
 import { FormField } from '../../core/models/form-field';
+import { Media } from '../../core/models/media';
+import { MediaApi } from '../../core/api/media.api';
+import { PageHeaderComponent } from "../../shared/components/page-header/page-header";
 
 @Component({
   selector: 'app-admin-setting-page',
   standalone: true,
-  imports: [ReactiveFormsModule, FormBuilderComponent, FileSelector, Gallery],
+  imports: [ReactiveFormsModule, FormBuilderComponent, FileSelector, Gallery, PageHeaderComponent],
   templateUrl: './settings-page.html',
 })
 export class SettingsPage implements OnInit {
   form!: FormGroup;
-
   setting?: Setting;
-
   medias: any[] = [];
-
   mediaFiles: File[] = [];
-
   loading = false;
 
   constructor(
     private fb: FormBuilder,
-
     private api: SettingApi,
-
     private toast: ToastService,
-
+    private mediaApi: MediaApi,
     private cdr: ChangeDetectorRef,
   ) {}
 
@@ -71,7 +68,7 @@ export class SettingsPage implements OnInit {
       next: (res: any) => {
         const data = res.data.data ?? res;
         this.setting = data;
-        console.log(this.setting)
+        console.log(this.setting);
         this.form.patchValue(data);
         this.medias = data.medias ?? [];
         this.cdr.detectChanges();
@@ -86,6 +83,13 @@ export class SettingsPage implements OnInit {
       type: 'text',
       col: 6,
       required: true,
+    },
+
+    {
+      key: 'address',
+      label: 'Adresse',
+      type: 'text',
+      col: 6,
     },
 
     {
@@ -107,13 +111,6 @@ export class SettingsPage implements OnInit {
       label: 'Téléphone',
       type: 'text',
       col: 6,
-    },
-
-    {
-      key: 'address',
-      label: 'Adresse',
-      type: 'text',
-      col: 12,
     },
 
     {
@@ -148,7 +145,7 @@ export class SettingsPage implements OnInit {
       key: 'maintenance',
       label: 'Maintenance',
       type: 'checkbox',
-      col: 6,
+      col: 3,
     },
   ];
 
@@ -220,6 +217,19 @@ export class SettingsPage implements OnInit {
         this.load();
 
         this.loading = false;
+      },
+    });
+  }
+
+  removeMedia(media: Media) {
+    this.mediaApi.remove(media.id).subscribe({
+      next: () => {
+        this.medias = this.medias.filter((item) => item.id !== media.id);
+        this.toast.success('Média supprimé');
+        this.cdr.detectChanges();
+      },
+      error: () => {
+        this.toast.error('Erreur suppression média');
       },
     });
   }

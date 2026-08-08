@@ -4,7 +4,7 @@ export const PUBLIC_ROUTES: Routes = [
   {
     path: '',
     loadComponent: () =>
-      import('../features/home/home-page').then((m) => m.HomePage),
+      import('../layout/public/public-layout').then((m) => m.PublicLayout),
   },
 
   {

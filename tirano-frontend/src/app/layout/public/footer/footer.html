@@ -1,0 +1,273 @@
+<footer class="bg-dark text-light mt-5">
+
+  <div class="container py-5">
+
+    <div class="row g-4">
+
+      <!-- ENTREPRISE -->
+      <div class="col-12 col-md-6 col-lg-4">
+
+        <div class="d-flex align-items-center gap-2 mb-3">
+
+          @if (settings.logo) {
+
+            <img
+              [src]="settings.logo.url"
+              [alt]="settings.siteName"
+              width="42"
+              height="42"
+              class="rounded-3 object-fit-contain bg-white p-1"
+            />
+
+          } @else {
+
+            <span
+              class="d-flex align-items-center justify-content-center
+                     bg-primary rounded-3"
+              style="width:42px;height:42px"
+            >
+              <i class="fa-solid fa-building"></i>
+            </span>
+
+          }
+
+          <h5 class="mb-0 fw-bold">
+            {{ settings.siteName }}
+          </h5>
+
+        </div>
+
+        @if (settings.setting?.description) {
+
+          <div
+            class="text-white-50 small"
+            [innerHTML]="settings.setting?.description"
+          ></div>
+
+        }
+
+      </div>
+
+
+      <!-- NAVIGATION -->
+      <div class="col-6 col-md-3 col-lg-2">
+
+        <h6 class="fw-bold mb-3">
+          Navigation
+        </h6>
+
+        <ul class="list-unstyled mb-0">
+
+          <li class="mb-2">
+            <a
+              routerLink="/"
+              class="text-white-50 text-decoration-none"
+            >
+              Accueil
+            </a>
+          </li>
+
+          <li class="mb-2">
+            <a
+              routerLink="/services"
+              class="text-white-50 text-decoration-none"
+            >
+              Services
+            </a>
+          </li>
+
+          <li class="mb-2">
+            <a
+              routerLink="/projects"
+              class="text-white-50 text-decoration-none"
+            >
+              Projets
+            </a>
+          </li>
+
+          <li class="mb-2">
+            <a
+              routerLink="/products"
+              class="text-white-50 text-decoration-none"
+            >
+              Produits
+            </a>
+          </li>
+
+          <li>
+            <a
+              routerLink="/articles"
+              class="text-white-50 text-decoration-none"
+            >
+              Actualités
+            </a>
+          </li>
+
+        </ul>
+
+      </div>
+
+
+      <!-- CONTACT -->
+      <div class="col-6 col-md-3 col-lg-3">
+
+        <h6 class="fw-bold mb-3">
+          Contact
+        </h6>
+
+        @if (settings.setting?.email) {
+
+          <div class="d-flex gap-2 mb-2">
+
+            <i class="fa-solid fa-envelope text-primary mt-1"></i>
+
+            <a
+              [href]="'mailto:' + settings.setting?.email"
+              class="text-white-50 text-decoration-none"
+            >
+              {{ settings.setting?.email }}
+            </a>
+
+          </div>
+
+        }
+
+
+        @if (settings.setting?.phone) {
+
+          <div class="d-flex gap-2 mb-2">
+
+            <i class="fa-solid fa-phone text-primary mt-1"></i>
+
+            <a
+              [href]="'tel:' + settings.setting?.phone"
+              class="text-white-50 text-decoration-none"
+            >
+              {{ settings.setting?.phone }}
+            </a>
+
+          </div>
+
+        }
+
+
+        @if (settings.setting?.address) {
+
+          <div class="d-flex gap-2">
+
+            <i class="fa-solid fa-location-dot text-primary mt-1"></i>
+
+            <span class="text-white-50">
+              {{ settings.setting?.address }}
+            </span>
+
+          </div>
+
+        }
+
+      </div>
+
+
+      <!-- RÉSEAUX SOCIAUX -->
+      <div class="col-12 col-lg-3">
+
+        <h6 class="fw-bold mb-3">
+          Suivez-nous
+        </h6>
+
+        <div class="d-flex gap-2">
+
+          @if (settings.setting?.facebook) {
+
+            <a
+              [href]="settings.setting?.facebook"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="btn btn-outline-light rounded-circle"
+              aria-label="Facebook"
+            >
+              <i class="fa-brands fa-facebook-f"></i>
+            </a>
+
+          }
+
+
+          @if (settings.setting?.instagram) {
+
+            <a
+              [href]="settings.setting?.instagram"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="btn btn-outline-light rounded-circle"
+              aria-label="Instagram"
+            >
+              <i class="fa-brands fa-instagram"></i>
+            </a>
+
+          }
+
+
+          @if (settings.setting?.linkedin) {
+
+            <a
+              [href]="settings.setting?.linkedin"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="btn btn-outline-light rounded-circle"
+              aria-label="LinkedIn"
+            >
+              <i class="fa-brands fa-linkedin-in"></i>
+            </a>
+
+          }
+
+
+          @if (settings.setting?.youtube) {
+
+            <a
+              [href]="settings.setting?.youtube"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="btn btn-outline-light rounded-circle"
+              aria-label="YouTube"
+            >
+              <i class="fa-brands fa-youtube"></i>
+            </a>
+
+          }
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <!-- COPYRIGHT -->
+
+  <div class="border-top border-secondary">
+
+    <div
+      class="container py-3
+             d-flex flex-column flex-md-row
+             justify-content-between
+             align-items-center
+             gap-2"
+    >
+
+      <small class="text-white-50">
+        © {{ currentYear }} {{ settings.siteName }}.
+        Tous droits réservés.
+      </small>
+
+      <small class="text-white-50">
+        Site officiel
+      </small>
+
+    </div>
+
+  </div>
+
+</footer>

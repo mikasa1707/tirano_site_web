@@ -1,23 +1,122 @@
-<div class="card shadow-sm">
-  <div class="card-header">
-    <h5>Paramètres du site</h5>
+<app-page-header title="Paramètres" subtitle="" icon="fa-solid fa-gears"> </app-page-header>
+
+<div class="row g-3">
+  <!-- ========================= -->
+  <!-- PARAMÈTRES -->
+  <!-- ========================= -->
+
+  <div class="col-lg-8">
+    <div class="card shadow-sm rounded-0 h-100">
+      <div
+        class="card-header bg-primary text-white rounded-0 d-flex align-items-center justify-content-between"
+      >
+        <div>
+          <h5 class="mb-0">Paramètres du site</h5>
+
+          <small class="opacity-75"> Informations générales </small>
+        </div>
+
+        <i class="fa-solid fa-gear"></i>
+      </div>
+
+      <div class="card-body">
+        <app-form-builder [form]="form" [fields]="fields" (save)="submit()"> </app-form-builder>
+      </div>
+    </div>
   </div>
 
-  <div class="card-body">
-    <app-form-builder [form]="form" [fields]="fields" (save)="submit()"> </app-form-builder>
+  <!-- ========================= -->
+  <!-- LOGO / MÉDIAS -->
+  <!-- ========================= -->
 
-    <hr />
+  <div class="col-lg-4">
+    <div class="card shadow-sm rounded-0 h-100">
+      <div
+        class="card-header bg-primary text-white rounded-0 d-flex align-items-center justify-content-between"
+      >
+        <div>
+          <h5 class="mb-0">Identité visuelle</h5>
 
-    <h5>Logo / Favicon / Médias</h5>
+          <small class="opacity-75"> Logo et médias </small>
+        </div>
 
-    <app-file-selector [multiple]="true" (selected)="uploadFiles($event)"> </app-file-selector>
+        <i class="fa-solid fa-image"></i>
+      </div>
 
-    <button class="btn btn-primary mt-3" (click)="uploadMedia()" [disabled]="!mediaFiles.length">
-      Ajouter les fichiers
-    </button>
+      <div class="card-body">
+        <!-- ========================= -->
+        <!-- LOGO -->
+        <!-- ========================= -->
 
-    <hr />
+        <div class="mb-4">
+          <div class="d-flex align-items-center justify-content-between mb-2">
+            <h6 class="mb-0 fw-bold">
+              <i class="fa-solid fa-image me-2 text-primary"></i>
+              Logo
+            </h6>
 
-    <app-gallery [items]="medias"> </app-gallery>
+            @if (medias.length > 0) {
+              <span class="badge bg-success"> {{ medias.length }} fichier(s) </span>
+            }
+          </div>
+
+          <!-- Zone upload -->
+
+          <div class="border rounded-2 p-3 bg-light">
+            <app-file-selector [multiple]="true" (selected)="uploadFiles($event)">
+            </app-file-selector>
+
+            @if (mediaFiles.length > 0) {
+              <div
+                class="alert alert-primary py-2 px-3 mt-3 mb-0 d-flex align-items-center justify-content-between"
+              >
+                <span class="small">
+                  <i class="fa-solid fa-paperclip me-2"></i>
+
+                  {{ mediaFiles.length }}
+                  fichier(s) sélectionné(s)
+                </span>
+
+                <button type="button" class="btn btn-primary btn-sm" (click)="uploadMedia()">
+                  <i class="fa-solid fa-upload me-1"></i>
+
+                  Ajouter
+                </button>
+              </div>
+            }
+          </div>
+        </div>
+
+        <!-- ========================= -->
+        <!-- APERÇU -->
+        <!-- ========================= -->
+
+        @if (medias.length > 0) {
+          <div>
+            <div class="d-flex align-items-center justify-content-between mb-2">
+              <h6 class="mb-0 fw-bold">
+                <i class="fa-solid fa-photo-film me-2 text-primary"></i>
+                Médias
+              </h6>
+
+              <small class="text-muted">
+                {{ medias.length }}
+              </small>
+            </div>
+
+            <div class="border rounded-2 p-2 bg-light">
+              <app-gallery [items]="medias" [removable]="true" (remove)="removeMedia($event)" itemClass="col-6 col-md-6 col-lg-6">
+              </app-gallery>
+            </div>
+          </div>
+        } @else {
+          <div class="text-center text-muted border rounded-2 py-5">
+            <i class="fa-regular fa-image fa-2x mb-2 opacity-50"></i>
+
+            <p class="mb-0 small">Aucun média</p>
+          </div>
+        }
+      </div>
+    </div>
   </div>
 </div>

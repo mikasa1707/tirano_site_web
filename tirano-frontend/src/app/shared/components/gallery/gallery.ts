@@ -13,6 +13,8 @@ export class Gallery {
 
   @Input()
   removable = false;
+  @Input()
+  itemClass = 'col-6 col-md-4 col-lg-3';
 
   @Output()
   select = new EventEmitter<Media>();

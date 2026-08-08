@@ -41,7 +41,7 @@ export class LoginPage implements OnInit {
       next: (response) => {
         const token = response.data.access_token;
         this.authService.saveToken(token);
-        this.router.navigate(['/admin']);
+        this.router.navigate(['/admin/services']);
       },
 
       error: () => {

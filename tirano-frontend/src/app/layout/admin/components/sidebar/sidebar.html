@@ -2,7 +2,7 @@
   <div class="mb-4">
     <h5>
       <i class="fa-solid fa-building text-white"></i>
-      <span class="text-white">Tirano Admin</span>
+      <span class="text-white">Admin</span>
     </h5>
   </div>
 
@@ -10,7 +10,7 @@
     @for (menu of menus; track menu.link) {
       <li class="nav-item">
         <a
-          class="nav-link text-white"
+          class="nav-link d-flex align-items-center text-white"
           [routerLink]="menu.link"
           routerLinkActive="bg-primary"
           [routerLinkActiveOptions]="{ exact: menu.link === '/admin' }"
