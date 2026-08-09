@@ -1,10 +1,12 @@
 import {
   Component,
   ElementRef,
+  EventEmitter,
   HostListener,
   Input,
   OnChanges,
   OnDestroy,
+  Output,
   SimpleChanges,
   ViewChild,
 } from '@angular/core';
@@ -31,6 +33,8 @@ export class GalleryViewerComponent implements OnChanges, OnDestroy {
 
   @ViewChild('galleryOverlay')
   galleryOverlay?: ElementRef<HTMLElement>;
+
+  @Output() closed = new EventEmitter<void>();
 
   /**
    * Média actuellement sélectionné.
@@ -124,13 +128,9 @@ export class GalleryViewerComponent implements OnChanges, OnDestroy {
    */
   close(): void {
     this.closeLightbox();
-
     this.open = false;
-
     this.unlockBodyScroll();
-
-    // Événement DOM personnalisé.
-    this.galleryOverlay?.nativeElement.dispatchEvent(new CustomEvent('galleryClosed'));
+    this.closed.emit();
   }
 
   /**
@@ -186,7 +186,7 @@ export class GalleryViewerComponent implements OnChanges, OnDestroy {
   /**
    * Empêche le scroll de la page derrière la galerie.
    */
-  
+
   private lockBodyScroll(): void {
     if (typeof document === 'undefined') {
       return;

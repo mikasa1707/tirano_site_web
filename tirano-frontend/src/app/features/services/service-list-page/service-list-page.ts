@@ -48,20 +48,14 @@ export class ServiceListPage implements OnInit {
     this.selectedGallery = {
       title: service.title,
       description: service.description,
-
       medias: (service.medias ?? []).map((media: any) => ({
         id: media.id,
-
         type: this.getMediaType(media),
-
         url: media.url,
-
         name: media.originalName,
-
         thumbnail: media.thumbnail,
       })),
     };
-
     this.galleryOpen = true;
   }
 
@@ -70,15 +64,12 @@ export class ServiceListPage implements OnInit {
    */
   private getMediaType(media: any): 'IMAGE' | 'VIDEO' | 'PDF' | 'DOCUMENT' {
     const mimeType = media.mimeType ?? media.type ?? '';
-
     if (mimeType.startsWith('image/')) {
       return 'IMAGE';
     }
-
     if (mimeType.startsWith('video/')) {
       return 'VIDEO';
     }
-
     if (mimeType === 'application/pdf' || media.originalName?.toLowerCase().endsWith('.pdf')) {
       return 'PDF';
     }
