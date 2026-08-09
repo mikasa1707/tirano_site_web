@@ -1,13 +1,23 @@
-<nav class="navbar navbar-expand-lg fixed-top">
+<nav class="navbar navbar-expand-lg fixed-top public-navbar">
   <div class="container">
-    <!-- LOGO / NOM -->
-    <a class="navbar-brand fw-bold" routerLink="/">
-      <i class="fa-solid fa-building text-primary me-2"></i>
+    <!-- BRAND -->
 
-      {{ settings.siteName }}
+    <a class="navbar-brand fw-bold" routerLink="/">
+      @if (setting?.medias && setting?.medias.length > 0) {
+        <img
+          [src]="setting.medias[0].url"
+          [alt]="setting.siteName"
+          width="100"
+          height="100"
+          class="rounded-3 object-fit-contain bg-white p-1 me-2"
+        />
+      } @else {
+        <i class="fa-solid fa-building text-primary me-2"></i>
+      }
     </a>
 
     <!-- MOBILE -->
+
     <button
       class="navbar-toggler"
       type="button"
@@ -21,31 +31,78 @@
     </button>
 
     <!-- MENU -->
+
     <div class="collapse navbar-collapse" id="publicNavbar">
-      <ul class="navbar-nav mx-auto">
-        <li class="nav-item">
-          <a class="nav-link" href="#accueil"> Accueil </a>
-        </li>
+      <ul class="navbar-nav mx-auto fw">
+        <!-- ACCUEIL -->
 
         <li class="nav-item">
-          <a class="nav-link" href="#services"> Services </a>
+          <a
+            href="#accueil"
+            class="nav-link"
+            [class.active]="isActive('accueil')"
+            (click)="scrollTo('accueil', $event)"
+          >
+            Accueil
+          </a>
         </li>
 
-        <li class="nav-item">
-          <a class="nav-link" href="#projets"> Projets </a>
-        </li>
+        <!-- SERVICES -->
 
         <li class="nav-item">
-          <a class="nav-link" href="#produits"> Produits </a>
+          <a
+            href="#services"
+            class="nav-link"
+            [class.active]="isActive('services')"
+            (click)="scrollTo('services', $event)"
+          >
+            Services
+          </a>
         </li>
 
+        <!-- PROJETS -->
+
         <li class="nav-item">
-          <a class="nav-link" href="#actualites"> Actualités </a>
+          <a
+            href="#projets"
+            class="nav-link"
+            [class.active]="isActive('projets')"
+            (click)="scrollTo('projets', $event)"
+          >
+            Projets
+          </a>
+        </li>
+
+        <!-- PRODUITS -->
+
+        <li class="nav-item">
+          <a
+            href="#produits"
+            class="nav-link"
+            [class.active]="isActive('produits')"
+            (click)="scrollTo('produits', $event)"
+          >
+            Produits
+          </a>
+        </li>
+
+        <!-- ACTUALITÉS -->
+
+        <li class="nav-item">
+          <a
+            href="#actualites"
+            class="nav-link"
+            [class.active]="isActive('actualites')"
+            (click)="scrollTo('actualites', $event)"
+          >
+            Actualités
+          </a>
         </li>
       </ul>
 
       <!-- CONTACT -->
-      <a href="#contact" class="btn btn-primary px-4">
+
+      <a href="#contact" class="btn btn-primary px-4" (click)="scrollTo('contact', $event)">
         <i class="fa-solid fa-envelope me-2"></i>
 
         Contact

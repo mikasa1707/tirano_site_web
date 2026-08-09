@@ -35,3 +35,11 @@
   position: relative;
   z-index: 1;
 }
+
+.container-page {
+  position: relative;
+  z-index: 10;
+
+  background: #fff;
+  padding: 80px 0;
+}

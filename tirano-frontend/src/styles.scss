@@ -18,3 +18,43 @@
   --tirano-accent: #fdf7ec;
 }
 
+.permanent-marker-regular {
+  font-family: 'Permanent Marker', cursive;
+  font-weight: 400;
+  font-style: normal;
+  letter-spacing: 2px;
+}
+
+.tirano-primary {
+  color: var(--tirano-PRIMARY);
+}
+.tirano-dark {
+  color: var(--tirano-dark);
+}
+.tirano-light {
+  color: var(--tirano-accent);
+}
+
+.section-page {
+  width: 100%;
+  background: #fff;
+
+  padding: 80px 0;
+}
+
+.section-header {
+  text-align: center;
+  margin-bottom: 50px;
+}
+
+.section-title {
+  color: var(--tirano-dark);
+  font-weight: 700;
+  margin-bottom: 15px;
+}
+
+.section-subtitle {
+  color: #6c757d;
+  max-width: 700px;
+  margin: 0 auto;
+}

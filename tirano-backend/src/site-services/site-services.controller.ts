@@ -16,6 +16,7 @@ import { CreateSiteServiceDto } from './dto/create-site-service.dto';
 import { UpdateSiteServiceDto } from './dto/update-site-service.dto';
 import { FilesInterceptor } from '@nestjs/platform-express';
 import { ResponseUtil } from 'src/common/utils/response.util';
+import { Public } from 'src/auth/decorators/public.decorator';
 
 interface SiteServiceQuery {
   page?: string;
@@ -36,6 +37,7 @@ export class SiteServicesController {
     return ResponseUtil.success(data, 'Service créé');
   }
 
+  @Public()
   @Get()
   findAll(@Query() query: SiteServiceQuery) {
     return this.service.findAll(
