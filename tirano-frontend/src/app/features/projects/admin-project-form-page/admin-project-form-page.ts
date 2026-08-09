@@ -157,6 +157,7 @@ export class AdminProjectFormPage implements OnChanges {
   private finishSave() {
     this.toast.success(this.project ? 'Project modifié' : 'Project ajouté');
     this.saved.emit();
+    this.form.reset();
     this.loading = false;
     this.cdr.detectChanges();
     this.mediaFiles = [];

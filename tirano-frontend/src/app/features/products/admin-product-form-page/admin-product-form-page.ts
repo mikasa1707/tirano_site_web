@@ -144,6 +144,7 @@ export class AdminProductFormPage implements OnChanges {
   private finishSave() {
     this.toast.success(this.product ? 'Product modifié' : 'Product ajouté');
     this.saved.emit();
+    this.form.reset();
     this.loading = false;
     this.cdr.detectChanges();
     this.mediaFiles = [];

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, map, tap } from 'rxjs';
+import { BehaviorSubject, Observable, of, map, tap } from 'rxjs';
 
 import { Setting } from '../models/setting';
 import { SettingApi } from '../api/settings.api';
@@ -14,36 +14,47 @@ export class SiteSettingsService {
 
   private loaded = false;
 
+  /**
+   * Images par défaut du site.
+   *
+   * Les fichiers doivent être placés dans :
+   * src/assets/images/
+   */
+  readonly defaultImages = {
+    media: 'assets/images/default-media.jpg',
+    service: 'assets/images/default-service.jpg',
+    project: 'assets/images/default-project.jpg',
+    product: 'assets/images/default-product.jpg',
+    article: 'assets/images/default-article.jpg',
+    testimonial: 'assets/images/default-testimonial.jpg',
+    user: 'assets/images/default-user.jpg',
+  };
+
   constructor(private readonly api: SettingApi) {}
 
   /**
    * Charge les paramètres du site.
    *
    * L'API retourne :
+   *
    * {
    *   success: true,
    *   message: 'Success',
    *   data: {...}
    * }
    *
-   * On retourne uniquement data aux composants.
+   * On retourne uniquement "data" aux composants.
    */
   load(): Observable<Setting> {
     if (this.loaded && this.settingSubject.value) {
-      return new Observable<Setting>((subscriber) => {
-        subscriber.next(this.settingSubject.value!);
-        subscriber.complete();
-      });
+      return of(this.settingSubject.value);
     }
 
     return this.api.findOne().pipe(
-      map((response: any): Setting => {
-        return response.data;
-      }),
+      map((response: any): Setting => response.data),
 
       tap((setting: Setting) => {
         this.settingSubject.next(setting);
-
         this.loaded = true;
 
         console.log('Settings chargés:', setting);
@@ -58,13 +69,10 @@ export class SiteSettingsService {
     this.loaded = false;
 
     return this.api.findOne().pipe(
-      map((response: any): Setting => {
-        return response.data;
-      }),
+      map((response: any): Setting => response.data),
 
       tap((setting: Setting) => {
         this.settingSubject.next(setting);
-
         this.loaded = true;
       }),
     );
@@ -148,12 +156,76 @@ export class SiteSettingsService {
   }
 
   /**
-   * Pour l'instant, il n'y a pas de logo
-   * stocké dans les médias Settings.
+   * Logo du site.
    *
-   * On utilise donc le nom du site.
+   * Pour l'instant, aucun logo n'est stocké
+   * dans les médias Settings.
    */
   get logo(): string {
     return this.siteName;
+  }
+
+  /**
+   * Image par défaut générique.
+   */
+  get defaultMediaImage(): string {
+    return this.defaultImages.media;
+  }
+
+  /**
+   * Image par défaut pour les services.
+   */
+  get defaultServiceImage(): string {
+    return this.defaultImages.service;
+  }
+
+  /**
+   * Image par défaut pour les projets.
+   */
+  get defaultProjectImage(): string {
+    return this.defaultImages.project;
+  }
+
+  /**
+   * Image par défaut pour les produits.
+   */
+  get defaultProductImage(): string {
+    return this.defaultImages.product;
+  }
+
+  /**
+   * Image par défaut pour les articles.
+   */
+  get defaultArticleImage(): string {
+    return this.defaultImages.article;
+  }
+
+  /**
+   * Image par défaut pour les témoignages.
+   */
+  get defaultTestimonialImage(): string {
+    return this.defaultImages.testimonial;
+  }
+
+  /**
+   * Image par défaut pour les utilisateurs.
+   */
+  get defaultUserImage(): string {
+    return this.defaultImages.user;
+  }
+
+  /**
+   * Retourne une image ou l'image par défaut.
+   */
+  getImage(
+    url: string | null | undefined,
+    type:
+      'media' | 'service' | 'project' | 'product' | 'article' | 'testimonial' | 'user' = 'media',
+  ): string {
+    if (url && url.trim() !== '') {
+      return url;
+    }
+
+    return this.defaultImages[type];
   }
 }

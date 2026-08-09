@@ -6,17 +6,23 @@
       <p class="section-subtitle">Découvrez nos solutions et services de forage.</p>
     </div>
 
-    <div class="service-grid">
+    <div class="services-grid">
       @for (service of services; track service.id) {
-        <div class="service-item">
+        <div class="services-item">
           <div class="card">
-            <img src="..." class="card-img-top" alt="..." />
+            <img
+              [src]="settings.getImage(service.medias?.[0]?.url, 'service')"
+              [alt]="service.title"
+              class="img-fluid"
+            />
             <div class="card-body">
               <h5 class="card-title">Card title</h5>
               <p class="card-text">
                 Some quick example text to build on the card title and make up the bulk of the
                 card's content.
               </p>
+            </div>
+            <div class="card-footer bg-primary">
               <a href="#" class="btn btn-primary">Go somewhere</a>
             </div>
           </div>

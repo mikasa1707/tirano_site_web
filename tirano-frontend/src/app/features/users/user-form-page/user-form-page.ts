@@ -249,13 +249,10 @@ export class UserFormPage implements OnChanges {
     this.toast.success(
       this.user ? 'Utilisateur modifié avec succès' : 'Utilisateur créé avec succès',
     );
-
     this.saved.emit();
-
+    this.form.reset();
     this.loading = false;
-
     this.mediaFiles = [];
-
     this.cdr.detectChanges();
   }
 

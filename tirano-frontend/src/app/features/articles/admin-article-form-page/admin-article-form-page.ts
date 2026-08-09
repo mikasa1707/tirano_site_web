@@ -196,6 +196,7 @@ export class AdminArticleFormPage implements OnInit, OnChanges {
   private finishSave() {
     this.toast.success(this.article ? 'Article modifié' : 'Article ajouté');
     this.saved.emit();
+    this.form.reset();
     this.loading = false;
     this.cdr.detectChanges();
     this.mediaFiles = [];

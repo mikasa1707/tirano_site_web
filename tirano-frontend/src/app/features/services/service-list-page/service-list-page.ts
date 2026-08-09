@@ -1,6 +1,7 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { Service } from '../../../core/models/service';
 import { ServiceApi } from '../../../core/api/service.api';
+import { SiteSettingsService } from '../../../core/services/site-settings.service';
 
 @Component({
   selector: 'app-service-list-page',
@@ -9,12 +10,12 @@ import { ServiceApi } from '../../../core/api/service.api';
   styleUrl: './service-list-page.scss',
 })
 export class ServiceListPage implements OnInit {
-
   services?: Service[] = [];
 
   constructor(
     private serviceApi: ServiceApi,
     private cdr: ChangeDetectorRef,
+    public readonly settings: SiteSettingsService,
   ) {}
 
   ngOnInit(): void {
@@ -30,14 +31,11 @@ export class ServiceListPage implements OnInit {
       .subscribe({
         next: (response: any) => {
           this.services = response.data.data;
-          console.log(this.services)
+          console.log(this.services);
           this.cdr.detectChanges();
         },
 
-        error: () => {
-
-        },
+        error: () => {},
       });
   }
-
 }
