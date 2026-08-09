@@ -1,0 +1,168 @@
+@if (open && gallery) {
+  <div #galleryOverlay class="gallery-overlay" (click)="onBackdropClick($event)">
+    <!-- ================================================= -->
+    <!-- HEADER -->
+    <!-- ================================================= -->
+
+    <div class="gallery-header">
+      <div class="gallery-title">
+        @if (gallery.title) {
+          <h2>
+            {{ gallery.title }}
+          </h2>
+        }
+      </div>
+
+      <button type="button" class="gallery-close" aria-label="Fermer" (click)="close()">
+        <span>Fermer</span>
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+    </div>
+
+    <!-- ================================================= -->
+    <!-- GALERIE - 80% -->
+    <!-- ================================================= -->
+
+    <div class="gallery-content">
+      @if (visualMedias.length > 0) {
+        <div class="gallery-grid">
+          @for (media of visualMedias; track media.id) {
+            <div
+              class="gallery-tile"
+              [class.video-tile]="media.type === 'VIDEO'"
+              (click)="openMedia(media)"
+            >
+              <!-- IMAGE -->
+
+              @if (media.type === 'IMAGE') {
+                <img
+                  [src]="getThumbnail(media)"
+                  [alt]="getMediaName(media)"
+                  loading="lazy"
+                  (error)="onImageError($event)"
+                />
+              }
+
+              <!-- VIDEO -->
+
+              @if (media.type === 'VIDEO') {
+                <div class="video-container">
+                  @if (media.thumbnail) {
+                    <img
+                      [src]="media.thumbnail"
+                      [alt]="getMediaName(media)"
+                      loading="lazy"
+                      (error)="onImageError($event)"
+                    />
+                  } @else {
+                    <div class="video-placeholder">
+                      <i class="fa-solid fa-video"></i>
+                    </div>
+                  }
+
+                  <div class="video-overlay">
+                    <div class="play-button">
+                      <i class="fa-solid fa-play"></i>
+                    </div>
+                  </div>
+                </div>
+              }
+
+              <!-- NOM DU MEDIA -->
+
+              @if (media.name || media.originalName) {
+                <div class="gallery-tile-name">
+                  {{ getMediaName(media) }}
+                </div>
+              }
+            </div>
+          }
+        </div>
+      } @else {
+        <div class="gallery-empty">
+          <i class="fa-regular fa-images"></i>
+
+          <p>Aucun média disponible</p>
+        </div>
+      }
+    </div>
+
+    <!-- ================================================= -->
+    <!-- FOOTER - 20% -->
+    <!-- ================================================= -->
+
+    <div class="gallery-footer">
+      <div class="gallery-footer-content">
+        <!-- DESCRIPTION -->
+
+        <div class="gallery-description">
+          @if (gallery.description) {
+            <h4>Description</h4>
+
+            <p>
+              {{ gallery.description }}
+            </p>
+          }
+        </div>
+
+        <!-- DOCUMENTS -->
+
+        @if (documents.length > 0) {
+          <div class="gallery-documents">
+            <h4>Documents</h4>
+
+            <div class="documents-list">
+              @for (document of documents; track document.id) {
+                <a
+                  class="document-item"
+                  [href]="document.url"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <i [class]="getDocumentIcon(document)"></i>
+
+                  <span>
+                    {{ getMediaName(document) }}
+                  </span>
+
+                  <i class="fa-solid fa-arrow-up-right-from-square document-open"></i>
+                </a>
+              }
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+
+    <!-- ================================================= -->
+    <!-- LIGHTBOX -->
+    <!-- ================================================= -->
+
+    @if (lightboxOpen && selectedMedia) {
+      <div class="lightbox" (click)="closeLightbox()">
+        <button
+          type="button"
+          class="lightbox-close"
+          aria-label="Fermer"
+          (click)="closeLightbox(); $event.stopPropagation()"
+        >
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+
+        <div class="lightbox-content" (click)="$event.stopPropagation()">
+          <!-- IMAGE -->
+
+          @if (selectedMedia.type === 'IMAGE') {
+            <img [src]="selectedMedia.url" [alt]="getMediaName(selectedMedia)" />
+          }
+
+          <!-- VIDEO -->
+
+          @if (selectedMedia.type === 'VIDEO') {
+            <video [src]="selectedMedia.url" controls autoplay playsinline></video>
+          }
+        </div>
+      </div>
+    }
+  </div>
+}
