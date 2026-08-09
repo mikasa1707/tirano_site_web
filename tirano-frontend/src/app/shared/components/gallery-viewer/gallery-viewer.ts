@@ -10,13 +10,13 @@ import {
   SimpleChanges,
   ViewChild,
 } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, NgTemplateOutlet } from '@angular/common';
 import { GalleryData, GalleryMedia } from '../../../core/models/media';
 
 @Component({
   selector: 'app-gallery-viewer',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, NgTemplateOutlet],
   templateUrl: './gallery-viewer.html',
   styleUrl: './gallery-viewer.scss',
 })
@@ -215,5 +215,13 @@ export class GalleryViewerComponent implements OnChanges, OnDestroy {
 
   ngOnDestroy(): void {
     this.unlockBodyScroll();
+  }
+
+  isImage(media: any): boolean {
+    return String(media?.type ?? '').toLowerCase() === 'image';
+  }
+
+  isVideo(media: any): boolean {
+    return String(media?.type ?? '').toLowerCase() === 'video';
   }
 }

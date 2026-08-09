@@ -1,10 +1,10 @@
 @if (open && gallery) {
-  <div #galleryOverlay class="gallery-overlay" (click)="onBackdropClick($event)">
+  <div class="gallery-overlay">
     <!-- ================================================= -->
     <!-- HEADER -->
     <!-- ================================================= -->
 
-    <div class="gallery-header">
+    <header class="gallery-header">
       <div class="gallery-title">
         @if (gallery.title) {
           <h2>
@@ -17,67 +17,81 @@
         <span>Fermer</span>
         <i class="fa-solid fa-xmark"></i>
       </button>
-    </div>
+    </header>
 
     <!-- ================================================= -->
-    <!-- GALERIE - 80% -->
+    <!-- GALERIE 80% -->
     <!-- ================================================= -->
 
-    <div class="gallery-content">
+    <section class="gallery-content">
       @if (visualMedias.length > 0) {
-        <div class="gallery-grid">
-          @for (media of visualMedias; track media.id) {
-            <div
-              class="gallery-tile"
-              [class.video-tile]="media.type === 'VIDEO'"
-              (click)="openMedia(media)"
-            >
-              <!-- IMAGE -->
+        <div class="gallery-album">
+          <!-- COLONNE GAUCHE -->
 
-              @if (media.type === 'IMAGE') {
-                <img
-                  [src]="getThumbnail(media)"
-                  [alt]="getMediaName(media)"
-                  loading="lazy"
-                  (error)="onImageError($event)"
-                />
-              }
-
-              <!-- VIDEO -->
-
-              @if (media.type === 'VIDEO') {
-                <div class="video-container">
-                  @if (media.thumbnail) {
-                    <img
-                      [src]="media.thumbnail"
-                      [alt]="getMediaName(media)"
-                      loading="lazy"
-                      (error)="onImageError($event)"
-                    />
-                  } @else {
-                    <div class="video-placeholder">
-                      <i class="fa-solid fa-video"></i>
-                    </div>
+          <div class="gallery-column">
+            @for (media of visualMedias.slice(0, 3); track media.id) {
+              <ng-container
+                *ngTemplateOutlet="
+                  mediaTemplate;
+                  context: {
+                    media: media,
+                    large: false,
                   }
+                "
+              ></ng-container>
+            }
+          </div>
 
-                  <div class="video-overlay">
-                    <div class="play-button">
-                      <i class="fa-solid fa-play"></i>
-                    </div>
-                  </div>
-                </div>
-              }
+          <!-- COLONNE CENTRALE -->
 
-              <!-- NOM DU MEDIA -->
+          <div class="gallery-column gallery-column-large">
+            @for (media of visualMedias.slice(3, 5); track media.id) {
+              <ng-container
+                *ngTemplateOutlet="
+                  mediaTemplate;
+                  context: {
+                    media: media,
+                    large: true,
+                  }
+                "
+              ></ng-container>
+            }
+          </div>
 
-              @if (media.name || media.originalName) {
-                <div class="gallery-tile-name">
-                  {{ getMediaName(media) }}
-                </div>
-              }
-            </div>
-          }
+          <!-- COLONNE DROITE -->
+
+          <div class="gallery-column">
+            @for (media of visualMedias.slice(5, 8); track media.id) {
+              <ng-container
+                *ngTemplateOutlet="
+                  mediaTemplate;
+                  context: {
+                    media: media,
+                    large: false,
+                  }
+                "
+              ></ng-container>
+            }
+          </div>
         </div>
+
+        <!-- MÉDIAS SUPPLÉMENTAIRES -->
+
+        @if (visualMedias.length > 8) {
+          <div class="gallery-more-grid">
+            @for (media of visualMedias.slice(8); track media.id) {
+              <ng-container
+                *ngTemplateOutlet="
+                  mediaTemplate;
+                  context: {
+                    media: media,
+                    large: false,
+                  }
+                "
+              ></ng-container>
+            }
+          </div>
+        }
       } @else {
         <div class="gallery-empty">
           <i class="fa-regular fa-images"></i>
@@ -85,13 +99,65 @@
           <p>Aucun média disponible</p>
         </div>
       }
-    </div>
+    </section>
 
     <!-- ================================================= -->
-    <!-- FOOTER - 20% -->
+    <!-- TEMPLATE MEDIA -->
     <!-- ================================================= -->
 
-    <div class="gallery-footer">
+    <ng-template #mediaTemplate let-media="media" let-large="large">
+      <div
+        class="gallery-media"
+        [class.gallery-media-large]="large"
+        [class.video-media]="isVideo(media)"
+        (click)="openMedia(media)"
+      >
+        <!-- IMAGE -->
+
+        @if (isImage(media)) {
+          <img
+            [src]="getThumbnail(media)"
+            [alt]="getMediaName(media)"
+            loading="lazy"
+            (error)="onImageError($event)"
+          />
+        }
+
+        <!-- VIDEO -->
+
+        @if (isVideo(media)) {
+          <div class="video-container">
+            @if (media.thumbnail) {
+              <img [src]="media.thumbnail" [alt]="getMediaName(media)" loading="lazy" />
+            } @else {
+              <div class="video-placeholder">
+                <i class="fa-solid fa-video"></i>
+              </div>
+            }
+
+            <div class="video-overlay">
+              <div class="play-button">
+                <i class="fa-solid fa-play"></i>
+              </div>
+            </div>
+          </div>
+        }
+
+        <!-- NOM -->
+
+        @if (media.name || media.originalName) {
+          <div class="gallery-media-name">
+            {{ getMediaName(media) }}
+          </div>
+        }
+      </div>
+    </ng-template>
+
+    <!-- ================================================= -->
+    <!-- FOOTER 20% -->
+    <!-- ================================================= -->
+
+    <footer class="gallery-footer">
       <div class="gallery-footer-content">
         <!-- DESCRIPTION -->
 
@@ -132,7 +198,7 @@
           </div>
         }
       </div>
-    </div>
+    </footer>
 
     <!-- ================================================= -->
     <!-- LIGHTBOX -->
@@ -150,15 +216,11 @@
         </button>
 
         <div class="lightbox-content" (click)="$event.stopPropagation()">
-          <!-- IMAGE -->
-
-          @if (selectedMedia.type === 'IMAGE') {
+          @if (isImage(selectedMedia)) {
             <img [src]="selectedMedia.url" [alt]="getMediaName(selectedMedia)" />
           }
 
-          <!-- VIDEO -->
-
-          @if (selectedMedia.type === 'VIDEO') {
+          @if (isVideo(selectedMedia)) {
             <video [src]="selectedMedia.url" controls autoplay playsinline></video>
           }
         </div>
