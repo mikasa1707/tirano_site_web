@@ -1,20 +1,21 @@
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { Service } from '../../../core/models/service';
 import { ServiceApi } from '../../../core/api/service.api';
 import { SiteSettingsService } from '../../../core/services/site-settings.service';
-import { GalleryData } from '../../../core/models/media';
-import { GalleryViewerComponent } from "../../../shared/components/gallery-viewer/gallery-viewer";
+import { GalleryData, GalleryMedia, Media } from '../../../core/models/media';
 
 @Component({
   selector: 'app-service-list-page',
-  imports: [GalleryViewerComponent],
+  imports: [],
   templateUrl: './service-list-page.html',
   styleUrl: './service-list-page.scss',
 })
 export class ServiceListPage implements OnInit {
   services?: Service[] = [];
 
-  galleryOpen = false;
+  @Output()
+  galleryOpen = new EventEmitter<GalleryData>();
+
   selectedGallery: GalleryData | null = null;
 
   constructor(
@@ -44,19 +45,27 @@ export class ServiceListPage implements OnInit {
       });
   }
 
-  openGallery(service: Service): void {
-    this.selectedGallery = {
-      title: service.title,
-      description: service.description,
-      medias: (service.medias ?? []).map((media: any) => ({
+  openGallery(
+    title: string,
+    medias?: Media[],
+  ): void {
+
+    if (!medias?.length) {
+      return;
+    }
+
+    const galleryMedias: GalleryMedia[] =
+      medias.map((media) => ({
         id: media.id,
-        type: this.getMediaType(media),
         url: media.url,
-        name: media.originalName,
-        thumbnail: media.thumbnail,
-      })),
-    };
-    this.galleryOpen = true;
+        type: media.type,
+        originalName: media.filename,
+      }));
+
+    this.galleryOpen.emit({
+      title,
+      medias: galleryMedias,
+    });
   }
 
   /**
@@ -75,13 +84,5 @@ export class ServiceListPage implements OnInit {
     }
 
     return 'DOCUMENT';
-  }
-
-  /**
-   * Ferme la galerie.
-   */
-  closeGallery(): void {
-    this.galleryOpen = false;
-    this.selectedGallery = null;
   }
 }

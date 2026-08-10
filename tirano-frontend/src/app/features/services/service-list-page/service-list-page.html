@@ -1,4 +1,4 @@
-<div class="container">
+<div class="container" style="padding-top: 150px">
   <div class="section-header text-center">
     <h1 class="section-title tirano-dark">Nos services</h1>
 
@@ -22,7 +22,7 @@
           </div>
           <div
             class="btn bg-primary card-footer d-flex justify-content-between align-items-center w-100 rounded-0"
-            (click)="openGallery(service)"
+            (click)="openGallery(service.title, service.medias)"
           >
             <span>Galerie</span>
             <i class="fa-solid fa-arrow-right"></i>
@@ -32,10 +32,3 @@
     }
   </div>
 </div>
-
-<app-gallery-viewer
-  [gallery]="selectedGallery"
-  [open]="galleryOpen"
-  (closed)="closeGallery()"
->
-</app-gallery-viewer>

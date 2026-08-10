@@ -3,7 +3,7 @@
   <div class="public-background"></div>
 
   <div class="public-content">
-      <app-public-navbar></app-public-navbar>
+    <app-public-navbar></app-public-navbar>
 
     <main>
       <!-- ACCUEIL -->
@@ -16,7 +16,7 @@
       <!-- SERVICES -->
       <section id="services" class="min-vh-100 py-5 d-flex align-items-center container-page">
         <div class="container">
-          <app-service-list-page></app-service-list-page>
+          <app-service-list-page (galleryOpen)="openGallery($event)"></app-service-list-page>
         </div>
       </section>
 
@@ -52,3 +52,6 @@
     <app-footer></app-footer>
   </div>
 </div>
+
+<app-gallery-viewer [gallery]="selectedGallery" [open]="galleryOpen" (closed)="closeGallery()">
+</app-gallery-viewer>
