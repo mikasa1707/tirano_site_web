@@ -1,1 +1,135 @@
-<p>project-list-page works!</p>
+<div class="container-fluid px-0" style="padding-top: 150px">
+  <!-- HEADER -->
+  <div class="text-center mb-5">
+    <h1 class="section-title tirano-light">Nos services</h1>
+
+    <p class="section-subtitle mx-auto">
+      Découvrez quelques-unes de nos réalisations dans le domaine du forage, de l'eau et des
+      solutions hydrauliques.
+    </p>
+  </div>
+
+  <!-- FILTRES -->
+  <div class="d-flex justify-content-center mb-5">
+    <div class="btn-group shadow-sm" role="group" aria-label="Filtre projets">
+      <button
+        type="button"
+        class="btn"
+        [class.btn-primary]="isFilterActive('ALL')"
+        [class.btn-outline-primary]="!isFilterActive('ALL')"
+        (click)="setFilter('ALL')"
+      >
+        Tous
+      </button>
+
+      <button
+        type="button"
+        class="btn"
+        [class.btn-warning]="isFilterActive('EN_COURS')"
+        [class.btn-outline-warning]="!isFilterActive('EN_COURS')"
+        (click)="setFilter('EN_COURS')"
+      >
+        En cours
+      </button>
+
+      <button
+        type="button"
+        class="btn"
+        [class.btn-success]="isFilterActive('TERMINE')"
+        [class.btn-outline-success]="!isFilterActive('TERMINE')"
+        (click)="setFilter('TERMINE')"
+      >
+        Terminés
+      </button>
+
+      <button
+        type="button"
+        class="btn"
+        [class.btn-info]="isFilterActive('A_VENIR')"
+        [class.btn-outline-info]="!isFilterActive('A_VENIR')"
+        (click)="setFilter('A_VENIR')"
+      >
+        À venir
+      </button>
+    </div>
+  </div>
+
+  <!-- MASONRY -->
+  @if (filteredProjects.length) {
+    <div class="projects-masonry">
+      @for (project of filteredProjects; track project.id) {
+        <article class="project-card">
+          <!-- IMAGE -->
+          <div class="project-image-wrapper">
+            <img
+              [src]="getProjectImage(project)"
+              [alt]="project.title"
+              class="project-image"
+              loading="lazy"
+            />
+
+            <!-- STATUT -->
+            <span class="badge project-status" [class]="getStatusClass(project.status)">
+              {{ getStatusLabel(project.status) }}
+            </span>
+
+            <!-- GALERIE -->
+            @if (hasMedia(project)) {
+              <button
+                type="button"
+                class="gallery-button"
+                (click)="openGallery(project.title, project.description, project.medias)"
+                aria-label="Voir la galerie"
+              >
+                <i class="fa-solid fa-images"></i>
+              </button>
+            }
+          </div>
+
+          <!-- CONTENU -->
+          <div class="project-content">
+            <h3 class="project-title">
+              {{ project.title }}
+            </h3>
+
+            @if (project.location) {
+              <div class="project-location">
+                <i class="fa-solid fa-location-dot me-2"></i>
+                {{ project.location }}
+              </div>
+            }
+
+            @if (project.description) {
+              <p class="project-description">
+                {{ project.description }}
+              </p>
+            }
+
+            @if (project.client) {
+              <div class="project-client">
+                <small class="text-muted"> Client </small>
+
+                <div class="fw-semibold">
+                  {{ project.client }}
+                </div>
+              </div>
+            }
+          </div>
+        </article>
+      }
+    </div>
+  }
+
+  <!-- EMPTY -->
+  @if (!filteredProjects.length) {
+    <div class="text-center py-5">
+      <div class="empty-icon mb-3">
+        <i class="fa-solid fa-folder-open"></i>
+      </div>
+
+      <h4 class="fw-bold">Aucun projet</h4>
+
+      <p class="text-muted">Aucun projet ne correspond à ce filtre.</p>
+    </div>
+  }
+</div>

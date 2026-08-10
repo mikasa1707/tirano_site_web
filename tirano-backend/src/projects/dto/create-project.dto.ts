@@ -1,4 +1,12 @@
-import { IsBoolean, IsOptional, IsString } from 'class-validator';
+import {
+  IsBoolean,
+  IsDateString,
+  IsEnum,
+  IsOptional,
+  IsString,
+} from 'class-validator';
+
+import { ProjectStatus } from '../entities/project.entity';
 
 export class CreateProjectDto {
   @IsString()
@@ -16,7 +24,12 @@ export class CreateProjectDto {
   location?: string;
 
   @IsOptional()
-  realizationDate?: Date;
+  @IsDateString()
+  realizationDate?: string;
+
+  @IsOptional()
+  @IsEnum(ProjectStatus)
+  status?: ProjectStatus;
 
   @IsOptional()
   @IsBoolean()

@@ -47,6 +47,7 @@ export class ServiceListPage implements OnInit {
 
   openGallery(
     title: string,
+    description: string,
     medias?: Media[],
   ): void {
 
@@ -64,6 +65,7 @@ export class ServiceListPage implements OnInit {
 
     this.galleryOpen.emit({
       title,
+      description,
       medias: galleryMedias,
     });
   }

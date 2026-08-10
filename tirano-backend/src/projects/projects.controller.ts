@@ -15,6 +15,7 @@ import { ProjectsService } from './projects.service';
 import { CreateProjectDto } from './dto/create-project.dto';
 import { UpdateProjectDto } from './dto/update-project.dto';
 import { ResponseUtil } from '../common/utils/response.util';
+import { Public } from 'src/auth/decorators/public.decorator';
 
 interface QueryDto {
   page?: string;
@@ -35,6 +36,7 @@ export class ProjectsController {
     return ResponseUtil.success(data, 'Projet créé');
   }
 
+  @Public()
   @Get()
   findAll(@Query() query: QueryDto) {
     return this.service.findAll(

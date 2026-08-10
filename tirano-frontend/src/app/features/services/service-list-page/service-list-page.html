@@ -1,6 +1,6 @@
 <div class="container" style="padding-top: 150px">
   <div class="section-header text-center">
-    <h1 class="section-title tirano-dark">Nos services</h1>
+    <h1 class="section-title tirano-light">Nos services</h1>
 
     <p class="section-subtitle">Découvrez nos solutions et services de forage.</p>
   </div>
@@ -8,12 +8,12 @@
   <div class="services-grid">
     @for (service of services; track service.id) {
       <div class="services-item">
-        <div class="card">
-          <img
+        <div class="card bg-dark text-center tirano-light" style="height: 280px;">
+          <!-- <img
             [src]="settings.getImage(service.medias?.[0]?.url, 'service')"
             [alt]="service.title"
             class="img-fluid"
-          />
+          /> -->
           <div class="card-body">
             <h5 class="card-title">{{ service.title }}</h5>
             <p class="card-text">
@@ -21,10 +21,9 @@
             </p>
           </div>
           <div
-            class="btn bg-primary card-footer d-flex justify-content-between align-items-center w-100 rounded-0"
-            (click)="openGallery(service.title, service.medias)"
+            class="btn bg-dark card-footer d-flex justify-content-end align-items-center w-100 rounded-0"
+            (click)="openGallery(service.title, service.description, service.medias)"
           >
-            <span>Galerie</span>
             <i class="fa-solid fa-arrow-right"></i>
           </div>
         </div>

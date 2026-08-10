@@ -21,13 +21,13 @@ export class SiteSettingsService {
    * src/assets/images/
    */
   readonly defaultImages = {
-    media: 'assets/images/default-media.jpg',
-    service: 'assets/images/default-service.jpg',
-    project: 'assets/images/default-project.jpg',
-    product: 'assets/images/default-product.jpg',
-    article: 'assets/images/default-article.jpg',
-    testimonial: 'assets/images/default-testimonial.jpg',
-    user: 'assets/images/default-user.jpg',
+    media: 'assets/images/default-media.png',
+    service: 'assets/images/default-service.png',
+    project: 'assets/images/default-project.png',
+    product: 'assets/images/default-product.png',
+    article: 'assets/images/default-article.png',
+    testimonial: 'assets/images/default-testimonial.png',
+    user: 'assets/images/default-user.png',
   };
 
   constructor(private readonly api: SettingApi) {}
