@@ -1,9 +1,9 @@
 <div class="container-fluid px-0" style="padding-top: 150px">
   <!-- HEADER -->
   <div class="text-center mb-5">
-    <h1 class="section-title tirano-light">Nos services</h1>
+    <h1 class="section-title tirano-light">Nos réalisations</h1>
 
-    <p class="section-subtitle mx-auto">
+    <p class="section-subtitle mx-auto text-muted" style="max-width: 600px">
       Découvrez quelques-unes de nos réalisations dans le domaine du forage, de l'eau et des
       solutions hydrauliques.
     </p>
@@ -14,7 +14,7 @@
     <div class="btn-group shadow-sm" role="group" aria-label="Filtre projets">
       <button
         type="button"
-        class="btn"
+        class="btn btn-sm"
         [class.btn-primary]="isFilterActive('ALL')"
         [class.btn-outline-primary]="!isFilterActive('ALL')"
         (click)="setFilter('ALL')"
@@ -24,7 +24,7 @@
 
       <button
         type="button"
-        class="btn"
+        class="btn btn-sm"
         [class.btn-warning]="isFilterActive('EN_COURS')"
         [class.btn-outline-warning]="!isFilterActive('EN_COURS')"
         (click)="setFilter('EN_COURS')"
@@ -34,7 +34,7 @@
 
       <button
         type="button"
-        class="btn"
+        class="btn btn-sm"
         [class.btn-success]="isFilterActive('TERMINE')"
         [class.btn-outline-success]="!isFilterActive('TERMINE')"
         (click)="setFilter('TERMINE')"
@@ -44,7 +44,7 @@
 
       <button
         type="button"
-        class="btn"
+        class="btn btn-sm"
         [class.btn-info]="isFilterActive('A_VENIR')"
         [class.btn-outline-info]="!isFilterActive('A_VENIR')"
         (click)="setFilter('A_VENIR')"
@@ -54,9 +54,9 @@
     </div>
   </div>
 
-  <!-- MASONRY -->
+  <!-- GRILLE DE PROJETS -->
   @if (filteredProjects.length) {
-    <div class="projects-masonry">
+    <div class="projects-grid">
       @for (project of filteredProjects; track project.id) {
         <article class="project-card">
           <!-- IMAGE -->
@@ -86,34 +86,11 @@
             }
           </div>
 
-          <!-- CONTENU -->
-          <div class="project-content">
-            <h3 class="project-title">
+          <!-- CONTENU - Minimaliste comme dans l'UI -->
+          <div class="project-content text-center">
+            <h3 class="project-title text-muted">
               {{ project.title }}
             </h3>
-
-            @if (project.location) {
-              <div class="project-location">
-                <i class="fa-solid fa-location-dot me-2"></i>
-                {{ project.location }}
-              </div>
-            }
-
-            @if (project.description) {
-              <p class="project-description">
-                {{ project.description }}
-              </p>
-            }
-
-            @if (project.client) {
-              <div class="project-client">
-                <small class="text-muted"> Client </small>
-
-                <div class="fw-semibold">
-                  {{ project.client }}
-                </div>
-              </div>
-            }
           </div>
         </article>
       }
@@ -122,14 +99,14 @@
 
   <!-- EMPTY -->
   @if (!filteredProjects.length) {
-    <div class="text-center py-5">
-      <div class="empty-icon mb-3">
+    <div class="text-center py-5 text-muted">
+      <div class="empty-icon mb-3fs-1">
         <i class="fa-solid fa-folder-open"></i>
       </div>
 
       <h4 class="fw-bold">Aucun projet</h4>
 
-      <p class="text-muted">Aucun projet ne correspond à ce filtre.</p>
+      <p>Aucun projet ne correspond à ce filtre.</p>
     </div>
   }
 </div>
