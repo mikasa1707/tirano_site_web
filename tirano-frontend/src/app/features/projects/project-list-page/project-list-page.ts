@@ -1,10 +1,14 @@
-import { ChangeDetectorRef, Component, EventEmitter, OnInit, Output } from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Component,
+  EventEmitter,
+  OnInit,
+  Output,
+} from '@angular/core';
 
 import { ProjectApi } from '../../../core/api/project.api';
 import { SiteSettingsService } from '../../../core/services/site-settings.service';
-
 import { GalleryData, Media, GalleryMedia } from '../../../core/models/media';
-
 import { Project } from '../../../core/models/project';
 
 @Component({
@@ -16,13 +20,19 @@ import { Project } from '../../../core/models/project';
 })
 export class ProjectListPage implements OnInit {
   projects: Project[] = [];
-
   filteredProjects: Project[] = [];
+
+  showAllProjects = false;
+  readonly initialProjectLimit = 5;
 
   activeFilter: 'ALL' | 'EN_COURS' | 'TERMINE' | 'A_VENIR' = 'ALL';
 
-  @Output()
-  galleryOpen = new EventEmitter<GalleryData>();
+  projectColumns: Project[][] = [[], [], []];
+
+  private readonly cardHeights = [380, 420, 460, 500, 540, 580, 620];
+  private readonly projectHeights = new Map<number, number>();
+
+  @Output() galleryOpen = new EventEmitter();
 
   selectedGallery: GalleryData | null = null;
 
@@ -45,53 +55,106 @@ export class ProjectListPage implements OnInit {
       .subscribe({
         next: (response: any) => {
           this.projects = response.data?.data ?? [];
-
+          this.prepareProjectHeights();
           this.applyFilter();
-
           this.cdr.detectChanges();
         },
-
         error: (error) => {
           console.error('Erreur chargement projets', error);
-
           this.projects = [];
           this.filteredProjects = [];
+          this.projectColumns = [[], [], []];
         },
       });
   }
 
-  /**
-   * Change le filtre.
-   */
-  setFilter(filter: 'ALL' | 'EN_COURS' | 'TERMINE' | 'A_VENIR'): void {
-    this.activeFilter = filter;
+  private prepareProjectHeights(): void {
+    for (const project of this.projects) {
+      if (this.projectHeights.has(project.id)) {
+        continue;
+      }
 
+      const index = Math.abs(project.id) % this.cardHeights.length;
+      this.projectHeights.set(project.id, this.cardHeights[index]);
+    }
+  }
+
+  getProjectCardHeight(project: Project): number {
+    if (!this.projectHeights.has(project.id)) {
+      const index = Math.abs(project.id) % this.cardHeights.length;
+      this.projectHeights.set(project.id, this.cardHeights[index]);
+    }
+
+    return this.projectHeights.get(project.id) ?? 460;
+  }
+
+  private buildProjectColumns(): void {
+    const projectsToDisplay = this.showAllProjects
+      ? this.filteredProjects
+      : this.filteredProjects.slice(0, this.initialProjectLimit);
+
+    const columns: Project[][] = [[], [], []];
+    const columnHeights = [0, 0, 0];
+
+    for (const project of projectsToDisplay) {
+      const height = this.getProjectCardHeight(project);
+
+      let columnIndex = 0;
+
+      for (let i = 1; i < columnHeights.length; i++) {
+        if (columnHeights[i] < columnHeights[columnIndex]) {
+          columnIndex = i;
+        }
+      }
+
+      columns[columnIndex].push(project);
+      columnHeights[columnIndex] += height + 24;
+    }
+
+    this.projectColumns = columns;
+  }
+
+  setFilter(
+    filter: 'ALL' | 'EN_COURS' | 'TERMINE' | 'A_VENIR',
+  ): void {
+    this.activeFilter = filter;
+    this.showAllProjects = false;
     this.applyFilter();
   }
 
-  /**
-   * Applique le filtre actif.
-   */
+  showMoreProjects(): void {
+    this.showAllProjects = true;
+    this.buildProjectColumns();
+  }
+
+  showLessProjects(): void {
+    this.showAllProjects = false;
+    this.buildProjectColumns();
+  }
+
   private applyFilter(): void {
     if (this.activeFilter === 'ALL') {
       this.filteredProjects = [...this.projects];
-      return;
+    } else {
+      this.filteredProjects = this.projects.filter(
+        (project) => project.status === this.activeFilter,
+      );
     }
 
-    this.filteredProjects = this.projects.filter((project) => project.status === this.activeFilter);
+    this.buildProjectColumns();
   }
 
-  /**
-   * Vérifie si un filtre est actif.
-   */
-  isFilterActive(filter: 'ALL' | 'EN_COURS' | 'TERMINE' | 'A_VENIR'): boolean {
+  isFilterActive(
+    filter: 'ALL' | 'EN_COURS' | 'TERMINE' | 'A_VENIR',
+  ): boolean {
     return this.activeFilter === filter;
   }
 
-  /**
-   * Ouvre la galerie d'un projet.
-   */
-  openGallery(title: string, description: string, medias?: Media[]): void {
+  openGallery(
+    title: string,
+    description: string,
+    medias?: Media[],
+  ): void {
     if (!medias?.length) {
       return;
     }
@@ -110,10 +173,9 @@ export class ProjectListPage implements OnInit {
     });
   }
 
-  /**
-   * Détermine le type du média.
-   */
-  private getMediaType(media: Media): 'IMAGE' | 'VIDEO' | 'PDF' | 'DOCUMENT' {
+  private getMediaType(
+    media: Media,
+  ): 'IMAGE' | 'VIDEO' | 'PDF' | 'DOCUMENT' {
     const mimeType = media.type ?? '';
 
     if (mimeType.startsWith('image/')) {
@@ -133,29 +195,19 @@ export class ProjectListPage implements OnInit {
     return 'DOCUMENT';
   }
 
-  /**
-   * Image principale du projet.
-   */
   getProjectImage(project: Project): string {
     const image = project.medias?.find((media: Media) => {
       const type = media.type ?? '';
-
       return type.startsWith('image/');
     });
 
     return image?.url ?? 'assets/images/default-project.png';
   }
 
-  /**
-   * Vérifie si le projet possède des médias.
-   */
   hasMedia(project: Project): boolean {
     return !!project.medias?.length;
   }
 
-  /**
-   * Label du statut.
-   */
   getStatusLabel(status: string): string {
     switch (status) {
       case 'EN_COURS':
@@ -172,9 +224,6 @@ export class ProjectListPage implements OnInit {
     }
   }
 
-  /**
-   * Classe Bootstrap du badge.
-   */
   getStatusClass(status: string): string {
     switch (status) {
       case 'EN_COURS':

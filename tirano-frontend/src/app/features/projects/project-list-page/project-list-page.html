@@ -56,57 +56,80 @@
 
   <!-- GRILLE DE PROJETS -->
   @if (filteredProjects.length) {
-    <div class="projects-grid">
-      @for (project of filteredProjects; track project.id) {
-        <article class="project-card">
-          <!-- IMAGE -->
-          <div class="project-image-wrapper">
-            <img
-              [src]="getProjectImage(project)"
-              [alt]="project.title"
-              class="project-image"
-              loading="lazy"
-            />
+    <div class="projects-masonry">
+      @for (column of projectColumns; track $index) {
+        <div class="projects-column">
+          @for (project of column; track project.id) {
+            <article class="project-card" [style.height.px]="getProjectCardHeight(project)">
+              <div class="project-image-wrapper">
+                <img
+                  [src]="getProjectImage(project)"
+                  [alt]="project.title"
+                  class="project-image"
+                  loading="lazy"
+                />
 
-            <!-- STATUT -->
-            <span class="badge project-status" [class]="getStatusClass(project.status)">
-              {{ getStatusLabel(project.status) }}
-            </span>
+                @if (hasMedia(project)) {
+                  <button
+                    type="button"
+                    class="gallery-button"
+                    (click)="openGallery(project.title, project.description, project.medias)"
+                    aria-label="Voir la galerie"
+                  >
+                    <i class="fa-solid fa-images"></i>
+                  </button>
+                }
 
-            <!-- GALERIE -->
-            @if (hasMedia(project)) {
-              <button
-                type="button"
-                class="gallery-button"
-                (click)="openGallery(project.title, project.description, project.medias)"
-                aria-label="Voir la galerie"
-              >
-                <i class="fa-solid fa-images"></i>
-              </button>
-            }
-          </div>
+                <span class="badge project-status" [class]="getStatusClass(project.status)">
+                  {{ getStatusLabel(project.status) }}
+                </span>
+              </div>
 
-          <!-- CONTENU - Minimaliste comme dans l'UI -->
-          <div class="project-content text-center">
-            <h3 class="project-title text-muted">
-              {{ project.title }}
-            </h3>
-          </div>
-        </article>
+              <div class="project-content">
+                <h3 class="project-title">
+                  {{ project.title }}
+                </h3>
+              </div>
+            </article>
+          }
+        </div>
       }
     </div>
-  }
 
-  <!-- EMPTY -->
-  @if (!filteredProjects.length) {
-    <div class="text-center py-5 text-muted">
-      <div class="empty-icon mb-3fs-1">
-        <i class="fa-solid fa-folder-open"></i>
+    <!-- =====================================================
+       VOIR PLUS / VOIR MOINS
+       ===================================================== -->
+
+    @if (filteredProjects.length > initialProjectLimit) {
+      <div class="projects-more">
+        @if (!showAllProjects) {
+          <button
+            type="button"
+            class="btn btn-primary projects-more-button"
+            (click)="showMoreProjects()"
+          >
+            Voir plus
+
+            <i class="fa-solid fa-chevron-down ms-2"></i>
+          </button>
+        } @else {
+          <button
+            type="button"
+            class="btn btn-outline-primary projects-more-button"
+            (click)="showLessProjects()"
+          >
+            Voir moins
+
+            <i class="fa-solid fa-chevron-up ms-2"></i>
+          </button>
+        }
       </div>
-
+    }
+  } @else {
+    <div class="projects-empty">
       <h4 class="fw-bold">Aucun projet</h4>
 
-      <p>Aucun projet ne correspond à ce filtre.</p>
+      <p class="text-muted mb-0">Aucun projet ne correspond à ce filtre.</p>
     </div>
   }
 </div>
