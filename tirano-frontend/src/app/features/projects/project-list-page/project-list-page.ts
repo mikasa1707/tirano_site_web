@@ -10,11 +10,12 @@ import { ProjectApi } from '../../../core/api/project.api';
 import { SiteSettingsService } from '../../../core/services/site-settings.service';
 import { GalleryData, Media, GalleryMedia } from '../../../core/models/media';
 import { Project } from '../../../core/models/project';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-project-list-page',
   standalone: true,
-  imports: [],
+  imports: [CommonModule],
   templateUrl: './project-list-page.html',
   styleUrl: './project-list-page.scss',
 })

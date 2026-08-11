@@ -58,41 +58,83 @@
   @if (filteredProjects.length) {
     <div class="projects-masonry">
       @for (column of projectColumns; track $index) {
-        <div class="projects-column">
-          @for (project of column; track project.id) {
-            <article class="project-card" [style.height.px]="getProjectCardHeight(project)">
-              <div class="project-image-wrapper">
-                <img
-                  [src]="getProjectImage(project)"
-                  [alt]="project.title"
-                  class="project-image"
-                  loading="lazy"
-                />
+        @if (column.length) {
+          <div class="projects-column">
+            @for (project of column; track project.id) {
+              <article class="project-card" [style.height.px]="getProjectCardHeight(project)">
+                <div class="project-image-wrapper">
+                  <img
+                    [src]="getProjectImage(project)"
+                    [alt]="project.title"
+                    class="project-image"
+                    loading="lazy"
+                  />
 
-                @if (hasMedia(project)) {
-                  <button
-                    type="button"
-                    class="gallery-button"
-                    (click)="openGallery(project.title, project.description, project.medias)"
-                    aria-label="Voir la galerie"
-                  >
-                    <i class="fa-solid fa-images"></i>
-                  </button>
-                }
+                  @if (hasMedia(project)) {
+                    <button
+                      type="button"
+                      class="gallery-button"
+                      (click)="openGallery(project.title, project.description, project.medias)"
+                      aria-label="Voir la galerie"
+                    >
+                      <i class="fa-solid fa-images"></i>
+                    </button>
+                  }
 
-                <span class="badge project-status" [class]="getStatusClass(project.status)">
-                  {{ getStatusLabel(project.status) }}
-                </span>
-              </div>
+                  <span class="badge project-status" [class]="getStatusClass(project.status)">
+                    {{ getStatusLabel(project.status) }}
+                  </span>
+                </div>
 
-              <div class="project-content">
-                <h3 class="project-title">
-                  {{ project.title }}
-                </h3>
-              </div>
-            </article>
-          }
-        </div>
+                <div class="project-content">
+                  <h3 class="project-title">
+                    {{ project.title }}
+                  </h3>
+
+                  <div class="project-details">
+                    @if (project.description) {
+                      <p class="project-description">
+                        {{ project.description }}
+                      </p>
+                    }
+
+                    <div class="project-meta">
+                      @if (project.location) {
+                        <div class="project-meta-item">
+                          <i class="fa-solid fa-location-dot"></i>
+
+                          <span>
+                            {{ project.location }}
+                          </span>
+                        </div>
+                      }
+
+                      @if (project.client) {
+                        <div class="project-meta-item">
+                          <i class="fa-solid fa-user"></i>
+
+                          <span>
+                            {{ project.client }}
+                          </span>
+                        </div>
+                      }
+
+                      @if (project.realizationDate) {
+                        <div class="project-meta-item">
+                          <i class="fa-solid fa-calendar-days"></i>
+
+                          <span>
+                            {{ project.realizationDate | date: 'dd/MM/yyyy' }}
+                          </span>
+                        </div>
+                      }
+                    </div>
+                  </div>
+                </div>
+              </article>
+            }
+          </div>
+        }
       }
     </div>
 

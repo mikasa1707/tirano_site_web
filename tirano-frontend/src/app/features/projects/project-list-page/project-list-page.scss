@@ -1,371 +1,217 @@
-/* =========================================================
-   PAGE
-   ========================================================= */
-
 :host {
   display: block;
-
   width: 100%;
 }
-
-/* =========================================================
-   MASONRY
-   ========================================================= */
 
 .projects-masonry {
-  display: grid;
-
-  /*
-   * 3 colonnes
-   */
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-
-  /*
-   * ESPACEMENT IDENTIQUE
-   *
-   * horizontal = 1.5rem
-   * vertical   = 1.5rem
-   */
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
   gap: 1.5rem;
-
-  width: min(100%, 1200px);
-
+  width: 100%;
+  max-width: 1200px;
   margin-inline: auto;
-
   padding-inline: 1rem;
-
-  /*
-   * Les colonnes commencent toujours en haut.
-   */
-  align-items: start;
 }
-
-/* =========================================================
-   COLONNE
-   ========================================================= */
 
 .projects-column {
-  display: flex;
-
-  flex-direction: column;
-
-  /*
-   * ESPACEMENT ENTRE LES CARDS
-   */
-  gap: 1.5rem;
-
-  width: 100%;
-
+  flex: 0 1 380px;
+  width: 380px;
   min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
 }
-
-/* =========================================================
-   CARD
-   ========================================================= */
 
 .project-card {
   position: relative;
-
   display: flex;
-
   flex-direction: column;
-
   width: 100%;
-
-  /*
-   * La hauteur vient du [style.height.px]
-   * dans le HTML.
-   */
-
   min-height: 0;
-
   overflow: hidden;
-
   background: #fff;
-
-  border: 1px solid rgba(0, 0, 0, 0.06);
-
-  border-radius: 1rem;
-
+  border-radius: 5px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
-
   transition:
-    transform 0.3s cubic-bezier(0.16, 1, 0.3, 1),
     box-shadow 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-/* =========================================================
-   HOVER CARD
-   ========================================================= */
-
 .project-card:hover {
-  transform: translateY(-4px);
-
   box-shadow: 0 12px 28px rgba(0, 0, 0, 0.09);
 }
 
-/* =========================================================
-   IMAGE WRAPPER
-   ========================================================= */
-
 .project-image-wrapper {
   position: relative;
-
   width: 100%;
-
-  /*
-   * IMPORTANT :
-   *
-   * Pas de height fixe.
-   *
-   * L'image prend la place disponible
-   * dans la card.
-   */
   flex: 1 1 auto;
-
   min-height: 0;
-
   overflow: hidden;
-
   background: #f8f9fa;
 }
 
-/* =========================================================
-   IMAGE
-   ========================================================= */
-
 .project-image {
   display: block;
-
   width: 100%;
-
   height: 100%;
-
-  /*
-   * L'image remplit la partie disponible.
-   *
-   * Elle ne détermine PAS la hauteur
-   * de la card.
-   */
   object-fit: cover;
-
   object-position: center;
-
   transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
 }
-
-/* =========================================================
-   IMAGE HOVER
-   ========================================================= */
 
 .project-card:hover .project-image {
   transform: scale(1.035);
 }
 
-/* =========================================================
-   CONTENU
-   ========================================================= */
-
 .project-content {
+  position: relative;
+  z-index: 3;
   flex: 0 0 auto;
-
   padding: 1.25rem 1rem;
-
   text-align: center;
-
   background: #fff;
+  transition:
+    padding 0.35s ease,
+    background 0.35s ease;
 }
 
-/* =========================================================
-   TITRE
-   ========================================================= */
+.project-card:hover .project-content {
+  padding: 1.25rem 1rem 1.5rem;
+}
 
 .project-title {
   margin: 0;
-
   font-size: 0.95rem;
-
-  font-weight: 400;
-
+  font-weight: 500;
   line-height: 1.4;
+  color: #6c757d;
+  transition: color 0.3s ease;
+}
 
+.project-card:hover .project-title {
+  color: var(--bs-primary, #0d6efd);
+}
+
+.project-details {
+  max-height: 0;
+  overflow: hidden;
+  margin-top: 0;
+  opacity: 0;
+  transform: translateY(8px);
+  transition:
+    max-height 0.4s ease,
+    margin-top 0.35s ease,
+    opacity 0.3s ease,
+    transform 0.35s ease;
+  text-align: left;
+}
+
+.project-card:hover .project-details {
+  max-height: 300px;
+  margin-top: 0.9rem;
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.project-description {
+  margin: 0 0 1rem;
+  font-size: 0.82rem;
+  line-height: 1.55;
+  color: #6c757d;
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.project-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+  padding-top: 0.85rem;
+  border-top: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.project-meta-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.65rem;
+  font-size: 0.78rem;
+  line-height: 1.4;
   color: #6c757d;
 }
 
-/* =========================================================
-   GALERIE
-   ========================================================= */
+.project-meta-item i {
+  flex: 0 0 16px;
+  width: 16px;
+  margin-top: 2px;
+  color: var(--bs-primary, #0d6efd);
+  text-align: center;
+}
 
 .gallery-button {
   position: absolute;
-
   top: 0.75rem;
-
   left: 0.75rem;
-
-  z-index: 2;
-
+  z-index: 4;
   width: 36px;
-
   height: 36px;
-
   display: flex;
-
   align-items: center;
-
   justify-content: center;
-
   padding: 0;
-
   border: 0;
-
   border-radius: 50%;
-
   color: #fff;
-
   background: rgba(0, 0, 0, 0.42);
-
   backdrop-filter: blur(5px);
-
   -webkit-backdrop-filter: blur(5px);
-
   cursor: pointer;
-
   opacity: 0;
-
   transform: translateY(-5px);
-
   transition:
     opacity 0.25s ease,
     transform 0.25s ease,
     background 0.25s ease;
 }
 
-/* =========================================================
-   GALERIE → APPARITION
-   ========================================================= */
-
 .project-card:hover .gallery-button {
   opacity: 1;
-
   transform: translateY(0);
 }
-
-/* =========================================================
-   GALERIE → HOVER
-   ========================================================= */
 
 .gallery-button:hover {
   background: var(--bs-primary, #0d6efd);
 }
 
-/* =========================================================
-   STATUT
-   ========================================================= */
-
 .project-status {
   position: absolute;
-
   right: 0.75rem;
-
   bottom: 0.75rem;
-
-  z-index: 2;
-
+  z-index: 4;
   font-size: 0.7rem;
-
   padding: 0.4rem 0.65rem;
 }
 
-/* =========================================================
-   EMPTY
-   ========================================================= */
-
 .projects-empty {
   width: 100%;
-
   padding: 4rem 1rem;
 }
 
-/* =========================================================
-   TABLETTE
-   ========================================================= */
-
-@media (max-width: 991.98px) {
-  .projects-masonry {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-
-    gap: 1.25rem;
-  }
-
-  .projects-column {
-    gap: 1.25rem;
-  }
-}
-
-/* =========================================================
-   MOBILE
-   ========================================================= */
-
-@media (max-width: 575.98px) {
-  .projects-masonry {
-    grid-template-columns: 1fr;
-
-    width: min(100%, 500px);
-
-    padding-inline: 1rem;
-  }
-
-  .projects-column {
-    gap: 1.25rem;
-  }
-
-  /*
-   * Sur mobile, les colonnes deviennent
-   * une seule colonne.
-   */
-  .projects-column:not(:first-child) {
-    margin-top: 1.25rem;
-  }
-
-  /*
-   * Le bouton galerie reste visible
-   * sur mobile.
-   */
-  .gallery-button {
-    opacity: 1;
-
-    transform: translateY(0);
-  }
-}
-
-/* =========================================================
-   VOIR PLUS
-   ========================================================= */
-
 .projects-more {
   display: flex;
-
   justify-content: center;
-
   align-items: center;
-
   width: min(100%, 1200px);
-
   margin: 2.5rem auto 0;
-
   padding-inline: 1rem;
 }
 
 .projects-more-button {
   min-width: 150px;
-
   padding: 0.7rem 1.5rem;
-
   border-radius: 50rem;
-
   font-weight: 500;
-
   transition:
     transform 0.2s ease,
     box-shadow 0.2s ease;
@@ -373,6 +219,45 @@
 
 .projects-more-button:hover {
   transform: translateY(-2px);
-
   box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+}
+
+@media (max-width: 991.98px) {
+  .projects-masonry {
+    gap: 1.25rem;
+  }
+
+  .projects-column {
+    flex: 0 1 340px;
+    width: 340px;
+    gap: 1.25rem;
+  }
+}
+
+@media (max-width: 575.98px) {
+  .projects-masonry {
+    width: min(100%, 500px);
+    padding-inline: 1rem;
+  }
+
+  .projects-column {
+    width: 100%;
+    flex: 1 1 100%;
+  }
+
+  .projects-column:not(:first-child) {
+    margin-top: 1.25rem;
+  }
+
+  .gallery-button {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .project-details {
+    max-height: none;
+    margin-top: 0.9rem;
+    opacity: 1;
+    transform: none;
+  }
 }
