@@ -1,4 +1,4 @@
-<div class="container" style="padding-top: 150px">
+<div class="container services-page" style="padding-top: 150px">
   <div class="section-header text-center">
     <h1 class="section-title tirano-light">Nos services</h1>
 
@@ -7,27 +7,42 @@
 
   <div class="services-grid">
     @for (service of services; track service.id) {
-      <div class="services-item">
-        <div class="card bg-dark text-center tirano-light" style="height: 280px;">
-          <!-- <img
+      <article
+        class="service-card"
+        (click)="openGallery(service.title, service.description, service.medias)"
+      >
+        <!-- IMAGE -->
+        <div class="service-image">
+          <img
             [src]="settings.getImage(service.medias?.[0]?.url, 'service')"
             [alt]="service.title"
-            class="img-fluid"
-          /> -->
-          <div class="card-body">
-            <h5 class="card-title">{{ service.title }}</h5>
-            <p class="card-text">
+            loading="lazy"
+          />
+
+          <div class="service-image-overlay"></div>
+        </div>
+
+        <!-- CONTENU BAS -->
+        <div class="service-content">
+          <!-- TITRE -->
+          <h3 class="service-title">
+            {{ service.title }}
+          </h3>
+
+          <!-- DESCRIPTION AU SURVOL -->
+          @if (service.description) {
+            <p class="service-description">
               {{ service.description }}
             </p>
-          </div>
-          <div
-            class="btn bg-dark card-footer d-flex justify-content-end align-items-center w-100 rounded-0"
-            (click)="openGallery(service.title, service.description, service.medias)"
-          >
+          }
+
+          <!-- INDICATEUR -->
+          <div class="service-action">
+            <span>Découvrir</span>
             <i class="fa-solid fa-arrow-right"></i>
           </div>
         </div>
-      </div>
+      </article>
     }
   </div>
 </div>

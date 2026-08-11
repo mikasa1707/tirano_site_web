@@ -1,34 +1,383 @@
-/* GRILLE */
+/* =========================================================
+   SERVICES GRID
+========================================================= */
+
 .services-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 350px));
-  gap: 1.5rem;
+
+  grid-template-columns:
+    repeat(auto-fit, minmax(280px, 350px));
+
   justify-content: center;
-  align-items: stretch;
-}
 
-/* ITEM */
-.services-item .card > img {
+  gap: 1.5rem;
+
   width: 100%;
-  height: 350px;
-  object-fit: cover;
 }
 
-.service-item {
-  display: flex;
+
+/* =========================================================
+   CARD
+========================================================= */
+
+.service-card {
+  position: relative;
+
+  height: 420px;
+
+  overflow: hidden;
+
+  border-radius: 6px;
+
+  background: var(--tirano-dark, #172033);
+
+  cursor: pointer;
+
+  box-shadow:
+    0 10px 30px rgba(0, 0, 0, 0.12);
+
+  transition:
+    transform 0.35s ease,
+    box-shadow 0.35s ease;
 }
 
-.services-item .card {
+
+/* =========================================================
+   IMAGE
+========================================================= */
+
+.service-image {
+  position: absolute;
+
+  inset: 0;
+
   width: 100%;
   height: 100%;
+
+  overflow: hidden;
+}
+
+.service-image img {
+  display: block;
+
+  width: 100%;
+  height: 100%;
+
+  object-fit: cover;
+
+  transition:
+    transform 0.6s ease;
+}
+
+
+/* =========================================================
+   FUSION IMAGE → TIRANO DARK
+========================================================= */
+
+.service-image-overlay {
+  position: absolute;
+
+  inset: 0;
+
+  /*
+   * La fusion commence progressivement.
+   *
+   * Image
+   *   ↓
+   * image légèrement sombre
+   *   ↓
+   * dégradé
+   *   ↓
+   * tirano-dark
+   */
+
+  background:
+    linear-gradient(
+      to bottom,
+
+      rgba(23, 32, 51, 0) 20%,
+
+      rgba(23, 32, 51, 0.03) 30%,
+
+      rgba(23, 32, 51, 0.12) 42%,
+
+      rgba(23, 32, 51, 0.35) 53%,
+
+      rgba(23, 32, 51, 0.65) 64%,
+
+      rgba(23, 32, 51, 0.88) 74%,
+
+      var(--tirano-dark, #172033) 86%,
+
+      var(--tirano-dark, #172033) 100%
+    );
+
+  pointer-events: none;
+}
+
+
+/* =========================================================
+   CONTENU
+========================================================= */
+
+.service-content {
+  position: absolute;
+
+  z-index: 2;
+
+  left: 0;
+  right: 0;
+  bottom: 0;
+
   display: flex;
+
   flex-direction: column;
+
+  align-items: center;
+
+  justify-content: flex-end;
+
+  min-height: 145px;
+
+  padding: 1.5rem 1.25rem 1.25rem;
+
+  text-align: center;
+
+  /*
+   * IMPORTANT :
+   * aucun background ici.
+   *
+   * La fusion est réalisée par
+   * .service-image-overlay.
+   */
+
+  background: transparent;
+
+  transform: translateY(55px);
+
+  transition:
+    transform 0.4s ease;
 }
 
-.services-item .card-body {
-  flex: 1;
+
+/* =========================================================
+   TITRE
+========================================================= */
+
+.service-title {
+  margin: 0;
+
+  color: #fff;
+
+  font-size: 1.15rem;
+
+  font-weight: 700;
+
+  line-height: 1.3;
+
+  text-align: center;
 }
 
-.services-item .card-footer {
-  margin-top: auto;
+
+/* =========================================================
+   DESCRIPTION
+========================================================= */
+
+.service-description {
+  max-width: 290px;
+
+  margin: 0.8rem 0 0;
+
+  color: rgba(255, 255, 255, 0.72);
+
+  font-size: 0.85rem;
+
+  line-height: 1.6;
+
+  text-align: center;
+
+  display: -webkit-box;
+
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+
+  overflow: hidden;
+
+  opacity: 0;
+
+  transform: translateY(12px);
+
+  transition:
+    opacity 0.3s ease 0.05s,
+    transform 0.3s ease 0.05s;
+}
+
+
+/* =========================================================
+   ACTION
+========================================================= */
+
+.service-action {
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  gap: 0.5rem;
+
+  margin-top: 1rem;
+
+  color: rgba(255, 255, 255, 0.8);
+
+  font-size: 0.72rem;
+
+  font-weight: 700;
+
+  letter-spacing: 0.05em;
+
+  text-transform: uppercase;
+
+  opacity: 0;
+
+  transform: translateY(10px);
+
+  transition:
+    opacity 0.3s ease 0.1s,
+    transform 0.3s ease 0.1s;
+}
+
+
+/* =========================================================
+   ACTION ICON
+========================================================= */
+
+.service-action i {
+  font-size: 0.7rem;
+
+  transition:
+    transform 0.3s ease;
+}
+
+
+/* =========================================================
+   HOVER CARD
+========================================================= */
+
+.service-card:hover {
+  transform: translateY(-5px);
+
+  box-shadow:
+    0 20px 45px rgba(0, 0, 0, 0.22);
+}
+
+
+/* =========================================================
+   IMAGE ZOOM
+========================================================= */
+
+.service-card:hover .service-image img {
+  transform: scale(1.05);
+}
+
+
+/* =========================================================
+   CONTENU MONTE
+========================================================= */
+
+.service-card:hover .service-content {
+  transform: translateY(0);
+}
+
+
+/* =========================================================
+   DESCRIPTION APPARAÎT
+========================================================= */
+
+.service-card:hover .service-description {
+  opacity: 1;
+
+  transform: translateY(0);
+}
+
+
+/* =========================================================
+   ACTION APPARAÎT
+========================================================= */
+
+.service-card:hover .service-action {
+  opacity: 1;
+
+  transform: translateY(0);
+}
+
+
+/* =========================================================
+   FLÈCHE
+========================================================= */
+
+.service-card:hover .service-action i {
+  transform: translateX(4px);
+}
+
+
+/* =========================================================
+   TABLET
+========================================================= */
+
+@media (max-width: 768px) {
+
+  .services-grid {
+    grid-template-columns:
+      repeat(2, minmax(250px, 1fr));
+  }
+
+  .service-card {
+    height: 400px;
+  }
+
+  .service-content {
+    transform: translateY(35px);
+  }
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 575px) {
+
+  .services-grid {
+    grid-template-columns: 1fr;
+
+    max-width: 360px;
+
+    margin-inline: auto;
+  }
+
+  .service-card {
+    height: 390px;
+  }
+
+  /*
+   * Pas de hover réel sur mobile.
+   * Le contenu reste donc accessible.
+   */
+
+  .service-content {
+    transform: translateY(0);
+
+    min-height: 125px;
+  }
+
+  .service-description {
+    display: none;
+  }
+
+  .service-action {
+    opacity: 1;
+
+    transform: translateY(0);
+  }
 }

@@ -3,60 +3,99 @@
   width: 100%;
 }
 
+/* =========================================================
+   MASONRY
+========================================================= */
+
 .projects-masonry {
   display: flex;
   justify-content: center;
   align-items: flex-start;
+
   gap: 1.5rem;
+
   width: 100%;
   max-width: 1200px;
+
   margin-inline: auto;
   padding-inline: 1rem;
 }
 
+/* =========================================================
+   COLONNE
+========================================================= */
+
 .projects-column {
-  flex: 0 1 380px;
-  width: 380px;
+  flex: 1 1 0;
+
+  width: 100%;
+  max-width: 380px;
   min-width: 0;
+
   display: flex;
   flex-direction: column;
+
   gap: 1.5rem;
 }
 
+/* =========================================================
+   CARD
+========================================================= */
+
 .project-card {
   position: relative;
+
   display: flex;
   flex-direction: column;
+
   width: 100%;
+  min-width: 0;
   min-height: 0;
+
   overflow: hidden;
+
   background: #fff;
+
   border-radius: 5px;
+
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
-  transition:
-    box-shadow 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+
+  transition: box-shadow 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .project-card:hover {
   box-shadow: 0 12px 28px rgba(0, 0, 0, 0.09);
+
   cursor: pointer;
 }
 
+/* =========================================================
+   IMAGE
+========================================================= */
+
 .project-image-wrapper {
   position: relative;
+
   width: 100%;
+
   flex: 1 1 auto;
+
   min-height: 0;
+
   overflow: hidden;
+
   background: #f8f9fa;
 }
 
 .project-image {
   display: block;
+
   width: 100%;
   height: 100%;
+
   object-fit: cover;
   object-position: center;
+
   transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
@@ -64,13 +103,22 @@
   transform: scale(1.035);
 }
 
+/* =========================================================
+   CONTENU
+========================================================= */
+
 .project-content {
   position: relative;
   z-index: 3;
+
   flex: 0 0 auto;
+
   padding: 1.25rem 1rem;
+
   text-align: center;
+
   background: #fff;
+
   transition:
     padding 0.35s ease,
     background 0.35s ease;
@@ -80,12 +128,20 @@
   padding: 1.25rem 1rem 1.5rem;
 }
 
+/* =========================================================
+   TITRE
+========================================================= */
+
 .project-title {
   margin: 0;
+
   font-size: 0.95rem;
   font-weight: 500;
+
   line-height: 1.4;
+
   color: #6c757d;
+
   transition: color 0.3s ease;
 }
 
@@ -93,83 +149,137 @@
   color: var(--bs-primary, #0d6efd);
 }
 
+/* =========================================================
+   DETAILS
+========================================================= */
+
 .project-details {
   max-height: 0;
+
   overflow: hidden;
+
   margin-top: 0;
+
   opacity: 0;
+
   transform: translateY(8px);
+
+  text-align: left;
+
   transition:
     max-height 0.4s ease,
     margin-top 0.35s ease,
     opacity 0.3s ease,
     transform 0.35s ease;
-  text-align: left;
 }
 
 .project-card:hover .project-details {
   max-height: 300px;
+
   margin-top: 0.9rem;
+
   opacity: 1;
+
   transform: translateY(0);
 }
 
+/* =========================================================
+   DESCRIPTION
+========================================================= */
+
 .project-description {
   margin: 0 0 1rem;
+
   font-size: 0.82rem;
+
   line-height: 1.55;
+
   color: #6c757d;
+
   display: -webkit-box;
+
   -webkit-line-clamp: 4;
   -webkit-box-orient: vertical;
+
   overflow: hidden;
 }
+
+/* =========================================================
+   META
+========================================================= */
 
 .project-meta {
   display: flex;
   flex-direction: column;
+
   gap: 0.55rem;
+
   padding-top: 0.85rem;
+
   border-top: 1px solid rgba(0, 0, 0, 0.08);
 }
 
 .project-meta-item {
   display: flex;
   align-items: flex-start;
+
   gap: 0.65rem;
+
   font-size: 0.78rem;
   line-height: 1.4;
+
   color: #6c757d;
 }
 
 .project-meta-item i {
   flex: 0 0 16px;
+
   width: 16px;
+
   margin-top: 2px;
+
   color: var(--bs-primary, #0d6efd);
+
   text-align: center;
 }
 
+/* =========================================================
+   BOUTON GALERIE
+========================================================= */
+
 .gallery-button {
   position: absolute;
+
   top: 0.75rem;
   left: 0.75rem;
+
   z-index: 4;
+
   width: 36px;
   height: 36px;
+
   display: flex;
   align-items: center;
   justify-content: center;
+
   padding: 0;
+
   border: 0;
   border-radius: 50%;
+
   color: #fff;
+
   background: rgba(0, 0, 0, 0.42);
+
   backdrop-filter: blur(5px);
   -webkit-backdrop-filter: blur(5px);
+
   cursor: pointer;
+
   opacity: 0;
+
   transform: translateY(-5px);
+
   transition:
     opacity 0.25s ease,
     transform 0.25s ease,
@@ -178,6 +288,7 @@
 
 .project-card:hover .gallery-button {
   opacity: 1;
+
   transform: translateY(0);
 }
 
@@ -185,34 +296,58 @@
   background: var(--bs-primary, #0d6efd);
 }
 
+/* =========================================================
+   STATUS
+========================================================= */
+
 .project-status {
   position: absolute;
+
   right: 0.75rem;
   bottom: 0.75rem;
+
   z-index: 4;
+
   font-size: 0.7rem;
+
   padding: 0.4rem 0.65rem;
 }
 
+/* =========================================================
+   EMPTY
+========================================================= */
+
 .projects-empty {
   width: 100%;
+
   padding: 4rem 1rem;
 }
+
+/* =========================================================
+   VOIR PLUS
+========================================================= */
 
 .projects-more {
   display: flex;
   justify-content: center;
   align-items: center;
+
   width: min(100%, 1200px);
+
   margin: 2.5rem auto 0;
+
   padding-inline: 1rem;
 }
 
 .projects-more-button {
   min-width: 150px;
+
   padding: 0.7rem 1.5rem;
+
   border-radius: 50rem;
+
   font-weight: 500;
+
   transition:
     transform 0.2s ease,
     box-shadow 0.2s ease;
@@ -220,45 +355,280 @@
 
 .projects-more-button:hover {
   transform: translateY(-2px);
+
   box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
 }
 
-@media (max-width: 991.98px) {
+/* =========================================================
+   LARGE DESKTOP
+   3 COLONNES
+========================================================= */
+
+@media (min-width: 992px) {
   .projects-masonry {
-    gap: 1.25rem;
+    gap: 1.5rem;
   }
 
   .projects-column {
-    flex: 0 1 340px;
-    width: 340px;
-    gap: 1.25rem;
+    flex: 1 1 0;
+
+    max-width: 380px;
   }
 }
 
+/* =========================================================
+   TABLETTE
+   2 COLONNES
+========================================================= */
+
+@media (min-width: 576px) and (max-width: 991.98px) {
+  .projects-masonry {
+    width: 100%;
+
+    max-width: 800px;
+
+    gap: 1.25rem;
+
+    padding-inline: 1rem;
+  }
+
+  .projects-column {
+    flex: 1 1 0;
+
+    width: calc(50% - 0.625rem);
+
+    max-width: none;
+
+    gap: 1.25rem;
+  }
+
+  /*
+   * On masque la 3e colonne uniquement si
+   * le HTML contient réellement 3 colonnes.
+   *
+   * Les cartes peuvent être redistribuées
+   * depuis le composant Angular.
+   */
+}
+
+/* =========================================================
+   PETITE TABLETTE
+========================================================= */
+
+@media (min-width: 576px) and (max-width: 700px) {
+  .projects-masonry {
+    gap: 1rem;
+  }
+
+  .projects-column {
+    gap: 1rem;
+  }
+
+  .project-content {
+    padding: 1rem 0.85rem;
+  }
+
+  .project-card:hover .project-content {
+    padding: 1rem 0.85rem 1.25rem;
+  }
+
+  .project-title {
+    font-size: 0.9rem;
+  }
+
+  .project-description {
+    font-size: 0.78rem;
+  }
+}
+
+/* =========================================================
+   MOBILE
+   1 COLONNE
+========================================================= */
+
 @media (max-width: 575.98px) {
   .projects-masonry {
-    width: min(100%, 500px);
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    width: 100%;
+
+    max-width: 500px;
+
+    gap: 1rem;
+
     padding-inline: 1rem;
   }
 
   .projects-column {
     width: 100%;
-    flex: 1 1 100%;
+
+    max-width: 100%;
+
+    flex: 1 1 auto;
+
+    gap: 1rem;
   }
 
+  /*
+   * Important :
+   * toutes les colonnes deviennent une seule
+   * largeur mobile.
+   */
+
   .projects-column:not(:first-child) {
-    margin-top: 1.25rem;
+    margin-top: 0;
   }
+
+  /* -------------------------------------------------------
+     CARD
+  ------------------------------------------------------- */
+
+  .project-card {
+    width: 100%;
+
+    border-radius: 5px;
+  }
+
+  /* -------------------------------------------------------
+     GALERIE
+  ------------------------------------------------------- */
 
   .gallery-button {
     opacity: 1;
+
     transform: translateY(0);
+
+    width: 38px;
+    height: 38px;
   }
+
+  /* -------------------------------------------------------
+     DETAILS
+     
+     Pas de hover sur mobile :
+     les informations restent accessibles.
+  ------------------------------------------------------- */
 
   .project-details {
     max-height: none;
+
     margin-top: 0.9rem;
+
     opacity: 1;
+
+    transform: none;
+  }
+
+  .project-content {
+    padding: 1.1rem 1rem 1.25rem;
+  }
+
+  .project-title {
+    font-size: 0.95rem;
+  }
+
+  .project-description {
+    font-size: 0.82rem;
+
+    -webkit-line-clamp: 4;
+  }
+
+  /* -------------------------------------------------------
+     META
+  ------------------------------------------------------- */
+
+  .project-meta {
+    gap: 0.5rem;
+
+    padding-top: 0.75rem;
+  }
+
+  .project-meta-item {
+    font-size: 0.76rem;
+  }
+
+  /* -------------------------------------------------------
+     STATUS
+  ------------------------------------------------------- */
+
+  .project-status {
+    right: 0.6rem;
+    bottom: 0.6rem;
+
+    font-size: 0.65rem;
+
+    padding: 0.35rem 0.55rem;
+  }
+}
+
+/* =========================================================
+   TRÈS PETITS ÉCRANS
+========================================================= */
+
+@media (max-width: 380px) {
+  .projects-masonry {
+    padding-inline: 0.75rem;
+
+    gap: 0.85rem;
+  }
+
+  .projects-column {
+    gap: 0.85rem;
+  }
+
+  .project-content {
+    padding: 1rem 0.85rem 1.1rem;
+  }
+
+  .project-title {
+    font-size: 0.9rem;
+  }
+
+  .project-description {
+    font-size: 0.78rem;
+  }
+
+  .project-meta-item {
+    font-size: 0.72rem;
+  }
+
+  .gallery-button {
+    top: 0.6rem;
+    left: 0.6rem;
+
+    width: 34px;
+    height: 34px;
+  }
+
+  .project-status {
+    right: 0.6rem;
+    bottom: 0.6rem;
+  }
+}
+
+/* =========================================================
+   ACCESSIBILITÉ
+========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+  .project-card,
+  .project-image,
+  .project-content,
+  .project-details,
+  .gallery-button,
+  .projects-more-button {
+    transition: none !important;
+  }
+
+  .project-card:hover {
+    transform: none;
+  }
+
+  .project-card:hover .project-image {
     transform: none;
   }
 }
