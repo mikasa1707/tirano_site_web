@@ -1,211 +1,184 @@
 @if (open && gallery) {
   <div class="gallery-overlay">
-    <!-- ================================================= -->
-    <!-- HEADER -->
-    <!-- ================================================= -->
+    <!-- =====================================================
+         HEADER
+    ====================================================== -->
 
     <header class="gallery-header">
-      <div class="gallery-title">
+      <div class="gallery-heading">
         @if (gallery.title) {
-          <h2>
-            {{ gallery.title }}
-          </h2>
+          <h2>{{ gallery.title }}</h2>
+        }
+
+        @if (gallery.description) {
+          <p>{{ gallery.description }}</p>
         }
       </div>
 
-      <button type="button" class="gallery-close" aria-label="Fermer" (click)="close()">
+      <button type="button" class="gallery-close" aria-label="Fermer la galerie" (click)="close()">
         <span>Fermer</span>
         <i class="fa-solid fa-xmark"></i>
       </button>
     </header>
 
-    <!-- ================================================= -->
-    <!-- GALERIE 80% -->
-    <!-- ================================================= -->
+    <!-- =====================================================
+         GALERIE MASONRY
+    ====================================================== -->
 
     <section class="gallery-content">
       @if (visualMedias.length > 0) {
-        <div class="gallery-album">
-          <!-- COLONNE GAUCHE -->
+        <div class="gallery-masonry">
+          @for (media of visualMedias; track media.id; let index = $index) {
+            <article
+              class="gallery-media"
+              [class.gallery-media-featured]="index % 7 === 0"
+              [class.gallery-media-tall]="index % 5 === 0"
+              [class.video-media]="isVideo(media)"
+              (click)="openMedia(media)"
+              tabindex="0"
+              role="button"
+              [attr.aria-label]="'Ouvrir ' + getMediaName(media)"
+              (keydown.enter)="openMedia(media)"
+              (keydown.space)="openMedia(media); $event.preventDefault()"
+            >
+              <!-- IMAGE -->
 
-          <div class="gallery-column">
-            @for (media of visualMedias.slice(0, 3); track media.id) {
-              <ng-container
-                *ngTemplateOutlet="
-                  mediaTemplate;
-                  context: {
-                    media: media,
-                    large: false,
+              @if (isImage(media)) {
+                <img
+                  [src]="getThumbnail(media)"
+                  [alt]="getMediaName(media)"
+                  loading="lazy"
+                  (error)="onImageError($event)"
+                />
+              }
+
+              <!-- VIDEO -->
+
+              @else if (isVideo(media)) {
+                <div class="video-container">
+                  @if (media.thumbnail) {
+                    <img [src]="media.thumbnail" [alt]="getMediaName(media)" loading="lazy" />
+                  } @else {
+                    <video [src]="media.url" preload="metadata" muted playsinline></video>
                   }
-                "
-              ></ng-container>
-            }
-          </div>
 
-          <!-- COLONNE CENTRALE -->
+                  <div class="video-overlay">
+                    <span class="play-button">
+                      <i class="fa-solid fa-play"></i>
+                    </span>
+                  </div>
+                </div>
+              }
 
-          <div class="gallery-column gallery-column-large">
-            @for (media of visualMedias.slice(3, 5); track media.id) {
-              <ng-container
-                *ngTemplateOutlet="
-                  mediaTemplate;
-                  context: {
-                    media: media,
-                    large: true,
+              <!-- OVERLAY -->
+
+              <div class="gallery-media-overlay">
+                <div class="gallery-media-top">
+                  @if (isVideo(media)) {
+                    <span class="media-type">
+                      <i class="fa-solid fa-video"></i>
+                      Vidéo
+                    </span>
+                  } @else {
+                    <span class="media-type">
+                      <i class="fa-regular fa-image"></i>
+                      Photo
+                    </span>
                   }
-                "
-              ></ng-container>
-            }
-          </div>
+                </div>
 
-          <!-- COLONNE DROITE -->
-
-          <div class="gallery-column">
-            @for (media of visualMedias.slice(5, 8); track media.id) {
-              <ng-container
-                *ngTemplateOutlet="
-                  mediaTemplate;
-                  context: {
-                    media: media,
-                    large: false,
+                <div class="gallery-media-bottom">
+                  @if (media.name || media.originalName) {
+                    <span class="gallery-media-name">
+                      {{ getMediaName(media) }}
+                    </span>
                   }
-                "
-              ></ng-container>
-            }
-          </div>
+
+                  <span class="gallery-media-open">
+                    <i class="fa-solid fa-expand"></i>
+                  </span>
+                </div>
+              </div>
+            </article>
+          }
         </div>
-
-        <!-- MÉDIAS SUPPLÉMENTAIRES -->
-
-        @if (visualMedias.length > 8) {
-          <div class="gallery-more-grid">
-            @for (media of visualMedias.slice(8); track media.id) {
-              <ng-container
-                *ngTemplateOutlet="
-                  mediaTemplate;
-                  context: {
-                    media: media,
-                    large: false,
-                  }
-                "
-              ></ng-container>
-            }
-          </div>
-        }
       } @else {
         <div class="gallery-empty">
-          <i class="fa-regular fa-images"></i>
+          <div class="gallery-empty-icon">
+            <i class="fa-regular fa-images"></i>
+          </div>
 
-          <p>Aucun média disponible</p>
+          <h3>Aucun média disponible</h3>
+
+          <p>Aucun contenu visuel n'est disponible pour cette galerie.</p>
         </div>
       }
     </section>
 
-    <!-- ================================================= -->
-    <!-- TEMPLATE MEDIA -->
-    <!-- ================================================= -->
+    <!-- =====================================================
+         DOCUMENTS
+    ====================================================== -->
 
-    <ng-template #mediaTemplate let-media="media" let-large="large">
-      <div
-        class="gallery-media"
-        [class.gallery-media-large]="large"
-        [class.video-media]="isVideo(media)"
-        (click)="openMedia(media)"
-      >
-        <!-- IMAGE -->
-
-        @if (isImage(media)) {
-          <img
-            [src]="getThumbnail(media)"
-            [alt]="getMediaName(media)"
-            loading="lazy"
-            (error)="onImageError($event)"
-          />
-        }
-
-        <!-- VIDEO -->
-
-        @if (isVideo(media)) {
-          <div class="video-container">
-            @if (media.thumbnail) {
-              <img [src]="media.thumbnail" [alt]="getMediaName(media)" loading="lazy" />
-            } @else {
-              <div class="video-placeholder">
-                <i class="fa-solid fa-video"></i>
-              </div>
-            }
-
-            <div class="video-overlay">
-              <div class="play-button">
-                <i class="fa-solid fa-play"></i>
-              </div>
-            </div>
+    @if (documents.length > 0) {
+      <section class="gallery-documents-section">
+        <div class="gallery-section-header">
+          <div class="gallery-section-icon">
+            <i class="fa-solid fa-paperclip"></i>
           </div>
-        }
 
-        <!-- NOM -->
-
-        @if (media.name || media.originalName) {
-          <div class="gallery-media-name">
-            {{ getMediaName(media) }}
-          </div>
-        }
-      </div>
-    </ng-template>
-
-    <!-- ================================================= -->
-    <!-- FOOTER 20% -->
-    <!-- ================================================= -->
-
-    <footer class="gallery-footer">
-      <div class="gallery-footer-content">
-        <!-- DESCRIPTION -->
-
-        <div class="gallery-description">
-          @if (gallery.description) {
-            <h4>Description</h4>
-
+          <div>
+            <h3>Documents</h3>
             <p>
-              {{ gallery.description }}
+              {{ documents.length }}
+              {{ documents.length > 1 ? 'documents disponibles' : 'document disponible' }}
             </p>
-          }
+          </div>
         </div>
 
-        <!-- DOCUMENTS -->
+        <div class="documents-list">
+          @for (document of documents; track document.id) {
+            <a
+              class="document-item"
+              [href]="document.url"
+              target="_blank"
+              rel="noopener noreferrer"
+              download
+            >
+              <div class="document-icon">
+                <i [class]="getDocumentIcon(document)"></i>
+              </div>
 
-        @if (documents.length > 0) {
-          <div class="gallery-documents">
-            <h4>Documents</h4>
+              <div class="document-info">
+                <strong>
+                  {{ getMediaName(document) }}
+                </strong>
 
-            <div class="documents-list">
-              @for (document of documents; track document.id) {
-                <a
-                  class="document-item"
-                  [href]="document.url"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <i [class]="getDocumentIcon(document)"></i>
+                <span> Ouvrir ou télécharger </span>
+              </div>
 
-                  <span>
-                    {{ getMediaName(document) }}
-                  </span>
+              <div class="document-action">
+                <i class="fa-solid fa-arrow-up-right-from-square"></i>
+              </div>
+            </a>
+          }
+        </div>
+      </section>
+    }
 
-                  <i class="fa-solid fa-arrow-up-right-from-square document-open"></i>
-                </a>
-              }
-            </div>
-          </div>
-        }
-      </div>
-    </footer>
-
-    <!-- ================================================= -->
-    <!-- LIGHTBOX -->
-    <!-- ================================================= -->
+    <!-- =====================================================
+         LIGHTBOX
+    ====================================================== -->
 
     @if (lightboxOpen && selectedMedia) {
-      <div class="lightbox" (click)="closeLightbox()">
+      <div
+        class="lightbox"
+        role="dialog"
+        aria-modal="true"
+        aria-label="Visualisation du média"
+        (click)="closeLightbox()"
+      >
+        <!-- FERMER -->
+
         <button
           type="button"
           class="lightbox-close"
@@ -215,13 +188,30 @@
           <i class="fa-solid fa-xmark"></i>
         </button>
 
+        <!-- CONTENU -->
+
         <div class="lightbox-content" (click)="$event.stopPropagation()">
           @if (isImage(selectedMedia)) {
-            <img [src]="selectedMedia.url" [alt]="getMediaName(selectedMedia)" />
+            <img
+              class="lightbox-image"
+              [src]="selectedMedia.url"
+              [alt]="getMediaName(selectedMedia)"
+            />
+
+          } @else if (isVideo(selectedMedia)) {
+            <video
+              class="lightbox-video"
+              [src]="selectedMedia.url"
+              controls
+              autoplay
+              playsinline
+            ></video>
           }
 
-          @if (isVideo(selectedMedia)) {
-            <video [src]="selectedMedia.url" controls autoplay playsinline></video>
+          @if (getMediaName(selectedMedia)) {
+            <div class="lightbox-caption">
+              {{ getMediaName(selectedMedia) }}
+            </div>
           }
         </div>
       </div>

@@ -163,7 +163,7 @@ export class ProjectListPage implements OnInit {
     const galleryMedias: GalleryMedia[] = medias.map((media) => ({
       id: media.id,
       url: media.url,
-      type: this.getMediaType(media),
+      type: media.type,
       originalName: media.title ?? media.filename ?? '',
     }));
 

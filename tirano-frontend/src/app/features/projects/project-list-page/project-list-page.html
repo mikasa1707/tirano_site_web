@@ -61,7 +61,7 @@
         @if (column.length) {
           <div class="projects-column">
             @for (project of column; track project.id) {
-              <article class="project-card" [style.height.px]="getProjectCardHeight(project)">
+              <article class="project-card" [style.height.px]="getProjectCardHeight(project)" (click)="openGallery(project.title, project.description, project.medias)">
                 <div class="project-image-wrapper">
                   <img
                     [src]="getProjectImage(project)"

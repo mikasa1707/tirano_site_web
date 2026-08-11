@@ -17,6 +17,7 @@ import { ArticlesService } from './articles.service';
 
 import { CreateArticleDto } from './dto/create-article.dto';
 import { UpdateArticleDto } from './dto/update-article.dto';
+import { Public } from 'src/auth/decorators/public.decorator';
 
 interface SiteServiceQuery {
   page?: string;
@@ -35,6 +36,7 @@ export class ArticlesController {
     return this.service.create(dto);
   }
 
+  @Public()
   @Get()
   findAll(@Query() query: SiteServiceQuery) {
     return this.service.findAll(

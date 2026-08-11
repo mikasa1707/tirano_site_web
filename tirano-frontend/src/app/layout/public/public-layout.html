@@ -23,7 +23,7 @@
       <!-- PROJETS -->
       <section id="projets" class="min-vh-100 py-5 d-flex align-items-center container-page">
         <div class="container">
-          <app-project-list-page></app-project-list-page>
+          <app-project-list-page (galleryOpen)="openGallery($event)"> </app-project-list-page>
         </div>
       </section>
 
@@ -37,7 +37,7 @@
       <!-- ACTUALITÉS -->
       <section id="actualites" class="min-vh-100 py-5 d-flex align-items-center container-page">
         <div class="container">
-          <app-article-list-page></app-article-list-page>
+          <app-article-list-page (galleryOpen)="openGallery($event)" (articleOpen)="openArticle($event)" ></app-article-list-page>
         </div>
       </section>
 
@@ -55,3 +55,9 @@
 
 <app-gallery-viewer [gallery]="selectedGallery" [open]="galleryOpen" (closed)="closeGallery()">
 </app-gallery-viewer>
+
+<app-article-viewer
+  [open]="articleViewerOpen"
+  [article]="selectedArticle"
+  (closed)="closeArticleViewer()"
+></app-article-viewer>

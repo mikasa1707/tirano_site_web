@@ -9,6 +9,8 @@ import { ProductListPage } from '../../features/products/product-list-page/produ
 import { ArticleListPage } from '../../features/articles/article-list-page/article-list-page';
 import { GalleryViewerComponent } from '../../shared/components/gallery-viewer/gallery-viewer';
 import { GalleryData } from '../../core/models/media';
+import { Article } from '../../core/models/article';
+import { ArticleViewerComponent } from "../../shared/components/article-viewer/article-viewer";
 
 @Component({
   selector: 'app-public-layout',
@@ -23,28 +25,39 @@ import { GalleryData } from '../../core/models/media';
     ProductListPage,
     ArticleListPage,
     GalleryViewerComponent,
-  ],
+    ArticleViewerComponent
+],
   templateUrl: './public-layout.html',
   styleUrl: './public-layout.scss',
 })
 export class PublicLayout {
   galleryOpen = false;
-
   selectedGallery: GalleryData | null = null;
+
+  selectedArticle: Article | null = null;
+  articleViewerOpen = false;
 
   openGallery(gallery: GalleryData): void {
     this.selectedGallery = gallery;
-
     this.galleryOpen = true;
-
     document.body.classList.add('gallery-open');
   }
 
   closeGallery(): void {
     this.galleryOpen = false;
-
     this.selectedGallery = null;
-
     document.body.classList.remove('gallery-open');
+  }
+
+  openArticle(article: Article): void {
+    this.selectedArticle = article;
+    this.articleViewerOpen = true;
+    document.body.style.overflow = 'hidden';
+  }
+
+  closeArticleViewer(): void {
+    this.articleViewerOpen = false;
+    this.selectedArticle = null;
+    document.body.style.overflow = '';
   }
 }

@@ -1,1 +1,229 @@
-<p>article-list-page works!</p>
+<section class="articles-section">
+  <!-- =====================================================
+       HEADER
+  ====================================================== -->
+
+  <div class="text-center mb-5">
+    <h1 class="section-title tirano-light">Actualités & informations</h1>
+
+    <p class="section-subtitle mx-auto text-muted" style="max-width: 600px">
+      Retrouvez les dernières nouvelles, événements, annonces et informations de Tirano.
+    </p>
+  </div>
+
+  <!-- =====================================================
+       ARTICLES
+  ====================================================== -->
+
+  @if (filteredArticles.length > 0) {
+    <div class="articles-list">
+      @for (
+        article of showAllArticles
+          ? filteredArticles
+          : filteredArticles.slice(0, initialArticleLimit);
+        track article.id;
+        let index = $index
+      ) {
+        <article class="article-item" [class.article-item-reverse]="index % 2 === 1">
+          <div class="article-card">
+            <!-- =================================================
+                 MEDIA
+            ================================================== -->
+
+            <div
+              class="article-media"
+              [class.media-count-1]="(article.medias?.length ?? 0) === 1"
+              [class.media-count-2]="(article.medias?.length ?? 0) === 2"
+              [class.media-count-3]="(article.medias?.length ?? 0) >= 3"
+            >
+              @if (article.medias?.length) {
+                @for (
+                  media of article.medias.slice(0, 3);
+                  track media.id;
+                  let mediaIndex = $index
+                ) {
+                  <div
+                    class="article-media-item"
+                    [class.media-item-1]="mediaIndex === 0"
+                    [class.media-item-2]="mediaIndex === 1"
+                    [class.media-item-3]="mediaIndex === 2"
+                  >
+                    <!-- IMAGE -->
+
+                    @if (isImageMedia(media)) {
+                      <img
+                        class="article-media-image"
+                        [src]="getMediaUrl(media)"
+                        [alt]="media.title || article.title"
+                        loading="lazy"
+                        (error)="onMediaError($event)"
+                      />
+                    }
+
+                    <!-- VIDEO -->
+
+                    @else if (isVideoMedia(media)) {
+                      <video
+                        class="article-media-video"
+                        [src]="getMediaUrl(media)"
+                        muted
+                        playsinline
+                        preload="metadata"
+                      ></video>
+
+                      <div class="article-video-overlay">
+                        <span class="article-video-icon">
+                          <i class="fa-solid fa-play"></i>
+                        </span>
+                      </div>
+                    }
+
+                    <!-- DOCUMENT -->
+
+                    @else {
+                      <div class="article-document">
+                        <i class="fa-solid fa-file-lines"></i>
+
+                        <span>
+                          {{ media.title || media.filename || 'Document' }}
+                        </span>
+                      </div>
+                    }
+                  </div>
+                }
+              } @else {
+                <div class="article-media-default">
+                  <img
+                    src="assets/images/default-article.png"
+                    [alt]="article.title"
+                    class="article-media-image"
+                  />
+                </div>
+              }
+
+              <!-- GALERIE -->
+
+              <!-- @if ((article.medias?.length ?? 0) > 0) {
+                <button
+                  type="button"
+                  class="article-gallery-button"
+                  (click)="
+                    openGallery(article.title, article.excerpt || article.content, article.medias)
+                  "
+                >
+                  <i class="fa-solid fa-images"></i>
+
+                  <span>
+                    {{ article.medias?.length }}
+                  </span>
+                </button>
+              } -->
+            </div>
+
+            <!-- =================================================
+                 CONTENU
+            ================================================== -->
+
+            <div class="article-content">
+              <!-- META -->
+
+              <div class="article-meta">
+                <span class="article-type" [class]="getArticleTypeClass(article.type)">
+                  {{ getArticleTypeLabel(article.type) }}
+                </span>
+
+                @if (article.publishedAt) {
+                  <time class="article-date" [attr.datetime]="article.publishedAt">
+                    <i class="fa-regular fa-calendar"></i>
+
+                    {{ article.publishedAt | date: 'dd MMMM yyyy' : '' : 'fr-FR' }}
+                  </time>
+                }
+              </div>
+
+              <!-- TITRE -->
+
+              <h3 class="article-title">
+                {{ article.title }}
+              </h3>
+
+              <!-- DESCRIPTION -->
+
+              @if (article.excerpt) {
+                <p class="article-excerpt">
+                  {{ article.excerpt }}
+                </p>
+              } @else {
+                <p class="article-excerpt">
+                  {{ article.content }}
+                </p>
+              }
+
+              <!-- SOURCE -->
+
+              @if (article.source) {
+                <div class="article-source">
+                  <i class="fa-solid fa-link"></i>
+
+                  <span>Source :</span>
+
+                  <strong>
+                    {{ article.source }}
+                  </strong>
+                </div>
+              }
+
+              <!-- FOOTER -->
+
+              <div class="article-footer">
+                <button type="button" class="article-read-more" (click)="openArticle(article)">
+                  Lire la publication
+
+                  <i class="fa-solid fa-arrow-right"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        </article>
+      }
+    </div>
+
+    <!-- =====================================================
+         VOIR PLUS
+    ====================================================== -->
+
+    @if (!showAllArticles && filteredArticles.length > initialArticleLimit) {
+      <div class="articles-more">
+        <button type="button" class="btn btn-primary articles-more-button" (click)="showMoreArticles()">
+          Voir plus
+
+          <i class="fa-solid fa-chevron-down ms-2"></i>
+        </button>
+      </div>
+    }
+
+    <!-- =====================================================
+         VOIR MOINS
+    ====================================================== -->
+
+    @if (showAllArticles && filteredArticles.length > initialArticleLimit) {
+      <div class="articles-more">
+        <button type="button" class="btn btn-primary articles-more-button" (click)="showLessArticles()">
+          Voir moins
+
+          <i class="fa-solid fa-chevron-up ms-2"></i>
+        </button>
+      </div>
+    }
+  } @else {
+    <div class="articles-empty">
+      <div class="articles-empty-icon">
+        <i class="fa-regular fa-newspaper"></i>
+      </div>
+
+      <h3>Aucune actualité disponible</h3>
+
+      <p>Les dernières informations de Tirano apparaîtront ici.</p>
+    </div>
+  }
+</section>
