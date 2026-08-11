@@ -45,7 +45,6 @@
                 @for (client of testimonials.slice(i, i + 3); track client.id) {
                   <div class="col-12 col-md-6 col-lg-4">
                     <article class="testimonial-card">
-
                       <!-- =================================================
                            TRAIT VERTICAL
                       ================================================== -->
@@ -74,9 +73,17 @@
                         <div class="testimonial-author">
                           <span class="testimonial-author-line" aria-hidden="true"></span>
 
-                          <h3 class="testimonial-name">
-                            {{ client.name }}
-                          </h3>
+                          <div class="testimonial-author-info">
+                            <h3 class="testimonial-name">
+                              {{ client.name }}
+                            </h3>
+
+                            @if (client.role) {
+                              <span class="testimonial-role">
+                                {{ client.role }}
+                              </span>
+                            }
+                          </div>
                         </div>
                       </div>
                     </article>
