@@ -37,7 +37,21 @@
       <!-- ACTUALITÉS -->
       <section id="actualites" class="min-vh-100 py-5 d-flex align-items-center container-page">
         <div class="container">
-          <app-article-list-page (galleryOpen)="openGallery($event)" (articleOpen)="openArticle($event)" ></app-article-list-page>
+          <app-article-list-page (articleOpen)="openArticle($event)" ></app-article-list-page>
+        </div>
+      </section>
+
+      <!-- TEMOIGNAGE -->
+      <section id="testimonial" class="min-vh-100 py-5 d-flex align-items-center container-page">
+        <div class="container">
+          <app-testimonial-list-page></app-testimonial-list-page>
+        </div>
+      </section>
+
+      <!-- EQUIPES -->
+      <section id="user" class="min-vh-100 py-5 d-flex align-items-center container-page">
+        <div class="container">
+          <app-user-list-page></app-user-list-page>
         </div>
       </section>
 

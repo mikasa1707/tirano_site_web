@@ -16,6 +16,7 @@ import { TestimonialsService } from './testimonials.service';
 
 import { CreateTestimonialDto } from './dto/create-testimonial.dto';
 import { UpdateTestimonialDto } from './dto/update-testimonial.dto';
+import { Public } from 'src/auth/decorators/public.decorator';
 
 interface SiteServiceQuery {
   page?: string;
@@ -34,6 +35,7 @@ export class TestimonialsController {
     return this.service.create(dto);
   }
 
+  @Public()
   @Get()
   findAll(@Query() query: SiteServiceQuery) {
     return this.service.findAll(
@@ -77,3 +79,4 @@ export class TestimonialsController {
     return this.service.addMedia(Number(id), files);
   }
 }
+

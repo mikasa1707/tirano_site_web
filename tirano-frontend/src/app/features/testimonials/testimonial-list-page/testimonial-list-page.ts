@@ -1,17 +1,17 @@
 import { ChangeDetectorRef, Component, EventEmitter, OnInit, Output } from '@angular/core';
-import { User } from '../../../core/models/user';
-import { UserApi } from '../../../core/api/user.api';
+import { TestimonialApi } from '../../../core/api/testimonial.api';
 import { GalleryData, Media, GalleryMedia } from '../../../core/models/media';
+import { Testimonial } from '../../../core/models/testimonial';
 import { SiteSettingsService } from '../../../core/services/site-settings.service';
 
 @Component({
-  selector: 'app-user-list-page',
+  selector: 'app-testimonial-list-page',
   imports: [],
-  templateUrl: './user-list-page.html',
-  styleUrl: './user-list-page.scss',
+  templateUrl: './testimonial-list-page.html',
+  styleUrl: './testimonial-list-page.scss',
 })
-export class UserListPage implements OnInit {
-  users?: User[] = [];
+export class TestimonialListPage implements OnInit {
+  testimonials?: Testimonial[] = [];
 
   @Output()
   galleryOpen = new EventEmitter<GalleryData>();
@@ -19,7 +19,7 @@ export class UserListPage implements OnInit {
   selectedGallery: GalleryData | null = null;
 
   constructor(
-    private userApi: UserApi,
+    private testimonialApi: TestimonialApi,
     private cdr: ChangeDetectorRef,
     public readonly settings: SiteSettingsService,
   ) {}
@@ -29,15 +29,15 @@ export class UserListPage implements OnInit {
   }
 
   load() {
-    this.userApi
+    this.testimonialApi
       .findAll({
         sortBy: 'created_at',
         sortOrder: 'DESC',
       })
       .subscribe({
         next: (response: any) => {
-          this.users = response.data.data;
-          console.log(this.users);
+          this.testimonials = response.data.data;
+          console.log(this.testimonials);
           this.cdr.detectChanges();
         },
 
@@ -64,7 +64,7 @@ export class UserListPage implements OnInit {
     });
   }
 
-  getUserImage(user: User): string {
-      return this.settings.getImage(user.medias?.[0]?.url, 'user');
-    }
+  getTestimonialImage(testimonial: Testimonial): string {
+    return this.settings.getImage(testimonial.medias?.[0]?.url, 'testimonial');
+  }
 }

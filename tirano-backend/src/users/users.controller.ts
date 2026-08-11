@@ -16,6 +16,7 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { Roles } from '../auth/decorators/roles.decorator';
 import { UserRole } from './entities/user.entity';
 import { FilesInterceptor } from '@nestjs/platform-express';
+import { Public } from 'src/auth/decorators/public.decorator';
 
 interface QueryDto {
   page?: string;
@@ -29,6 +30,7 @@ interface QueryDto {
 export class UsersController {
   constructor(private readonly service: UsersService) {}
 
+  @Public()
   @Get()
   findAll(@Query() query: QueryDto) {
     return this.service.findAll(

@@ -23,7 +23,7 @@ export const ADMIN_ROUTES: Routes = [
         path: 'users',
 
         loadComponent: () =>
-          import('../features/users/user-list-page/user-list-page').then(
+          import('../features/users/admin-user-list-page/user-list-page').then(
             (m) => m.UserListPage,
           ),
       },

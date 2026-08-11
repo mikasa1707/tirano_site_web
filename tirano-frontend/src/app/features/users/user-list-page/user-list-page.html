@@ -1,58 +1,97 @@
-<app-page-header
-  title="Services"
-  subtitle="Gestion des services proposées"
-  icon="fa-solid fa-gears"
->
-  <div class="d-flex gap-2 flex-wrap">
-    <div class="search-wrapper">
-      <app-search-bar (searchChange)="onSearch($event)"></app-search-bar>
+<section class="team-section">
+  <div class="section-header text-center">
+    <h1 class="section-title tirano-light">
+      Les bons résultats naissent d'une équipe professionnelle
+    </h1>
+
+    <p class="section-subtitle">Rencontrez nos managers, ingénieurs et ouvriers.</p>
+  </div>
+
+  <div id="teamCarousel" class="carousel slide" data-bs-ride="carousel">
+    <!-- INDICATEURS -->
+    <div class="carousel-indicators">
+      @for (user of users; track user.id; let i = $index) {
+        @if (i % 3 === 0) {
+          <button
+            type="button"
+            data-bs-target="#teamCarousel"
+            [attr.data-bs-slide-to]="i / 3"
+            [class.active]="i === 0"
+            [attr.aria-current]="i === 0 ? 'true' : null"
+            [attr.aria-label]="'Équipe ' + (i / 3 + 1)"
+          ></button>
+        }
+      }
     </div>
 
-    <button class="btn btn-sm btn-primary" (click)="openCreate()">
-      <i class="fa-solid fa-plus me-1"></i>
-      Ajouter
+    <!-- SLIDES -->
+    @if (users) {
+      <div class="carousel-inner">
+        @for (user of users; track user.id; let i = $index) {
+          @if (i % 3 === 0) {
+            <div class="carousel-item" [class.active]="i === 0">
+              <div class="row justify-content-center g-4">
+                @for (member of users.slice(i, i + 3); track member.id) {
+                  <div class="col-12 col-md-6 col-lg-4">
+                    <article class="team-card">
+                      <!-- PHOTO -->
+                      <div class="team-photo">
+                        @if (member.photo) {
+                          <img
+                            [src]="member.photo"
+                            [alt]="member.firstname + ' ' + member.lastname"
+                          />
+                        } @else {
+                          <img
+                            [src]="settings.getImage(member.medias?.[0]?.url, 'user')"
+                            [alt]="member.firstname + ' ' + member.lastname"
+                          />
+                        }
+                      </div>
+
+                      <!-- INFOS -->
+                      <div class="team-info">
+                        <h3 class="team-name">
+                          {{ member.firstname }}
+                          {{ member.lastname }}
+                        </h3>
+
+                        <p class="team-job">
+                          {{ member.job }}
+                        </p>
+                      </div>
+                    </article>
+                  </div>
+                }
+              </div>
+            </div>
+          }
+        }
+      </div>
+    }
+
+    <!-- PREVIOUS -->
+    <button
+      class="carousel-control-prev"
+      type="button"
+      data-bs-target="#teamCarousel"
+      data-bs-slide="prev"
+    >
+      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+
+      <span class="visually-hidden"> Précédent </span>
+    </button>
+
+    <!-- NEXT -->
+    <button
+      class="carousel-control-next"
+      type="button"
+      data-bs-target="#teamCarousel"
+      data-bs-slide="next"
+    >
+      <span class="carousel-control-next-icon" aria-hidden="true"></span>
+
+      <span class="visually-hidden"> Suivant </span>
     </button>
   </div>
-</app-page-header>
-
-<div class="container-fluid">
-  @if (loading) {
-    <app-loading></app-loading>
-  } @else {
-    <!-- <h1>ADMIN SERVICE LIST CHARGE {{ services.length }}</h1> -->
-    @if (users.length > 0) {
-      <app-data-table
-        [columns]="columns"
-        [data]="users"
-        [loading]="loading"
-        [page]="page"
-        [totalPages]="totalPages"
-        (pageChange)="onPageChange($event)"
-        [showViewButton]="false"
-        (edit)="edit($event)"
-        (delete)="delete($event)"
-      >
-      </app-data-table>
-
-      <app-pagination
-        [page]="page"
-        [total]="total"
-        [limit]="limit"
-        (pageChange)="onPageChange($event)"
-      >
-      </app-pagination>
-    } @else {
-      <app-state-view type="empty"> </app-state-view>
-    }
-  }
-</div>
-
-<app-modal
-  size="xl"
-  [show]="show_modal"
-  title="{{ selected ? 'Modifier utilisateur' : 'Ajouter utilisateur' }}"
-  (closed)="closeModal()"
->
-  <app-user-form-page [user]="selected" (saved)="onSaved()">
-  </app-user-form-page>
-</app-modal>
+</section>

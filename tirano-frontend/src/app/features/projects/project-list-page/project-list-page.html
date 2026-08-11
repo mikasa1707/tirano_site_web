@@ -11,47 +11,45 @@
 
   <!-- FILTRES -->
   <div class="d-flex justify-content-center mb-5">
-    <div class="btn-group shadow-sm" role="group" aria-label="Filtre projets">
-      <button
-        type="button"
-        class="btn btn-sm"
-        [class.btn-primary]="isFilterActive('ALL')"
-        [class.btn-outline-primary]="!isFilterActive('ALL')"
-        (click)="setFilter('ALL')"
-      >
-        Tous
-      </button>
+    <button
+      type="button"
+      class="btn btn-sm mx-3"
+      [class.btn-primary]="isFilterActive('ALL')"
+      [class.btn-outline-primary]="!isFilterActive('ALL')"
+      (click)="setFilter('ALL')"
+    >
+      Tous
+    </button>
 
-      <button
-        type="button"
-        class="btn btn-sm"
-        [class.btn-warning]="isFilterActive('EN_COURS')"
-        [class.btn-outline-warning]="!isFilterActive('EN_COURS')"
-        (click)="setFilter('EN_COURS')"
-      >
-        En cours
-      </button>
+    <button
+      type="button"
+      class="btn btn-sm mx-3"
+      [class.btn-warning]="isFilterActive('EN_COURS')"
+      [class.btn-outline-warning]="!isFilterActive('EN_COURS')"
+      (click)="setFilter('EN_COURS')"
+    >
+      En cours
+    </button>
 
-      <button
-        type="button"
-        class="btn btn-sm"
-        [class.btn-success]="isFilterActive('TERMINE')"
-        [class.btn-outline-success]="!isFilterActive('TERMINE')"
-        (click)="setFilter('TERMINE')"
-      >
-        Terminés
-      </button>
+    <button
+      type="button"
+      class="btn btn-sm mx-3"
+      [class.btn-success]="isFilterActive('TERMINE')"
+      [class.btn-outline-success]="!isFilterActive('TERMINE')"
+      (click)="setFilter('TERMINE')"
+    >
+      Terminés
+    </button>
 
-      <button
-        type="button"
-        class="btn btn-sm"
-        [class.btn-info]="isFilterActive('A_VENIR')"
-        [class.btn-outline-info]="!isFilterActive('A_VENIR')"
-        (click)="setFilter('A_VENIR')"
-      >
-        À venir
-      </button>
-    </div>
+    <button
+      type="button"
+      class="btn btn-sm mx-3"
+      [class.btn-info]="isFilterActive('A_VENIR')"
+      [class.btn-outline-info]="!isFilterActive('A_VENIR')"
+      (click)="setFilter('A_VENIR')"
+    >
+      À venir
+    </button>
   </div>
 
   <!-- GRILLE DE PROJETS -->
@@ -61,7 +59,11 @@
         @if (column.length) {
           <div class="projects-column">
             @for (project of column; track project.id) {
-              <article class="project-card" [style.height.px]="getProjectCardHeight(project)" (click)="openGallery(project.title, project.description, project.medias)">
+              <article
+                class="project-card"
+                [style.height.px]="getProjectCardHeight(project)"
+                (click)="openGallery(project.title, project.description, project.medias)"
+              >
                 <div class="project-image-wrapper">
                   <img
                     [src]="getProjectImage(project)"

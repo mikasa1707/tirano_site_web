@@ -103,6 +103,32 @@
             Actualités
           </a>
         </li>
+        <!-- TESTIMONIALS -->
+
+        <li class="nav-item">
+          <a
+            href="#testimonial"
+            class="nav-link"
+            style="color: var(--tirano-accent)"
+            [class.active]="isActive('testimonial')"
+            (click)="scrollTo('testimonial', $event)"
+          >
+            Temoignages
+          </a>
+        </li>
+        <!-- USERS -->
+
+        <li class="nav-item">
+          <a
+            href="#user"
+            class="nav-link"
+            style="color: var(--tirano-accent)"
+            [class.active]="isActive('user')"
+            (click)="scrollTo('user', $event)"
+          >
+            Equipes
+          </a>
+        </li>
       </ul>
 
       <!-- CONTACT -->

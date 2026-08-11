@@ -3,8 +3,7 @@ import { Routes } from '@angular/router';
 export const PUBLIC_ROUTES: Routes = [
   {
     path: '',
-    loadComponent: () =>
-      import('../layout/public/public-layout').then((m) => m.PublicLayout),
+    loadComponent: () => import('../layout/public/public-layout').then((m) => m.PublicLayout),
   },
 
   {
@@ -40,8 +39,23 @@ export const PUBLIC_ROUTES: Routes = [
   },
 
   {
-    path: 'contact',
+    path: 'testimonial',
     loadComponent: () =>
-      import('../features/contact/contact-page').then((m) => m.ContactPage),
+      import('../features/testimonials/testimonial-list-page/testimonial-list-page').then(
+        (m) => m.TestimonialListPage,
+      ),
+  },
+
+  {
+    path: 'user',
+    loadComponent: () =>
+      import('../features/users/user-list-page/user-list-page').then(
+        (m) => m.UserListPage,
+      ),
+  },
+
+  {
+    path: 'contact',
+    loadComponent: () => import('../features/contact/contact-page').then((m) => m.ContactPage),
   },
 ];

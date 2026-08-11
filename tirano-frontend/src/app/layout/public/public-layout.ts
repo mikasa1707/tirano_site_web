@@ -11,6 +11,8 @@ import { GalleryViewerComponent } from '../../shared/components/gallery-viewer/g
 import { GalleryData } from '../../core/models/media';
 import { Article } from '../../core/models/article';
 import { ArticleViewerComponent } from "../../shared/components/article-viewer/article-viewer";
+import { TestimonialListPage } from "../../features/testimonials/testimonial-list-page/testimonial-list-page";
+import { UserListPage } from "../../features/users/user-list-page/user-list-page";
 
 @Component({
   selector: 'app-public-layout',
@@ -25,7 +27,9 @@ import { ArticleViewerComponent } from "../../shared/components/article-viewer/a
     ProductListPage,
     ArticleListPage,
     GalleryViewerComponent,
-    ArticleViewerComponent
+    ArticleViewerComponent,
+    TestimonialListPage,
+    UserListPage
 ],
   templateUrl: './public-layout.html',
   styleUrl: './public-layout.scss',

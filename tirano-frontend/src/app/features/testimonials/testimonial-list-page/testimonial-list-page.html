@@ -1,0 +1,132 @@
+<section class="testimonials-section">
+  <div class="section-header text-center">
+    <h1 class="section-title tirano-light">Les meilleures idées pour des clients satisfaits.</h1>
+
+    <p class="section-subtitle">
+      Écoutez les récits de nos clients et leurs choix de travailler avec nous.
+    </p>
+  </div>
+
+  @if (testimonials?.length) {
+    <div
+      id="testimonialCarousel"
+      class="carousel slide"
+      data-bs-ride="carousel"
+      data-bs-interval="6000"
+    >
+      <!-- =====================================================
+           INDICATEURS
+      ====================================================== -->
+
+      <div class="carousel-indicators">
+        @for (testimonial of testimonials; track testimonial.id; let i = $index) {
+          @if (i % 3 === 0) {
+            <button
+              type="button"
+              data-bs-target="#testimonialCarousel"
+              [attr.data-bs-slide-to]="i / 3"
+              [class.active]="i === 0"
+              [attr.aria-current]="i === 0 ? 'true' : null"
+              [attr.aria-label]="'Témoignages ' + (i / 3 + 1)"
+            ></button>
+          }
+        }
+      </div>
+
+      <!-- =====================================================
+           CAROUSEL
+      ====================================================== -->
+
+      <div class="carousel-inner">
+        @for (testimonial of testimonials; track testimonial.id; let i = $index) {
+          @if (i % 3 === 0) {
+            <div class="carousel-item" [class.active]="i === 0">
+              <div class="row justify-content-center g-4">
+                @for (client of testimonials.slice(i, i + 3); track client.id) {
+                  <div class="col-12 col-md-6 col-lg-4">
+                    <article class="testimonial-card">
+
+                      <!-- =================================================
+                           TRAIT VERTICAL
+                      ================================================== -->
+
+                      <div class="testimonial-divider" aria-hidden="true"></div>
+
+                      <!-- =================================================
+                           CONTENU
+                      ================================================== -->
+
+                      <div class="testimonial-content">
+                        <!-- GUILLEMETS -->
+
+                        <div class="testimonial-quote" aria-hidden="true">
+                          <i class="fa-solid fa-quote-left"></i>
+                        </div>
+
+                        <!-- MESSAGE -->
+
+                        <p class="testimonial-text">
+                          {{ client.message }}
+                        </p>
+
+                        <!-- CLIENT -->
+
+                        <div class="testimonial-author">
+                          <span class="testimonial-author-line" aria-hidden="true"></span>
+
+                          <h3 class="testimonial-name">
+                            {{ client.name }}
+                          </h3>
+                        </div>
+                      </div>
+                    </article>
+                  </div>
+                }
+              </div>
+            </div>
+          }
+        }
+      </div>
+
+      <!-- =====================================================
+           PREVIOUS
+      ====================================================== -->
+
+      <button
+        class="carousel-control-prev"
+        type="button"
+        data-bs-target="#testimonialCarousel"
+        data-bs-slide="prev"
+        aria-label="Témoignages précédents"
+      >
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+
+        <span class="visually-hidden"> Précédent </span>
+      </button>
+
+      <!-- =====================================================
+           NEXT
+      ====================================================== -->
+
+      <button
+        class="carousel-control-next"
+        type="button"
+        data-bs-target="#testimonialCarousel"
+        data-bs-slide="next"
+        aria-label="Témoignages suivants"
+      >
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+
+        <span class="visually-hidden"> Suivant </span>
+      </button>
+    </div>
+  } @else {
+    <!-- Aucun témoignage -->
+
+    <div class="testimonial-empty text-center">
+      <i class="fa-regular fa-comment-dots"></i>
+
+      <p>Aucun témoignage disponible pour le moment.</p>
+    </div>
+  }
+</section>
