@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+
 import { ApiService } from './api.service';
 import { Message } from '../models/message';
 
@@ -6,7 +7,25 @@ import { Message } from '../models/message';
   providedIn: 'root',
 })
 export class MessageApi {
-  constructor(private api: ApiService) {}
+  constructor(private readonly api: ApiService) {}
+
+  // =========================================================
+  // PUBLIC - CREATE MESSAGE
+  // =========================================================
+
+  create(data: {
+    fullname: string;
+    phone?: string;
+    email: string;
+    subject: string;
+    message: string;
+  }) {
+    return this.api.post<Message>('messages', data);
+  }
+
+  // =========================================================
+  // ADMIN - LIST
+  // =========================================================
 
   findAll(params?: {
     page?: number;
@@ -18,17 +37,41 @@ export class MessageApi {
     return this.api.get<any>('messages', params);
   }
 
+  // =========================================================
+  // ADMIN - DETAIL
+  // =========================================================
+
   findOne(id: number) {
     return this.api.get<Message>(`messages/${id}`);
   }
 
-  markRead(id: number) {
-    return this.api.put<Message>('messages/read', id, {});
+  // =========================================================
+  // ADMIN - UNREAD COUNT
+  // =========================================================
+
+  getUnreadCount() {
+    return this.api.get<any>('messages/unread-count');
   }
 
-  markUnread(id: number) {
-    return this.api.put<Message>('messages/unread', id, {});
+  // =========================================================
+  // ADMIN - MARK READ
+  // =========================================================
+
+  markRead(id: number) {
+    return this.api.putPath<Message>(`messages/${id}/read`);
   }
+
+  // =========================================================
+  // ADMIN - MARK UNREAD
+  // =========================================================
+
+  markUnread(id: number) {
+    return this.api.putPath<Message>(`messages/${id}/unread`);
+  }
+
+  // =========================================================
+  // ADMIN - DELETE
+  // =========================================================
 
   delete(id: number) {
     return this.api.delete(`messages/${id}`);

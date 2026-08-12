@@ -1,0 +1,487 @@
+/* =========================================================
+   CONTACT PAGE
+========================================================= */
+
+:host {
+  display: block;
+  width: 100%;
+}
+
+/* =========================================================
+   SECTION
+========================================================= */
+
+.contact-section {
+  width: 100%;
+  padding: 5rem 0 6rem;
+}
+
+/* =========================================================
+   HEADER
+========================================================= */
+
+.section-header {
+  max-width: 760px;
+  margin: 0 auto 4rem;
+  text-align: center;
+}
+
+.section-kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+
+  margin-bottom: 0.9rem;
+
+  color: var(--bs-primary);
+  font-size: 0.8rem;
+  font-weight: 700;
+
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.section-kicker i {
+  font-size: 0.85rem;
+}
+
+.section-title {
+  margin: 0;
+
+  color: var(--tirano-dark, #1f2937);
+
+  font-size: clamp(2rem, 4vw, 3.2rem);
+  font-weight: 800;
+
+  line-height: 1.15;
+}
+
+.section-subtitle {
+  max-width: 650px;
+
+  margin: 1rem auto 0;
+
+  color: #6c757d;
+
+  font-size: 1rem;
+  line-height: 1.7;
+}
+
+/* =========================================================
+   CONTACT INFORMATION
+========================================================= */
+
+.contact-info {
+  height: 100%;
+
+  padding: 2rem 0;
+}
+
+.contact-info h2 {
+  margin: 0 0 1rem;
+
+  color: var(--tirano-dark, #1f2937);
+
+  font-size: clamp(1.7rem, 3vw, 2.3rem);
+  font-weight: 750;
+
+  line-height: 1.2;
+}
+
+.contact-description {
+  max-width: 500px;
+
+  margin-bottom: 2.5rem;
+
+  color: #6c757d;
+
+  font-size: 0.98rem;
+  line-height: 1.75;
+}
+
+/* =========================================================
+   CONTACT ITEM
+========================================================= */
+
+.contact-info-item {
+  display: flex;
+  align-items: flex-start;
+
+  gap: 1rem;
+
+  margin-bottom: 1.5rem;
+}
+
+.contact-info-icon {
+  flex: 0 0 46px;
+
+  width: 46px;
+  height: 46px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+
+  background: rgba(var(--bs-primary-rgb), 0.1);
+
+  color: var(--bs-primary);
+
+  font-size: 1rem;
+}
+
+.contact-info-item > div:last-child {
+  min-width: 0;
+}
+
+.contact-info-label {
+  display: block;
+
+  margin-bottom: 0.2rem;
+
+  color: #6c757d;
+
+  font-size: 0.78rem;
+  font-weight: 600;
+
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.contact-info-value {
+  display: block;
+
+  color: var(--tirano-dark, #1f2937);
+
+  font-size: 0.95rem;
+  font-weight: 600;
+
+  line-height: 1.5;
+
+  text-decoration: none;
+
+  overflow-wrap: anywhere;
+
+  transition:
+    color 0.2s ease,
+    opacity 0.2s ease;
+}
+
+a.contact-info-value:hover {
+  color: var(--bs-primary);
+}
+
+/* =========================================================
+   SOCIAL
+========================================================= */
+
+.contact-social {
+  margin-top: 2.25rem;
+}
+
+.social-btn {
+  width: 40px;
+  height: 40px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  border: 1px solid rgba(0, 0, 0, 0.1);
+
+  border-radius: 50%;
+
+  background: transparent;
+
+  color: var(--tirano-dark, #1f2937);
+
+  text-decoration: none;
+
+  transition:
+    background-color 0.25s ease,
+    color 0.25s ease,
+    border-color 0.25s ease,
+    transform 0.25s ease;
+}
+
+.social-btn:hover {
+  background: var(--bs-primary);
+
+  border-color: var(--bs-primary);
+
+  color: #fff;
+
+  transform: translateY(-3px);
+}
+
+/* =========================================================
+   FORM WRAPPER
+========================================================= */
+
+.contact-form-wrapper {
+  width: 100%;
+
+  padding: 2.25rem;
+
+  border-radius: 1rem;
+
+  background: #fff;
+
+  box-shadow: 0 1rem 3rem rgba(0, 0, 0, 0.08);
+}
+
+/* =========================================================
+   LABELS
+========================================================= */
+
+.contact-form-wrapper .form-label {
+  margin-bottom: 0.5rem;
+
+  color: var(--tirano-dark, #1f2937);
+
+  font-size: 0.88rem;
+  font-weight: 650;
+}
+
+/* =========================================================
+   INPUTS
+========================================================= */
+
+.contact-form-wrapper .form-control,
+.contact-form-wrapper .form-select {
+  min-height: 48px;
+
+  border: 1px solid #dee2e6;
+
+  border-radius: 0.65rem;
+
+  background-color: #fff;
+
+  color: #212529;
+
+  font-size: 0.92rem;
+
+  box-shadow: none;
+
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.contact-form-wrapper textarea.form-control {
+  min-height: 150px;
+
+  resize: vertical;
+}
+
+.contact-form-wrapper .form-control::placeholder {
+  color: #adb5bd;
+}
+
+.contact-form-wrapper .form-control:focus,
+.contact-form-wrapper .form-select:focus {
+  border-color: var(--bs-primary);
+
+  box-shadow: 0 0 0 0.2rem rgba(var(--bs-primary-rgb), 0.12);
+}
+
+/* =========================================================
+   INVALID
+========================================================= */
+
+.contact-form-wrapper .form-control.is-invalid,
+.contact-form-wrapper .form-select.is-invalid {
+  border-color: var(--bs-danger);
+
+  background-image: none;
+}
+
+.contact-form-wrapper .form-control.is-invalid:focus,
+.contact-form-wrapper .form-select.is-invalid:focus {
+  border-color: var(--bs-danger);
+
+  box-shadow: 0 0 0 0.2rem rgba(var(--bs-danger-rgb), 0.12);
+}
+
+.invalid-feedback {
+  margin-top: 0.35rem;
+
+  font-size: 0.78rem;
+}
+
+/* =========================================================
+   SUBMIT BUTTON
+========================================================= */
+
+.contact-submit {
+  width: 100%;
+
+  min-height: 50px;
+
+  border-radius: 0.65rem;
+
+  font-weight: 650;
+
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.contact-submit:not(:disabled):hover {
+  transform: translateY(-2px);
+
+  box-shadow: 0 0.5rem 1.25rem rgba(var(--bs-primary-rgb), 0.2);
+}
+
+.contact-submit:disabled {
+  cursor: not-allowed;
+}
+
+/* =========================================================
+   TOAST
+========================================================= */
+
+.toast-container {
+  max-width: 100%;
+}
+
+.toast {
+  min-width: 300px;
+
+  border-radius: 0.65rem;
+
+  box-shadow: 0 0.75rem 2rem rgba(0, 0, 0, 0.15);
+}
+
+.toast-body {
+  padding: 0.9rem 1rem;
+
+  font-size: 0.9rem;
+}
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media (max-width: 991.98px) {
+  .contact-section {
+    padding: 4rem 0 5rem;
+  }
+
+  .section-header {
+    margin-bottom: 3rem;
+  }
+
+  .contact-info {
+    padding: 0;
+  }
+
+  .contact-description {
+    margin-bottom: 2rem;
+  }
+
+  .contact-form-wrapper {
+    padding: 2rem;
+  }
+}
+
+/* =========================================================
+   TABLET
+========================================================= */
+
+@media (max-width: 767.98px) {
+  .contact-section {
+    padding: 3.5rem 0 4rem;
+  }
+
+  .section-header {
+    margin-bottom: 2.5rem;
+  }
+
+  .section-title {
+    font-size: 2rem;
+  }
+
+  .section-subtitle {
+    font-size: 0.92rem;
+  }
+
+  .contact-info h2 {
+    font-size: 1.8rem;
+  }
+
+  .contact-form-wrapper {
+    padding: 1.5rem;
+  }
+}
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 479.98px) {
+  .contact-section {
+    padding: 3rem 0 3.5rem;
+  }
+
+  .section-header {
+    margin-bottom: 2rem;
+  }
+
+  .section-kicker {
+    font-size: 0.72rem;
+  }
+
+  .section-title {
+    font-size: 1.8rem;
+  }
+
+  .section-subtitle {
+    font-size: 0.88rem;
+  }
+
+  .contact-info {
+    padding: 0;
+  }
+
+  .contact-info h2 {
+    font-size: 1.6rem;
+  }
+
+  .contact-description {
+    font-size: 0.9rem;
+  }
+
+  .contact-info-item {
+    gap: 0.75rem;
+  }
+
+  .contact-info-icon {
+    flex-basis: 42px;
+
+    width: 42px;
+    height: 42px;
+  }
+
+  .contact-form-wrapper {
+    padding: 1.25rem;
+
+    border-radius: 0.85rem;
+  }
+
+  .contact-form-wrapper .form-control,
+  .contact-form-wrapper .form-select {
+    min-height: 46px;
+  }
+
+  .contact-submit {
+    min-height: 48px;
+  }
+
+  .toast {
+    min-width: 0;
+
+    width: calc(100vw - 2rem);
+  }
+}

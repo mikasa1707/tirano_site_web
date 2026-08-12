@@ -3,6 +3,7 @@ import { BehaviorSubject, Observable, of, map, tap } from 'rxjs';
 
 import { Setting } from '../models/setting';
 import { SettingApi } from '../api/settings.api';
+import { environment } from '../../../environments/environments';
 
 @Injectable({
   providedIn: 'root',
@@ -223,7 +224,11 @@ export class SiteSettingsService {
       'media' | 'service' | 'project' | 'product' | 'article' | 'testimonial' | 'user' = 'media',
   ): string {
     if (url && url.trim() !== '') {
-      return url;
+      if (url.startsWith('http://') || url.startsWith('https://')) {
+        return url;
+      }
+
+      return `${environment.apiUrl}${url}`;
     }
 
     return this.defaultImages[type];

@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Media } from '../../../core/models/media';
+import { ApiService } from '../../../core/api/api.service';
 
 @Component({
   selector: 'app-gallery',
@@ -8,6 +9,7 @@ import { Media } from '../../../core/models/media';
   styleUrl: './gallery.scss',
 })
 export class Gallery {
+  constructor(public readonly api: ApiService) {}
   @Input()
   items: Media[] = [];
 

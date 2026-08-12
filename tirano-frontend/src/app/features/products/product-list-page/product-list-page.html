@@ -1,1 +1,91 @@
-<p>product-list-page works!</p>
+<section class="products-section">
+  <!-- =====================================================
+       HEADER
+  ====================================================== -->
+
+  <div class="section-header text-center">
+    <h1 class="section-title tirano-light">Nos produits</h1>
+
+    <p class="section-subtitle">Découvrez nos produits et équipements disponibles.</p>
+  </div>
+
+  <!-- =====================================================
+       LOADING
+  ====================================================== -->
+
+  @if (loading) {
+    <app-loading message="Chargement des produits..."></app-loading>
+  }
+
+  <!-- =====================================================
+       EMPTY
+  ====================================================== -->
+
+  @else if (!products.length) {
+    <div class="products-empty">
+      <i class="fa-solid fa-box-open"></i>
+
+      <p>Aucun produit disponible pour le moment.</p>
+    </div>
+  }
+
+  <!-- =====================================================
+       PRODUCTS
+  ====================================================== -->
+
+  @else {
+    <div class="products-grid">
+      @for (product of products; track product.id) {
+        <article class="product-tile">
+          <!-- IMAGE -->
+
+          <div
+            class="product-image"
+            [class.clickable]="product.medias?.length"
+            (click)="openImage(product)"
+          >
+            @if (product.medias?.length) {
+              <img
+                [src]="getMediaUrl(product.medias[0])"
+                [alt]="product.name"
+                loading="lazy"
+                (error)="onImageError($event)"
+              />
+            } @else {
+              <div class="product-placeholder">
+                <i class="fa-solid fa-box-open"></i>
+              </div>
+            }
+          </div>
+
+          <!-- CONTENT -->
+
+          <div class="product-content">
+            <h2 class="product-name">
+              {{ product.name }}
+            </h2>
+
+            <div class="product-price">Ar {{ product.price | number: '1.0-0' }}</div>
+          </div>
+        </article>
+      }
+    </div>
+
+    <!-- ===================================================
+         PAGINATION
+    ==================================================== -->
+
+    @if (total > limit) {
+      <div class="products-pagination">
+        <app-pagination
+          [page]="page"
+          [totalPages]="totalPages"
+          [total]="total"
+          [limit]="limit"
+          [showLimit]="false"
+          (pageChange)="onPageChange($event)"
+        ></app-pagination>
+      </div>
+    }
+  }
+</section>

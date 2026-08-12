@@ -5,6 +5,7 @@ import { ArticleApi } from '../../../core/api/article.api';
 import { Article } from '../../../core/models/article';
 import { GalleryData, GalleryMedia, Media } from '../../../core/models/media';
 import { SiteSettingsService } from '../../../core/services/site-settings.service';
+import { ApiService } from '../../../core/api/api.service';
 
 @Component({
   selector: 'app-article-list-page',
@@ -43,6 +44,7 @@ export class ArticleListPage implements OnInit {
     private readonly articleApi: ArticleApi,
     private readonly cdr: ChangeDetectorRef,
     public readonly settings: SiteSettingsService,
+    public readonly api: ApiService,
   ) {}
 
   /* =========================================================
@@ -60,47 +62,24 @@ export class ArticleListPage implements OnInit {
   load(): void {
     this.articleApi
       .findAll({
+        limit: 1000,
         sortBy: 'created_at',
         sortOrder: 'DESC',
       })
       .subscribe({
         next: (response: any) => {
-          console.log('========== ARTICLE RESPONSE ==========');
-          console.log(response);
-
-          /*
-           * Selon la structure de ton ResponseUtil,
-           * response.data peut être directement le tableau
-           * ou contenir un autre data.
-           */
-
           if (Array.isArray(response?.data)) {
             this.articles = response.data;
           } else {
             this.articles = response?.data?.data ?? [];
           }
-
-          /*
-           * IMPORTANT :
-           * filteredArticles doit être alimenté.
-           */
-
           this.filteredArticles = [...this.articles];
-
-          console.log('Articles chargés :', this.articles.length);
-
-          console.log('Articles :', this.articles);
-
-          console.log('Filtered articles :', this.filteredArticles);
-
           this.cdr.detectChanges();
         },
 
         error: (error) => {
           console.error('Erreur chargement articles', error);
-
           this.articles = [];
-
           this.filteredArticles = [];
         },
       });
@@ -134,7 +113,7 @@ export class ArticleListPage implements OnInit {
     const galleryMedias: GalleryMedia[] = medias.map((media) => ({
       id: media.id,
 
-      url: media.url,
+      url: this.api.backend_url + media.url,
 
       type: this.getMediaType(media),
 
@@ -199,13 +178,11 @@ export class ArticleListPage implements OnInit {
   ========================================================= */
 
   getArticleImage(article: Article): string {
-    const image = article.medias?.find((media: Media) => {
-      const type = media.type?.toLowerCase() ?? '';
+    const image = article.medias?.find(
+      (media: Media) => String(media.type ?? '').toUpperCase() === 'IMAGE',
+    );
 
-      return type.startsWith('image/');
-    });
-
-    return image?.url ?? 'assets/images/default-article.png';
+    return image?.url ? this.api.backend_url + image.url : 'assets/images/default-article.png';
   }
 
   /* =========================================================
@@ -280,8 +257,20 @@ export class ArticleListPage implements OnInit {
     return type === 'video' || type === 'videos' || type.startsWith('video/');
   }
 
-  getMediaUrl(media: Media): string {
-    return media.url ?? '';
+  getMediaUrl(media: any): string {
+    if (!media) {
+      return this.defaultImage;
+    }
+
+    if (media.url) {
+      return this.api.backend_url + media.url;
+    }
+
+    return this.defaultImage;
+  }
+
+  get defaultImage(): string {
+    return 'assets/images/default-product.jpg';
   }
 
   onMediaError(event: Event): void {

@@ -1,0 +1,314 @@
+/* =========================================================
+   PAGE
+========================================================= */
+
+:host {
+  display: block;
+  width: 100%;
+}
+
+/* =========================================================
+   SECTION
+========================================================= */
+
+.products-section {
+  width: 100%;
+  padding: 4rem 1.5rem 5rem;
+}
+
+/* =========================================================
+   HEADER
+========================================================= */
+
+.section-header {
+  width: 100%;
+  margin-bottom: 4rem;
+}
+
+/* =========================================================
+   PRODUCTS GRID
+========================================================= */
+
+.products-grid {
+  width: 100%;
+  max-width: 1600px;
+  margin-inline: auto;
+
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+
+  column-gap: 2.5rem;
+  row-gap: 4.5rem;
+
+  align-items: start;
+  justify-items: center;
+
+  /*
+   * Hauteur réservée au contenu.
+   * Ne concerne PAS la taille des tuiles.
+   */
+  min-height: 550px;
+}
+
+/* =========================================================
+   PRODUCT TILE
+========================================================= */
+
+.product-tile {
+  width: 100%;
+  max-width: 240px;
+
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  overflow: visible;
+
+  transition: transform 0.3s ease;
+}
+
+.product-tile:hover {
+  transform: translateY(-6px);
+}
+
+/* =========================================================
+   PRODUCT IMAGE
+========================================================= */
+
+.product-image {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+
+  overflow: hidden;
+
+  background: #f5f5f5;
+  border-radius: 12px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.product-image.clickable {
+  cursor: zoom-in;
+}
+
+.product-image img {
+  display: block;
+
+  width: 100%;
+  height: 100%;
+
+  object-fit: cover;
+
+  transition: transform 0.35s ease;
+}
+
+.product-tile:hover .product-image img {
+  transform: scale(1.05);
+}
+
+/* =========================================================
+   PLACEHOLDER
+========================================================= */
+
+.product-placeholder {
+  width: 100%;
+  height: 100%;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  color: #aaa;
+  font-size: 2rem;
+}
+
+/* =========================================================
+   CONTENT
+========================================================= */
+
+.product-content {
+  width: 100%;
+  padding-top: 0.9rem;
+  text-align: center;
+}
+
+.product-name {
+  margin: 0;
+
+  color: var(--tirano-accent);
+
+  font-size: 0.95rem;
+  font-weight: 600;
+  line-height: 1.35;
+}
+
+.product-price {
+  margin-top: 0.4rem;
+
+  color: var(--tirano-accent);
+
+  font-size: 0.9rem;
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+/* =========================================================
+   LOADING
+========================================================= */
+
+.products-loading {
+  min-height: 250px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* =========================================================
+   EMPTY
+========================================================= */
+
+.products-empty {
+  min-height: 250px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  gap: 1rem;
+
+  color: #888;
+  text-align: center;
+}
+
+.products-empty i {
+  font-size: 3rem;
+}
+
+.products-empty p {
+  margin: 0;
+}
+
+/* =========================================================
+   LARGE DESKTOP
+   6 COLONNES
+   10 produits = 2 lignes
+========================================================= */
+
+@media (min-width: 1200px) {
+
+  .products-grid {
+    max-width: 1500px;
+
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+
+    column-gap: 3rem;
+    row-gap: 5rem;
+
+    /*
+     * 2 lignes maximum
+     */
+    min-height: 600px;
+  }
+
+  .product-tile {
+    max-width: 200px;
+  }
+}
+
+/* =========================================================
+   DESKTOP / TABLET
+   4 COLONNES
+   10 produits = 3 lignes
+========================================================= */
+
+@media (min-width: 768px) and (max-width: 1199.98px) {
+
+  .products-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+
+    column-gap: 2.5rem;
+    row-gap: 4rem;
+
+    /*
+     * 3 lignes maximum
+     */
+    min-height: 900px;
+  }
+
+  .product-tile {
+    max-width: 180px;
+  }
+}
+
+/* =========================================================
+   MOBILE
+   2 COLONNES
+   10 produits = 5 lignes
+========================================================= */
+
+@media (min-width: 480px) and (max-width: 767.98px) {
+
+  .products-section {
+    padding-inline: 1.5rem;
+  }
+
+  .products-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+
+    column-gap: 2rem;
+    row-gap: 3.5rem;
+
+    /*
+     * 5 lignes maximum
+     */
+    min-height: 1200px;
+  }
+
+  .product-tile {
+    max-width: 180px;
+  }
+}
+
+/* =========================================================
+   SMALL MOBILE
+   2 COLONNES
+   10 produits = 5 lignes
+========================================================= */
+
+@media (max-width: 479.98px) {
+
+  .products-section {
+    padding-inline: 1rem;
+  }
+
+  .section-header {
+    margin-bottom: 3rem;
+  }
+
+  .products-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+
+    column-gap: 1.5rem;
+    row-gap: 3rem;
+
+    /*
+     * 5 lignes maximum
+     */
+    min-height: 1100px;
+  }
+
+  .product-tile {
+    max-width: 160px;
+  }
+
+  .product-name {
+    font-size: 0.9rem;
+  }
+
+  .product-price {
+    font-size: 0.85rem;
+  }
+}

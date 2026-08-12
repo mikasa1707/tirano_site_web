@@ -10,8 +10,12 @@ import {
   SimpleChanges,
   ViewChild,
 } from '@angular/core';
+
 import { CommonModule } from '@angular/common';
+
 import { GalleryData, GalleryMedia } from '../../../core/models/media';
+
+import { ApiService } from '../../../core/api/api.service';
 
 @Component({
   selector: 'app-gallery-viewer',
@@ -21,20 +25,20 @@ import { GalleryData, GalleryMedia } from '../../../core/models/media';
   styleUrl: './gallery-viewer.scss',
 })
 export class GalleryViewerComponent implements OnChanges, OnDestroy {
-  @Input() gallery: GalleryData | null = null;
+  @Input()
+  gallery: GalleryData | null = null;
 
-  @Input() open = false;
+  @Input()
+  open = false;
 
-  /**
-   * Événement envoyé au parent lorsque
-   * l'utilisateur ferme la galerie.
-   */
-  @Input() closeOnBackdrop = true;
+  @Input()
+  closeOnBackdrop = true;
 
   @ViewChild('galleryOverlay')
   galleryOverlay?: ElementRef<HTMLElement>;
 
-  @Output() closed = new EventEmitter<void>();
+  @Output()
+  closed = new EventEmitter<void>();
 
   /**
    * Média actuellement sélectionné.
@@ -42,55 +46,66 @@ export class GalleryViewerComponent implements OnChanges, OnDestroy {
   selectedMedia: GalleryMedia | null = null;
 
   /**
-   * Permet de savoir si on affiche le viewer
-   * grand format.
+   * Viewer grand format ouvert.
    */
   lightboxOpen = false;
 
   /**
-   * Évite de restaurer le scroll plusieurs fois.
+   * Sauvegarde du overflow original du body.
    */
   private bodyOverflowBackup = '';
 
-  /**
-   * Liste des médias visuels.
-   */
+  constructor(public readonly api: ApiService) {}
+
+  // =========================================================
+  // MEDIAS VISUELS
+  // =========================================================
+
   get visualMedias(): GalleryMedia[] {
     if (!this.gallery?.medias) {
       return [];
     }
 
-    return this.gallery.medias.filter((media) => media.type === 'IMAGE' || media.type === 'VIDEO');
+    return this.gallery.medias.filter((media) => this.isImage(media) || this.isVideo(media));
   }
 
-  /**
-   * Liste des documents.
-   */
+  // =========================================================
+  // DOCUMENTS
+  // =========================================================
+
   get documents(): GalleryMedia[] {
     if (!this.gallery?.medias) {
       return [];
     }
 
-    return this.gallery.medias.filter((media) => media.type === 'PDF' || media.type === 'DOCUMENT');
+    return this.gallery.medias.filter((media) => {
+      const type = String(media?.type ?? '').toLowerCase();
+
+      return type === 'pdf' || type === 'document';
+    });
   }
 
-  /**
-   * Lorsqu'un Input change.
-   */
+  // =========================================================
+  // INPUT CHANGE
+  // =========================================================
+
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes['open']) {
-      if (this.open) {
-        this.lockBodyScroll();
-      } else {
-        this.closeLightbox();
-        this.unlockBodyScroll();
-      }
+    if (!changes['open']) {
+      return;
+    }
+
+    if (this.open) {
+      this.lockBodyScroll();
+    } else {
+      this.closeLightbox();
+      this.unlockBodyScroll();
     }
   }
 
-  /**
-   * Fermer avec ESC.
-   */
+  // =========================================================
+  // ESC
+  // =========================================================
+
   @HostListener('document:keydown.escape')
   onEscape(): void {
     if (!this.open) {
@@ -105,43 +120,55 @@ export class GalleryViewerComponent implements OnChanges, OnDestroy {
     this.close();
   }
 
-  /**
-   * Ouvre un média.
-   */
+  // =========================================================
+  // OUVRIR MEDIA
+  // =========================================================
+
   openMedia(media: GalleryMedia): void {
-    if (media.type === 'IMAGE' || media.type === 'VIDEO') {
-      this.selectedMedia = media;
-      this.lightboxOpen = true;
+
+    console.log(media)
+    if (!this.isImage(media) && !this.isVideo(media)) {
+      return;
     }
+
+    this.selectedMedia = media;
+    this.lightboxOpen = true;
   }
 
-  /**
-   * Ferme le média grand format.
-   */
+  // =========================================================
+  // FERMER LIGHTBOX
+  // =========================================================
+
   closeLightbox(): void {
     this.lightboxOpen = false;
     this.selectedMedia = null;
   }
 
-  /**
-   * Ferme la galerie.
-   */
+  // =========================================================
+  // FERMER GALERIE
+  // =========================================================
+
   close(): void {
     this.closeLightbox();
+
     this.open = false;
+
     this.unlockBodyScroll();
+
     this.closed.emit();
   }
 
-  /**
-   * Gestion du clic sur le fond.
-   */
+  // =========================================================
+  // BACKDROP
+  // =========================================================
+
   onBackdropClick(event: MouseEvent): void {
     if (!this.closeOnBackdrop) {
       return;
     }
 
     const target = event.target as HTMLElement;
+
     const currentTarget = event.currentTarget as HTMLElement;
 
     if (target === currentTarget) {
@@ -149,43 +176,145 @@ export class GalleryViewerComponent implements OnChanges, OnDestroy {
     }
   }
 
+  // =========================================================
+  // URL MEDIA
+  // =========================================================
   /**
-   * Retourne l'URL d'une miniature.
+   * La base contient uniquement :
+   *
+   * /uploads/settings/image.png
+   *
+   * L'URL du backend vient de :
+   *
+   * this.api.backend_url
+   *
+   * Exemple :
+   * http://localhost:3000
+   *
+   * Résultat :
+   * http://localhost:3000/uploads/settings/image.png
    */
-  getThumbnail(media: GalleryMedia): string {
-    return media.thumbnail || media.url;
+  getMediaUrl(media: GalleryMedia | null | undefined): string {
+    if (!media) {
+      return '';
+    }
+
+    if (media.url) {
+      return this.buildMediaUrl(media.url);
+    }
+
+    if (media.thumbnail) {
+      return this.buildMediaUrl(media.thumbnail);
+    }
+
+    return '';
   }
 
-  /**
-   * Nom affiché du document/média.
-   */
+  // =========================================================
+  // THUMBNAIL
+  // =========================================================
+
+  getThumbnail(media: GalleryMedia): string {
+    return this.getMediaUrl(media);
+  }
+
+  // =========================================================
+  // CONSTRUCTION URL
+  // =========================================================
+
+  private buildMediaUrl(path: string): string {
+    if (!path) {
+      return '';
+    }
+
+    const cleanPath = path.trim();
+
+    if (!cleanPath) {
+      return '';
+    }
+
+    /*
+     * Si jamais une URL complète existe déjà,
+     * on la retourne directement.
+     */
+    if (cleanPath.startsWith('http://') || cleanPath.startsWith('https://')) {
+      return cleanPath;
+    }
+
+    /*
+     * backend_url vient de l'environnement
+     *
+     * Exemple :
+     * http://localhost:3000
+     *
+     * ou :
+     * http://192.168.88.29:3000
+     *
+     * ou :
+     * https://api.tirano.com
+     */
+    const backendUrl = this.api.backend_url.replace(/\/+$/, '');
+
+    /*
+     * On garantit qu'il y a un /
+     * entre backend_url et le chemin.
+     */
+    const mediaPath = cleanPath.startsWith('/') ? cleanPath : `/${cleanPath}`;
+
+    return `${backendUrl}${mediaPath}`;
+  }
+
+  // =========================================================
+  // NOM MEDIA
+  // =========================================================
+
   getMediaName(media: GalleryMedia): string {
     return media.name || media.originalName || 'Document';
   }
 
-  /**
-   * Icône FontAwesome selon le type.
-   */
+  // =========================================================
+  // ICON DOCUMENT
+  // =========================================================
+
   getDocumentIcon(media: GalleryMedia): string {
-    if (media.type === 'PDF') {
+    const type = String(media?.type ?? '').toLowerCase();
+
+    if (type === 'pdf') {
       return 'fa-solid fa-file-pdf';
     }
 
     return 'fa-solid fa-file-lines';
   }
 
-  /**
-   * Gestion d'une image inaccessible.
-   */
+  // =========================================================
+  // TYPE IMAGE
+  // =========================================================
+
+  isImage(media: GalleryMedia | null | undefined): boolean {
+    return String(media?.type ?? '').toLowerCase() === 'image';
+  }
+
+  // =========================================================
+  // TYPE VIDEO
+  // =========================================================
+
+  isVideo(media: GalleryMedia | null | undefined): boolean {
+    return String(media?.type ?? '').toLowerCase() === 'video';
+  }
+
+  // =========================================================
+  // IMAGE ERROR
+  // =========================================================
+
   onImageError(event: Event): void {
     const image = event.target as HTMLImageElement;
 
     image.style.display = 'none';
   }
 
-  /**
-   * Empêche le scroll de la page derrière la galerie.
-   */
+  // =========================================================
+  // LOCK BODY SCROLL
+  // =========================================================
 
   private lockBodyScroll(): void {
     if (typeof document === 'undefined') {
@@ -197,31 +326,31 @@ export class GalleryViewerComponent implements OnChanges, OnDestroy {
     }
 
     document.body.style.overflow = 'hidden';
+
     document.body.classList.add('gallery-open');
   }
 
-  /**
-   * Restaure le scroll.
-   */
+  // =========================================================
+  // UNLOCK BODY SCROLL
+  // =========================================================
+
   private unlockBodyScroll(): void {
     if (typeof document === 'undefined') {
       return;
     }
 
     document.body.style.overflow = this.bodyOverflowBackup;
+
     document.body.classList.remove('gallery-open');
+
     this.bodyOverflowBackup = '';
   }
 
+  // =========================================================
+  // DESTROY
+  // =========================================================
+
   ngOnDestroy(): void {
     this.unlockBodyScroll();
-  }
-
-  isImage(media: any): boolean {
-    return String(media?.type ?? '').toLowerCase() === 'image';
-  }
-
-  isVideo(media: any): boolean {
-    return String(media?.type ?? '').toLowerCase() === 'video';
   }
 }

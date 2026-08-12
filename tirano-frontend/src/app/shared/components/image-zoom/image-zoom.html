@@ -1,0 +1,37 @@
+@if (image) {
+  <div
+    class="image-zoom-overlay"
+    tabindex="0"
+    role="dialog"
+    aria-modal="true"
+    [attr.aria-label]="title || 'Image agrandie'"
+    (click)="onBackdropClick($event)"
+    (keydown)="onKeyDown($event)"
+  >
+    <div class="image-zoom-container">
+      <!-- =================================================
+           CLOSE
+      ================================================== -->
+
+      <button type="button" class="image-zoom-close" aria-label="Fermer" (click)="close()">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+
+      <!-- =================================================
+           IMAGE
+      ================================================== -->
+
+      <img class="image-zoom-image" [src]="image" [alt]="alt || title" />
+
+      <!-- =================================================
+           TITLE
+      ================================================== -->
+
+      @if (title) {
+        <div class="image-zoom-title">
+          {{ title }}
+        </div>
+      }
+    </div>
+  </div>
+}

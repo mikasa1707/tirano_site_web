@@ -1,273 +1,266 @@
-<footer class="bg-dark text-light mt-5">
+<footer class="site-footer">
+  <!-- =====================================================
+       MAIN FOOTER
+  ====================================================== -->
+  @if (setting) {
+    <div class="container footer-container">
+      <div class="row gy-5 gx-lg-5">
+        <!-- =================================================
+           ENTREPRISE
+      ================================================== -->
 
-  <div class="container py-5">
+        <div class="col-12 col-lg-4">
+          <div class="footer-brand">
+            <!-- LOGO -->
 
-    <div class="row g-4">
+            @if (setting.medias) {
+              <div class="footer-medias">
+                <img
+                  [src]="api.backend_url + setting.medias[0].url"
+                  [alt]="setting.siteName"
+                  width="100"
+                  height="100"
+                  class="rounded-3 object-fit-contain bg-transparent p-1 me-2"
+                />
+              </div>
+            } @else {
+              <div class="footer-medias footer-medias-placeholder">
+                <i class="fa-solid fa-building"></i>
+              </div>
+            }
 
-      <!-- ENTREPRISE -->
-      <div class="col-12 col-md-6 col-lg-4">
+            <!-- NOM -->
 
-        <div class="d-flex align-items-center gap-2 mb-3">
+            <div class="footer-brand-info">
+              <h5 class="footer-site-name">
+                {{ setting.siteName }}
+              </h5>
 
-          @if (settings.logo) {
+              <span class="footer-brand-line"></span>
+            </div>
+          </div>
 
-            <img
-              [src]="settings.logo"
-              [alt]="settings.siteName"
-              width="42"
-              height="42"
-              class="rounded-3 object-fit-contain bg-white p-1"
-            />
+          <!-- DESCRIPTION -->
 
-          } @else {
-
-            <span
-              class="d-flex align-items-center justify-content-center
-                     bg-primary rounded-3"
-              style="width:42px;height:42px"
-            >
-              <i class="fa-solid fa-building"></i>
-            </span>
-
+          @if (setting.description) {
+            <div class="footer-description" [innerHTML]="setting.description"></div>
           }
-
-          <h5 class="mb-0 fw-bold">
-            {{ settings.siteName }}
-          </h5>
-
         </div>
 
-        @if (settings.setting?.description) {
+        <!-- =================================================
+           NAVIGATION
+      ================================================== -->
 
-          <div
-            class="text-white-50 small"
-            [innerHTML]="settings.setting?.description"
-          ></div>
+        <div class="col-6 col-md-4 col-lg-2">
+          <h6 class="footer-title">Navigation</h6>
 
-        }
+          <ul class="footer-links">
+            <li>
+              <a href="#">
+                <i class="fa-solid fa-chevron-right"></i>
+                Accueil
+              </a>
+            </li>
 
-      </div>
+            <li>
+              <a href="#services">
+                <i class="fa-solid fa-chevron-right"></i>
+                Nos services
+              </a>
+            </li>
 
+            <li>
+              <a href="#projets">
+                <i class="fa-solid fa-chevron-right"></i>
+                Nos projets
+              </a>
+            </li>
 
-      <!-- NAVIGATION -->
-      <div class="col-6 col-md-3 col-lg-2">
+            <li>
+              <a href="#produits">
+                <i class="fa-solid fa-chevron-right"></i>
+                Nos produits
+              </a>
+            </li>
 
-        <h6 class="fw-bold mb-3">
-          Navigation
-        </h6>
-
-        <ul class="list-unstyled mb-0">
-
-          <li class="mb-2">
-            <a
-              routerLink="/"
-              class="text-white-50 text-decoration-none"
-            >
-              Accueil
-            </a>
-          </li>
-
-          <li class="mb-2">
-            <a
-              routerLink="/services"
-              class="text-white-50 text-decoration-none"
-            >
-              Services
-            </a>
-          </li>
-
-          <li class="mb-2">
-            <a
-              routerLink="/projects"
-              class="text-white-50 text-decoration-none"
-            >
-              Projets
-            </a>
-          </li>
-
-          <li class="mb-2">
-            <a
-              routerLink="/products"
-              class="text-white-50 text-decoration-none"
-            >
-              Produits
-            </a>
-          </li>
-
-          <li>
-            <a
-              routerLink="/articles"
-              class="text-white-50 text-decoration-none"
-            >
-              Actualités
-            </a>
-          </li>
-
-        </ul>
-
-      </div>
-
-
-      <!-- CONTACT -->
-      <div class="col-6 col-md-3 col-lg-3">
-
-        <h6 class="fw-bold mb-3">
-          Contact
-        </h6>
-
-        @if (settings.setting?.email) {
-
-          <div class="d-flex gap-2 mb-2">
-
-            <i class="fa-solid fa-envelope text-primary mt-1"></i>
-
-            <a
-              [href]="'mailto:' + settings.setting?.email"
-              class="text-white-50 text-decoration-none"
-            >
-              {{ settings.setting?.email }}
-            </a>
-
-          </div>
-
-        }
-
-
-        @if (settings.setting?.phone) {
-
-          <div class="d-flex gap-2 mb-2">
-
-            <i class="fa-solid fa-phone text-primary mt-1"></i>
-
-            <a
-              [href]="'tel:' + settings.setting?.phone"
-              class="text-white-50 text-decoration-none"
-            >
-              {{ settings.setting?.phone }}
-            </a>
-
-          </div>
-
-        }
-
-
-        @if (settings.setting?.address) {
-
-          <div class="d-flex gap-2">
-
-            <i class="fa-solid fa-location-dot text-primary mt-1"></i>
-
-            <span class="text-white-50">
-              {{ settings.setting?.address }}
-            </span>
-
-          </div>
-
-        }
-
-      </div>
-
-
-      <!-- RÉSEAUX SOCIAUX -->
-      <div class="col-12 col-lg-3">
-
-        <h6 class="fw-bold mb-3">
-          Suivez-nous
-        </h6>
-
-        <div class="d-flex gap-2">
-
-          @if (settings.setting?.facebook) {
-
-            <a
-              [href]="settings.setting?.facebook"
-              target="_blank"
-              rel="noopener noreferrer"
-              class="btn btn-outline-light rounded-circle"
-              aria-label="Facebook"
-            >
-              <i class="fa-brands fa-facebook-f"></i>
-            </a>
-
-          }
-
-
-          @if (settings.setting?.instagram) {
-
-            <a
-              [href]="settings.setting?.instagram"
-              target="_blank"
-              rel="noopener noreferrer"
-              class="btn btn-outline-light rounded-circle"
-              aria-label="Instagram"
-            >
-              <i class="fa-brands fa-instagram"></i>
-            </a>
-
-          }
-
-
-          @if (settings.setting?.linkedin) {
-
-            <a
-              [href]="settings.setting?.linkedin"
-              target="_blank"
-              rel="noopener noreferrer"
-              class="btn btn-outline-light rounded-circle"
-              aria-label="LinkedIn"
-            >
-              <i class="fa-brands fa-linkedin-in"></i>
-            </a>
-
-          }
-
-
-          @if (settings.setting?.youtube) {
-
-            <a
-              [href]="settings.setting?.youtube"
-              target="_blank"
-              rel="noopener noreferrer"
-              class="btn btn-outline-light rounded-circle"
-              aria-label="YouTube"
-            >
-              <i class="fa-brands fa-youtube"></i>
-            </a>
-
-          }
-
+            <li>
+              <a href="#actualites">
+                <i class="fa-solid fa-chevron-right"></i>
+                Nos actualités
+              </a>
+            </li>
+            <li>
+              <a href="#testimonial">
+                <i class="fa-solid fa-chevron-right"></i>
+                Temoignages
+              </a>
+            </li>
+            <li>
+              <a href="#user">
+                <i class="fa-solid fa-chevron-right"></i>
+                Notre equipes
+              </a>
+            </li>
+          </ul>
         </div>
 
+        <!-- =================================================
+           CONTACT
+      ================================================== -->
+
+        <div class="col-12 col-md-8 col-lg-3">
+          <h6 class="footer-title">Contact</h6>
+
+          <div class="footer-contact">
+            <!-- EMAIL -->
+
+            @if (setting.email) {
+              <a class="footer-contact-item" [href]="'mailto:' + setting.email">
+                <span class="footer-contact-icon">
+                  <i class="fa-solid fa-envelope"></i>
+                </span>
+
+                <span class="footer-contact-text">
+                  <small> Email </small>
+
+                  <span>
+                    {{ setting.email }}
+                  </span>
+                </span>
+              </a>
+            }
+
+            <!-- PHONE -->
+
+            @if (setting.phone) {
+              <a class="footer-contact-item" [href]="'tel:' + setting.phone">
+                <span class="footer-contact-icon">
+                  <i class="fa-solid fa-phone"></i>
+                </span>
+
+                <span class="footer-contact-text">
+                  <small> Téléphone </small>
+
+                  <span>
+                    {{ setting.phone }}
+                  </span>
+                </span>
+              </a>
+            }
+
+            <!-- ADDRESS -->
+
+            @if (setting.address) {
+              <div class="footer-contact-item">
+                <span class="footer-contact-icon">
+                  <i class="fa-solid fa-location-dot"></i>
+                </span>
+
+                <span class="footer-contact-text">
+                  <small> Adresse </small>
+
+                  <span>
+                    {{ setting.address }}
+                  </span>
+                </span>
+              </div>
+            }
+          </div>
+        </div>
+
+        <!-- =================================================
+           SOCIAL NETWORKS
+      ================================================== -->
+
+        <div class="col-12 col-lg-3">
+          <h6 class="footer-title">Suivez-nous</h6>
+
+          <p class="footer-social-text">Retrouvez-nous sur nos réseaux sociaux.</p>
+
+          <div class="footer-socials">
+            <!-- FACEBOOK -->
+
+            @if (setting.facebook) {
+              <a
+                [href]="setting.facebook"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="footer-social facebook"
+                aria-label="Facebook"
+                title="Facebook"
+              >
+                <i class="fa-brands fa-facebook-f"></i>
+              </a>
+            }
+
+            <!-- INSTAGRAM -->
+
+            @if (setting.instagram) {
+              <a
+                [href]="setting.instagram"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="footer-social instagram"
+                aria-label="Instagram"
+                title="Instagram"
+              >
+                <i class="fa-brands fa-instagram"></i>
+              </a>
+            }
+
+            <!-- LINKEDIN -->
+
+            @if (setting.linkedin) {
+              <a
+                [href]="setting.linkedin"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="footer-social linkedin"
+                aria-label="LinkedIn"
+                title="LinkedIn"
+              >
+                <i class="fa-brands fa-linkedin-in"></i>
+              </a>
+            }
+
+            <!-- YOUTUBE -->
+
+            @if (setting.youtube) {
+              <a
+                [href]="setting.youtube"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="footer-social youtube"
+                aria-label="YouTube"
+                title="YouTube"
+              >
+                <i class="fa-brands fa-youtube"></i>
+              </a>
+            }
+          </div>
+        </div>
       </div>
-
     </div>
 
-  </div>
+    <!-- =====================================================
+       COPYRIGHT
+  ====================================================== -->
 
+    <div class="footer-bottom">
+      <div class="container">
+        <div class="footer-bottom-content">
+          <small>
+            © {{ currentYear }} <strong>{{ setting.siteName }}</strong
+            >. Tous droits réservés.
+          </small>
 
-  <!-- COPYRIGHT -->
+          <small class="footer-official">
+            <i class="fa-solid fa-shield-halved"></i>
 
-  <div class="border-top border-secondary">
-
-    <div
-      class="container py-3
-             d-flex flex-column flex-md-row
-             justify-content-between
-             align-items-center
-             gap-2"
-    >
-
-      <small class="text-white-50">
-        © {{ currentYear }} {{ settings.siteName }}.
-        Tous droits réservés.
-      </small>
-
-      <small class="text-white-50">
-        Site officiel
-      </small>
-
+            Site officiel
+          </small>
+        </div>
+      </div>
     </div>
-
-  </div>
-
+  }
 </footer>

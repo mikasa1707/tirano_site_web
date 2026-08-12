@@ -4,11 +4,12 @@ import { DetailViewComponent } from '../../../shared/components/detail-view/deta
 import { DetailField } from '../../../core/models/detail-field';
 import { Media } from '../../../core/models/media';
 import { MediaViewer } from "../../../shared/components/media-viewer/media-viewer";
+import { ModalComponent } from "../../../shared/components/modal/modal";
 
 @Component({
   selector: 'app-admin-service-detail-page',
   standalone: true,
-  imports: [DetailViewComponent, MediaViewer],
+  imports: [DetailViewComponent, MediaViewer, ModalComponent],
   templateUrl: './admin-service-detail-page.html',
 })
 export class AdminServiceDetailPage {

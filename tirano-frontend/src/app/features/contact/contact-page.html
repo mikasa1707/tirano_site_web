@@ -1,1 +1,323 @@
-<p>contact-page works!</p>
+<div class="contact-page bg-white p-3" >
+
+  <!-- =====================================================
+       CONTACT SECTION
+  ====================================================== -->
+
+  <section class="contact-section">
+    <div class="container">
+      <!-- =================================================
+           HEADER
+      ================================================== -->
+
+      <div class="section-header text-center">
+        <h1 class="section-title">Contactez-nous</h1>
+        <p class="section-subtitle">
+          Une question, un projet ou une demande de devis ? Notre équipe est à votre écoute.
+        </p>
+      </div>
+
+      <!-- =================================================
+           CONTENT
+      ================================================== -->
+
+      <div class="row justify-content-center g-5">
+        <!-- ===============================================
+             CONTACT INFORMATION
+        ================================================ -->
+
+        <div class="col-12 col-lg-5">
+          <div class="contact-info">
+            <h2>Parlons de votre projet</h2>
+
+            <p class="contact-description">
+              Vous souhaitez en savoir plus sur nos services, nos solutions de forage ou obtenir un
+              devis ? N'hésitez pas à nous contacter.
+            </p>
+
+            <!-- PHONE -->
+
+            @if (settings.setting?.phone) {
+              <div class="contact-info-item">
+                <div class="contact-info-icon">
+                  <i class="fa-solid fa-phone"></i>
+                </div>
+
+                <div>
+                  <span class="contact-info-label"> Téléphone </span>
+
+                  <a [href]="'tel:' + settings.setting?.phone" class="contact-info-value">
+                    {{ settings.setting?.phone }}
+                  </a>
+                </div>
+              </div>
+            }
+
+            <!-- EMAIL -->
+
+            @if (settings.setting?.email) {
+              <div class="contact-info-item">
+                <div class="contact-info-icon">
+                  <i class="fa-solid fa-envelope"></i>
+                </div>
+
+                <div>
+                  <span class="contact-info-label"> Email </span>
+
+                  <a [href]="'mailto:' + settings.setting?.email" class="contact-info-value">
+                    {{ settings.setting?.email }}
+                  </a>
+                </div>
+              </div>
+            }
+
+            <!-- ADDRESS -->
+
+            @if (settings.setting?.address) {
+              <div class="contact-info-item">
+                <div class="contact-info-icon">
+                  <i class="fa-solid fa-location-dot"></i>
+                </div>
+
+                <div>
+                  <span class="contact-info-label"> Adresse </span>
+
+                  <span class="contact-info-value">
+                    {{ settings.setting?.address }}
+                  </span>
+                </div>
+              </div>
+            }
+
+            <!-- SOCIAL -->
+
+            <div class="contact-social">
+              <span class="contact-info-label"> Suivez-nous </span>
+
+              <div class="d-flex gap-2 mt-2">
+                @if (settings.setting?.facebook) {
+                  <a
+                    [href]="settings.setting?.facebook"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="social-btn"
+                    aria-label="Facebook"
+                  >
+                    <i class="fa-brands fa-facebook-f"></i>
+                  </a>
+                }
+
+                @if (settings.setting?.instagram) {
+                  <a
+                    [href]="settings.setting?.instagram"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="social-btn"
+                    aria-label="Instagram"
+                  >
+                    <i class="fa-brands fa-instagram"></i>
+                  </a>
+                }
+
+                @if (settings.setting?.linkedin) {
+                  <a
+                    [href]="settings.setting?.linkedin"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="social-btn"
+                    aria-label="LinkedIn"
+                  >
+                    <i class="fa-brands fa-linkedin-in"></i>
+                  </a>
+                }
+
+                @if (settings.setting?.youtube) {
+                  <a
+                    [href]="settings.setting?.youtube"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="social-btn"
+                    aria-label="YouTube"
+                  >
+                    <i class="fa-brands fa-youtube"></i>
+                  </a>
+                }
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ===============================================
+             FORM
+        ================================================ -->
+
+        <div class="col-12 col-lg-7">
+          <div class="contact-form-wrapper">
+            <form [formGroup]="form" (ngSubmit)="send()" novalidate>
+              <!-- =========================================
+                   NAME
+              ========================================== -->
+
+              <div class="mb-3">
+                <label for="fullname" class="form-label"> Nom complet </label>
+
+                <input
+                  id="fullname"
+                  type="text"
+                  class="form-control"
+                  formControlName="fullname"
+                  autocomplete="name"
+                  placeholder="Votre nom complet"
+                  [class.is-invalid]="
+                    form.get('fullname')?.touched && form.get('fullname')?.invalid
+                  "
+                />
+
+                @if (form.get('fullname')?.touched && form.get('fullname')?.invalid) {
+                  <div class="invalid-feedback">
+                    @if (form.get('fullname')?.hasError('required')) {
+                      Le nom est obligatoire.
+                    }
+
+                    @if (form.get('fullname')?.hasError('minlength')) {
+                      Le nom doit contenir au moins 2 caractères.
+                    }
+                  </div>
+                }
+              </div>
+
+              <!-- =========================================
+                   PHONE + EMAIL
+              ========================================== -->
+
+              <div class="row g-3">
+                <!-- PHONE -->
+
+                <div class="col-12 col-md-6">
+                  <label for="phone" class="form-label"> Téléphone </label>
+
+                  <input
+                    id="phone"
+                    type="tel"
+                    class="form-control"
+                    formControlName="phone"
+                    autocomplete="tel"
+                    placeholder="034 00 000 00"
+                    [class.is-invalid]="form.get('phone')?.touched && form.get('phone')?.invalid"
+                  />
+
+                  @if (form.get('phone')?.touched && form.get('phone')?.invalid) {
+                    <div class="invalid-feedback">
+                      Veuillez saisir un numéro de téléphone valide.
+                    </div>
+                  }
+                </div>
+
+                <!-- EMAIL -->
+
+                <div class="col-12 col-md-6">
+                  <label for="email" class="form-label"> Email </label>
+
+                  <input
+                    id="email"
+                    type="email"
+                    class="form-control"
+                    formControlName="email"
+                    autocomplete="email"
+                    placeholder="votre@email.com"
+                    [class.is-invalid]="form.get('email')?.touched && form.get('email')?.invalid"
+                  />
+
+                  @if (form.get('email')?.touched && form.get('email')?.invalid) {
+                    <div class="invalid-feedback">
+                      @if (form.get('email')?.hasError('required')) {
+                        L'adresse email est obligatoire.
+                      }
+
+                      @if (form.get('email')?.hasError('email')) {
+                        Veuillez saisir une adresse email valide.
+                      }
+                    </div>
+                  }
+                </div>
+              </div>
+
+              <!-- =========================================
+                   SUBJECT
+              ========================================== -->
+
+              <div class="mb-3 mt-3">
+                <label for="subject" class="form-label"> Objet </label>
+
+                <select
+                  id="subject"
+                  class="form-select"
+                  formControlName="subject"
+                  (change)="onSujetChange()"
+                  [class.is-invalid]="form.get('subject')?.touched && form.get('subject')?.invalid"
+                >
+                  <option value="">Choisissez un sujet</option>
+
+                  @for (sujet of sujets; track sujet.value) {
+                    <option [value]="sujet.value">
+                      {{ sujet.label }}
+                    </option>
+                  }
+                </select>
+
+                @if (form.get('subject')?.touched && form.get('subject')?.invalid) {
+                  <div class="invalid-feedback">Veuillez choisir un sujet.</div>
+                }
+              </div>
+
+              <!-- =========================================
+                   MESSAGE
+              ========================================== -->
+
+              <div class="mb-4">
+                <label for="message" class="form-label"> Message </label>
+
+                <textarea
+                  id="message"
+                  class="form-control"
+                  rows="7"
+                  formControlName="message"
+                  placeholder="Décrivez votre demande..."
+                  [class.is-invalid]="form.get('message')?.touched && form.get('message')?.invalid"
+                ></textarea>
+
+                @if (form.get('message')?.touched && form.get('message')?.invalid) {
+                  <div class="invalid-feedback">
+                    @if (form.get('message')?.hasError('required')) {
+                      Le message est obligatoire.
+                    }
+
+                    @if (form.get('message')?.hasError('minlength')) {
+                      Le message doit contenir au moins 10 caractères.
+                    }
+                  </div>
+                }
+              </div>
+
+              <!-- =========================================
+                   SUBMIT
+              ========================================== -->
+
+              <button type="submit" class="btn btn-primary contact-submit" [disabled]="sending">
+                @if (sending) {
+                  <span class="spinner-border spinner-border-sm me-2" aria-hidden="true"></span>
+
+                  Envoi en cours...
+                } @else {
+                  <i class="fa-solid fa-paper-plane me-2"></i>
+
+                  Envoyer le message
+                }
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>

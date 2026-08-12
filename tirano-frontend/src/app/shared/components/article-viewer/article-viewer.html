@@ -1,10 +1,16 @@
 @if (open && article) {
   <div class="article-viewer">
+
     <!-- =====================================================
          FERMER
     ====================================================== -->
 
-    <button type="button" class="article-viewer-close" aria-label="Fermer" (click)="close()">
+    <button
+      type="button"
+      class="article-viewer-close"
+      aria-label="Fermer"
+      (click)="close()"
+    >
       <i class="fa-solid fa-xmark"></i>
     </button>
 
@@ -13,18 +19,25 @@
     ====================================================== -->
 
     <main class="article-page">
+
       <!-- ===================================================
            HEADER
       ==================================================== -->
 
       <header class="article-header">
+
         <div class="article-kicker">
-          <span class="article-type" [class]="getArticleTypeClass(article.type)">
+
+          <span
+            class="article-type"
+            [class]="getArticleTypeClass(article.type)"
+          >
             {{ getArticleTypeLabel(article.type) }}
           </span>
 
           @if (article.publishedAt) {
             <span class="article-date">
+
               <i class="fa-regular fa-calendar"></i>
 
               <span>
@@ -36,8 +49,10 @@
               <span>
                 {{ article.publishedAt | date: 'dd MMMM yyyy' }}
               </span>
+
             </span>
           }
+
         </div>
 
         <!-- TITRE -->
@@ -58,13 +73,16 @@
 
         @if (article.source) {
           <div class="article-source-top">
+
             <span>Source</span>
 
             <strong>
               {{ article.source }}
             </strong>
+
           </div>
         }
+
       </header>
 
       <!-- ===================================================
@@ -72,22 +90,28 @@
       ==================================================== -->
 
       <article class="article-body">
+
         <!-- =================================================
              UN SEUL MEDIA
         ================================================== -->
 
         @if (hasSingleVisualMedia()) {
+
           @if (getSingleVisualMedia(); as media) {
+
             <figure class="article-single-media">
+
               <!-- IMAGE -->
 
               @if (isImageMedia(media)) {
+
                 <button
                   type="button"
                   class="article-media-clickable"
                   (click)="openMedia(media)"
                   [attr.aria-label]="'Ouvrir ' + (media.title || article.title)"
                 >
+
                   <img
                     [src]="getMediaUrl(media)"
                     [alt]="media.title || article.title"
@@ -98,24 +122,35 @@
                   <span class="article-media-zoom">
                     <i class="fa-solid fa-expand"></i>
                   </span>
+
                 </button>
+
               }
 
               <!-- VIDEO -->
 
               @else if (isVideoMedia(media)) {
+
                 <button
                   type="button"
                   class="article-media-clickable"
                   (click)="openMedia(media)"
                   aria-label="Ouvrir la vidéo"
                 >
-                  <video [src]="getMediaUrl(media)" preload="metadata" playsinline muted></video>
+
+                  <video
+                    [src]="getMediaUrl(media)"
+                    preload="metadata"
+                    playsinline
+                    muted
+                  ></video>
 
                   <span class="article-media-zoom">
                     <i class="fa-solid fa-play"></i>
                   </span>
+
                 </button>
+
               }
 
               @if (media.title) {
@@ -123,132 +158,79 @@
                   {{ media.title }}
                 </figcaption>
               }
+
             </figure>
           }
 
           <!-- TEXTE -->
 
           <div class="article-single-text">
+
             @if (paragraphs.length) {
+
               @for (paragraph of paragraphs; track $index) {
+
                 @if (paragraph.trim()) {
                   <p>
                     {{ paragraph }}
                   </p>
                 }
+
               }
+
             } @else {
+
               <p>
                 {{ article.content }}
               </p>
+
             }
+
           </div>
+
         }
 
         <!-- =================================================
              PLUSIEURS MEDIA
-             MODE MAGAZINE / JOURNAL
         ================================================== -->
 
         @else {
+
           <div class="article-magazine-body">
-            @for (paragraph of paragraphs; track $index; let index = $index) {
-              <!-- =========================================
-                   MEDIA
-              ========================================== -->
-
-              @if (getMediaForParagraph(index); as media) {
-                <figure
-                  class="article-inline-media"
-                  [class.article-inline-media-left]="index % 4 === 0"
-                  [class.article-inline-media-right]="index % 4 === 2"
-                >
-                  <!-- IMAGE -->
-
-                  @if (isImageMedia(media)) {
-                    <button
-                      type="button"
-                      class="article-media-clickable"
-                      (click)="openMedia(media)"
-                      [attr.aria-label]="'Ouvrir ' + (media.title || article.title)"
-                    >
-                      <img
-                        [src]="getMediaUrl(media)"
-                        [alt]="media.title || article.title"
-                        loading="lazy"
-                        (error)="onImageError($event)"
-                      />
-
-                      <span class="article-media-zoom">
-                        <i class="fa-solid fa-expand"></i>
-                      </span>
-                    </button>
-                  }
-
-                  <!-- VIDEO -->
-
-                  @else if (isVideoMedia(media)) {
-                    <button
-                      type="button"
-                      class="article-media-clickable"
-                      (click)="openMedia(media)"
-                      aria-label="Ouvrir la vidéo"
-                    >
-                      <video
-                        [src]="getMediaUrl(media)"
-                        preload="metadata"
-                        playsinline
-                        muted
-                      ></video>
-
-                      <span class="article-media-zoom">
-                        <i class="fa-solid fa-play"></i>
-                      </span>
-                    </button>
-                  }
-
-                  @if (media.title) {
-                    <figcaption>
-                      {{ media.title }}
-                    </figcaption>
-                  }
-                </figure>
-              }
-
-              <!-- PARAGRAPHE -->
-
-              @if (paragraph.trim()) {
-                <p>
-                  {{ paragraph }}
-                </p>
-              }
-            }
-
-            <!-- PAS DE PARAGRAPHE -->
-
-            @if (!paragraphs.length) {
-              <p>
-                {{ article.content }}
-              </p>
-            }
 
             <!-- =================================================
-                 MEDIAS RESTANTS
+                 TEXTE + MEDIAS INLINE
             ================================================== -->
 
-            @if (getVisualMedias().length > 3) {
-              <section class="article-gallery">
-                @for (media of getVisualMedias().slice(3); track media.id) {
-                  <figure>
+            @if (paragraphs.length) {
+
+              @for (
+                paragraph of paragraphs;
+                track $index;
+                let index = $index
+              ) {
+
+                <!-- MEDIA ASSOCIE AU PARAGRAPHE -->
+
+                @if (getMediaForParagraph(index); as media) {
+
+                  <figure
+                    class="article-inline-media"
+                    [class.article-inline-media-left]="index % 4 === 0"
+                    [class.article-inline-media-right]="index % 4 === 2"
+                  >
+
                     <!-- IMAGE -->
 
                     @if (isImageMedia(media)) {
+
                       <button
                         type="button"
                         class="article-media-clickable"
                         (click)="openMedia(media)"
                         [attr.aria-label]="'Ouvrir ' + (media.title || article.title)"
                       >
+
                         <img
                           [src]="getMediaUrl(media)"
                           [alt]="media.title || article.title"
@@ -259,18 +241,22 @@
                         <span class="article-media-zoom">
                           <i class="fa-solid fa-expand"></i>
                         </span>
+
                       </button>
+
                     }
 
                     <!-- VIDEO -->
 
                     @else if (isVideoMedia(media)) {
+
                       <button
                         type="button"
                         class="article-media-clickable"
                         (click)="openMedia(media)"
                         aria-label="Ouvrir la vidéo"
                       >
+
                         <video
                           [src]="getMediaUrl(media)"
                           preload="metadata"
@@ -281,7 +267,9 @@
                         <span class="article-media-zoom">
                           <i class="fa-solid fa-play"></i>
                         </span>
+
                       </button>
+
                     }
 
                     @if (media.title) {
@@ -289,10 +277,123 @@
                         {{ media.title }}
                       </figcaption>
                     }
+
                   </figure>
                 }
+
+                <!-- PARAGRAPHE -->
+
+                @if (paragraph.trim()) {
+                  <p>
+                    {{ paragraph }}
+                  </p>
+                }
+
+              }
+
+            } @else {
+
+              <p>
+                {{ article.content }}
+              </p>
+
+            }
+
+            <!-- =================================================
+                 MEDIAS RESTANTS
+                 TOUJOURS EN BAS DE L'ARTICLE
+            ================================================== -->
+
+            @if (getRemainingVisualMedias().length) {
+
+              <section class="article-gallery">
+
+                <div class="article-gallery-header">
+                  <span class="article-gallery-line"></span>
+
+                  <h2>
+                    Médias
+                  </h2>
+
+                  <span class="article-gallery-line"></span>
+                </div>
+
+                <div class="article-gallery-grid">
+
+                  @for (
+                    media of getRemainingVisualMedias();
+                    track media.id
+                  ) {
+
+                    <figure class="article-gallery-item">
+
+                      <!-- IMAGE -->
+
+                      @if (isImageMedia(media)) {
+
+                        <button
+                          type="button"
+                          class="article-media-clickable"
+                          (click)="openMedia(media)"
+                          [attr.aria-label]="'Ouvrir ' + (media.title || article.title)"
+                        >
+
+                          <img
+                            [src]="getMediaUrl(media)"
+                            [alt]="media.title || article.title"
+                            loading="lazy"
+                            (error)="onImageError($event)"
+                          />
+
+                          <span class="article-media-zoom">
+                            <i class="fa-solid fa-expand"></i>
+                          </span>
+
+                        </button>
+
+                      }
+
+                      <!-- VIDEO -->
+
+                      @else if (isVideoMedia(media)) {
+
+                        <button
+                          type="button"
+                          class="article-media-clickable"
+                          (click)="openMedia(media)"
+                          aria-label="Ouvrir la vidéo"
+                        >
+
+                          <video
+                            [src]="getMediaUrl(media)"
+                            preload="metadata"
+                            playsinline
+                            muted
+                          ></video>
+
+                          <span class="article-media-zoom">
+                            <i class="fa-solid fa-play"></i>
+                          </span>
+
+                        </button>
+
+                      }
+
+                      @if (media.title) {
+                        <figcaption>
+                          {{ media.title }}
+                        </figcaption>
+                      }
+
+                    </figure>
+
+                  }
+
+                </div>
+
               </section>
             }
+
           </div>
         }
 
@@ -301,15 +402,26 @@
         ================================================== -->
 
         @if (getDocuments().length) {
+
           <section class="article-documents">
+
             <div class="documents-heading">
+
               <i class="fa-solid fa-paperclip"></i>
 
-              <h2>Documents</h2>
+              <h2>
+                Documents
+              </h2>
+
             </div>
 
             <div class="documents-list">
-              @for (document of getDocuments(); track document.id) {
+
+              @for (
+                document of getDocuments();
+                track document.id
+              ) {
+
                 <a
                   class="document-link"
                   [href]="getMediaUrl(document)"
@@ -317,31 +429,53 @@
                   rel="noopener noreferrer"
                   download
                 >
+
                   <span class="document-icon">
+
                     @if (
                       document.type?.toLowerCase()?.includes('pdf') ||
                       document.filename?.toLowerCase()?.endsWith('.pdf')
                     ) {
+
                       <i class="fa-solid fa-file-pdf"></i>
+
                     } @else {
+
                       <i class="fa-solid fa-file"></i>
+
                     }
+
                   </span>
 
                   <span class="document-info">
+
                     <strong>
-                      {{ document.title || document.filename || 'Document' }}
+                      {{
+                        document.title ||
+                        document.filename ||
+                        'Document'
+                      }}
                     </strong>
 
-                    <small> Télécharger le document </small>
+                    <small>
+                      Télécharger le document
+                    </small>
+
                   </span>
 
-                  <i class="fa-solid fa-download document-download"></i>
+                  <i
+                    class="fa-solid fa-download document-download"
+                  ></i>
+
                 </a>
+
               }
+
             </div>
+
           </section>
         }
+
       </article>
 
       <!-- ===================================================
@@ -349,40 +483,74 @@
       ==================================================== -->
 
       <footer class="article-footer">
+
         @if (article.created_at) {
+
           <div class="article-footer-item">
-            <span> Article créé le </span>
+
+            <span>
+              Article créé le
+            </span>
 
             <strong>
               {{ article.created_at | date: 'dd MMMM yyyy' }}
             </strong>
+
           </div>
+
         }
 
         @if (article.publishedAt) {
+
           <div class="article-footer-item">
-            <span> Publié le </span>
+
+            <span>
+              Publié le
+            </span>
 
             <strong>
               {{ article.publishedAt | date: 'dd MMMM yyyy' }}
             </strong>
+
           </div>
+
         }
 
         @if (article.source) {
+
           <div class="article-footer-item">
-            <span> Source </span>
+
+            <span>
+              Source
+            </span>
 
             <strong>
               {{ article.source }}
             </strong>
+
           </div>
+
         }
+
       </footer>
+
     </main>
   </div>
+
+  <!-- =====================================================
+       MEDIA VIEWER
+       HORS ARTICLE VIEWER VISUELLEMENT
+  ====================================================== -->
+
   @if (mediaViewerOpen && selectedMedia) {
-    <div class="article-media-viewer" role="dialog" aria-modal="true" (click)="closeMedia()">
+
+    <div
+      class="article-media-viewer"
+      role="dialog"
+      aria-modal="true"
+      (click)="closeMedia()"
+    >
+
       <button
         type="button"
         class="article-media-viewer-close"
@@ -392,8 +560,13 @@
         <i class="fa-solid fa-xmark"></i>
       </button>
 
-      <div class="article-media-viewer-content" (click)="$event.stopPropagation()">
+      <div
+        class="article-media-viewer-content"
+        (click)="$event.stopPropagation()"
+      >
+
         @if (isImageMedia(selectedMedia)) {
+
           <img
             class="article-media-viewer-image"
             [src]="getMediaUrl(selectedMedia)"
@@ -402,6 +575,7 @@
           />
 
         } @else if (isVideoMedia(selectedMedia)) {
+
           <video
             class="article-media-viewer-video"
             [src]="getMediaUrl(selectedMedia)"
@@ -409,14 +583,19 @@
             autoplay
             playsinline
           ></video>
+
         }
 
         @if (selectedMedia.title) {
+
           <div class="article-media-viewer-caption">
             {{ selectedMedia.title }}
           </div>
+
         }
+
       </div>
+
     </div>
   }
 }

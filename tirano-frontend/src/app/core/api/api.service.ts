@@ -7,8 +7,10 @@ import { environment } from '../../../environments/environments';
 })
 export class ApiService {
   private url = environment.apiUrl + '/api';
+  public backend_url = environment.apiUrl;
 
   constructor(private http: HttpClient) {}
+
 
   get<T>(endpoint: string, params?: any) {
     let httpParams = new HttpParams();
@@ -34,6 +36,10 @@ export class ApiService {
 
   put<T>(endpoint: string, id: number | string, data: any) {
     return this.http.put<T>(`${this.url}/${endpoint}/${id}`, data);
+  }
+
+  putPath<T>(endpoint: string, data: any = {}) {
+    return this.http.put<T>(`${this.url}/${endpoint}`, data);
   }
 
   delete<T>(endpoint: string) {

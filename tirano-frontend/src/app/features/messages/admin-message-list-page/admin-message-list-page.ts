@@ -1,7 +1,9 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+
 import { MessageApi } from '../../../core/api/message.api';
 import { Message } from '../../../core/models/message';
 import { TableColumn } from '../../../core/models/table-column';
+
 import { DataTableComponent } from '../../../shared/components/data-table/data-table';
 import { PageHeaderComponent } from '../../../shared/components/page-header/page-header';
 import { SearchBarComponent } from '../../../shared/components/search-bar/search-bar';
@@ -9,12 +11,15 @@ import { PaginationComponent } from '../../../shared/components/pagination/pagin
 import { Loading } from '../../../shared/components/loading/loading';
 import { StateView } from '../../../shared/components/state-view/state-view';
 import { ModalComponent } from '../../../shared/components/modal/modal';
+
 import { AdminMessageDetailPage } from '../admin-message-detail-page/admin-message-detail-page';
 
 @Component({
   selector: 'app-admin-message-list-page',
   standalone: true,
+
   templateUrl: './admin-message-list-page.html',
+
   imports: [
     PageHeaderComponent,
     DataTableComponent,
@@ -27,18 +32,43 @@ import { AdminMessageDetailPage } from '../admin-message-detail-page/admin-messa
   ],
 })
 export class AdminMessageListPage implements OnInit {
+  // =========================================================
+  // DATA
+  // =========================================================
+
   messages: Message[] = [];
+
   selected?: Message;
 
+  // =========================================================
+  // STATE
+  // =========================================================
+
   loading = false;
-  page = 1;
-  limit = 10;
-  total = 0;
-  totalPages = 1;
 
   show = false;
 
+  // =========================================================
+  // PAGINATION
+  // =========================================================
+
+  page = 1;
+
+  limit = 10;
+
+  total = 0;
+
+  totalPages = 1;
+
+  // =========================================================
+  // SEARCH
+  // =========================================================
+
   search = '';
+
+  // =========================================================
+  // TABLE
+  // =========================================================
 
   columns: TableColumn[] = [
     {
@@ -69,16 +99,28 @@ export class AdminMessageListPage implements OnInit {
     },
   ];
 
+  // =========================================================
+  // CONSTRUCTOR
+  // =========================================================
+
   constructor(
-    private api: MessageApi,
-    private cdr: ChangeDetectorRef,
+    private readonly api: MessageApi,
+    private readonly cdr: ChangeDetectorRef,
   ) {}
 
-  ngOnInit() {
+  // =========================================================
+  // INIT
+  // =========================================================
+
+  ngOnInit(): void {
     this.load();
   }
 
-  load() {
+  // =========================================================
+  // LOAD
+  // =========================================================
+
+  load(): void {
     this.loading = true;
 
     this.api
@@ -91,20 +133,38 @@ export class AdminMessageListPage implements OnInit {
       })
       .subscribe({
         next: (res: any) => {
-          this.messages = res.data.data ?? [];
-          this.total = res.data.meta.total;
-          this.totalPages = res.data.totalPages ?? 1;
+          this.messages = res?.data?.data ?? [];
+
+          this.total = res?.data?.meta?.total ?? 0;
+
+          this.totalPages = res?.data?.totalPages ?? res?.data?.meta?.totalPages ?? 1;
+
           this.loading = false;
+
           this.cdr.detectChanges();
         },
 
-        error: () => {
+        error: (error) => {
+          console.error('Erreur chargement messages', error);
+
+          this.messages = [];
+
+          this.total = 0;
+
+          this.totalPages = 1;
+
           this.loading = false;
+
+          this.cdr.detectChanges();
         },
       });
   }
 
-  onSearch(value: string) {
+  // =========================================================
+  // SEARCH
+  // =========================================================
+
+  onSearch(value: string): void {
     this.search = value;
 
     this.page = 1;
@@ -112,48 +172,124 @@ export class AdminMessageListPage implements OnInit {
     this.load();
   }
 
-  onPageChange(page: number) {
+  // =========================================================
+  // PAGINATION
+  // =========================================================
+
+  onPageChange(page: number): void {
     this.page = page;
 
     this.load();
   }
 
-  onAction(event: any) {
-    const message = event.row;
+  // =========================================================
+  // OPEN
+  // =========================================================
 
-    switch (event.action) {
-      case 'view':
-        this.open(message);
+  open(message: Message): void {
+    this.selected = {
+      ...message,
+    };
 
-        break;
-
-      case 'read':
-        this.markRead(message.id);
-
-        break;
-
-      case 'delete':
-        this.delete(message.id);
-
-        break;
-    }
-  }
-
-  open(message: Message) {
     this.show = true;
-    this.selected = message;
-    // ouvrir modal detail ici
   }
 
-  delete(id: number) {
-    this.api.delete(id).subscribe(() => {
-      this.load();
+  // =========================================================
+  // CLOSE
+  // =========================================================
+
+  close(): void {
+    this.show = false;
+
+    this.selected = undefined;
+  }
+
+  // =========================================================
+  // MESSAGE CHANGED
+  // =========================================================
+
+  onMessageChanged(updatedMessage: Message): void {
+    /*
+     * 1. Mise à jour du tableau
+     */
+    const index = this.messages.findIndex((message) => message.id === updatedMessage.id);
+
+    if (index !== -1) {
+      this.messages[index] = {
+        ...updatedMessage,
+      };
+
+      /*
+       * Nouvelle référence du tableau
+       * pour forcer la détection Angular.
+       */
+      this.messages = [...this.messages];
+    }
+
+    /*
+     * 2. Mise à jour du message affiché
+     */
+    if (this.selected?.id === updatedMessage.id) {
+      this.selected = {
+        ...updatedMessage,
+      };
+    }
+
+    /*
+     * 3. Rafraîchissement de l'affichage
+     */
+    this.cdr.detectChanges();
+  }
+
+  // =========================================================
+  // DELETE
+  // =========================================================
+
+  delete(id: number): void {
+    this.api.delete(id).subscribe({
+      next: () => {
+        /*
+         * Si le dernier élément
+         * de la page vient d'être supprimé,
+         * on revient éventuellement à la page précédente.
+         */
+        if (this.messages.length === 1 && this.page > 1) {
+          this.page--;
+        }
+
+        this.load();
+      },
+
+      error: (error) => {
+        console.error('Erreur suppression message', error);
+      },
     });
   }
 
-  markRead(id: number) {
-    this.api.markRead(id).subscribe(() => {
-      this.load();
+  // =========================================================
+  // MARK READ
+  // =========================================================
+
+  markRead(id: number): void {
+    this.api.markRead(id).subscribe({
+      next: (updatedMessage: Message) => {
+        /*
+         * Si l'API retourne le message,
+         * on synchronise directement.
+         */
+        if (updatedMessage) {
+          this.onMessageChanged(updatedMessage);
+        } else {
+          /*
+           * Sinon on recharge les données.
+           */
+          this.load();
+        }
+      },
+
+      error: (error) => {
+        console.error('Erreur marquage message lu', error);
+      },
     });
   }
 }

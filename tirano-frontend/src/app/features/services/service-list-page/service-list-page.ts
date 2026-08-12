@@ -3,6 +3,7 @@ import { Service } from '../../../core/models/service';
 import { ServiceApi } from '../../../core/api/service.api';
 import { SiteSettingsService } from '../../../core/services/site-settings.service';
 import { GalleryData, GalleryMedia, Media } from '../../../core/models/media';
+import { ApiService } from '../../../core/api/api.service';
 
 @Component({
   selector: 'app-service-list-page',
@@ -20,6 +21,7 @@ export class ServiceListPage implements OnInit {
 
   constructor(
     private serviceApi: ServiceApi,
+    private api: ApiService,
     private cdr: ChangeDetectorRef,
     public readonly settings: SiteSettingsService,
   ) {}
@@ -31,6 +33,7 @@ export class ServiceListPage implements OnInit {
   load() {
     this.serviceApi
       .findAll({
+        limit:1000,
         sortBy: 'created_at',
         sortOrder: 'DESC',
       })
@@ -58,7 +61,7 @@ export class ServiceListPage implements OnInit {
     const galleryMedias: GalleryMedia[] =
       medias.map((media) => ({
         id: media.id,
-        url: media.url,
+        url: this.api.backend_url + media.url,
         type: media.type,
         originalName: media.filename,
       }));

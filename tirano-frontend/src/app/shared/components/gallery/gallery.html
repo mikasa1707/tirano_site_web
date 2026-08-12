@@ -19,7 +19,7 @@
         <!-- IMAGE -->
         @if (item.type === 'IMAGE') {
           <img
-            [src]="item.url"
+            [src]="api.backend_url + item.url"
             [alt]="item.filename ?? item.title ?? 'Document'"
             class="card-img-top"
             style="height: 220px; object-fit: cover"
@@ -33,7 +33,7 @@
             style="height: 220px"
           >
             <video
-              [src]="item.url"
+              [src]="api.backend_url + item.url"
               muted
               preload="metadata"
               class="w-100 h-100"
@@ -48,7 +48,7 @@
         @else {
           <a
             class="btn btn-light d-flex flex-column justify-content-center align-items-center"
-            [href]="item.url"
+            [href]="api.backend_url + item.url"
             target="_blank"
             style="height: 220px"
           >

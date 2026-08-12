@@ -22,7 +22,7 @@ import { Public } from 'src/auth/decorators/public.decorator';
 @Controller('settings')
 export class SettingsController {
   constructor(private readonly service: SettingsService) {}
-  
+
   @Public()
   @Get()
   async findOne() {

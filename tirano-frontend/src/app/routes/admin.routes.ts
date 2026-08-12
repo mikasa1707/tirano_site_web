@@ -13,10 +13,8 @@ export const ADMIN_ROUTES: Routes = [
     children: [
       {
         path: '',
-        loadComponent: () =>
-          import('../features/dashboard/dashboard-page').then(
-            (m) => m.DashboardPage,
-          ),
+        pathMatch: 'full',
+        redirectTo: 'services',
       },
 
       {
@@ -86,9 +84,7 @@ export const ADMIN_ROUTES: Routes = [
         path: 'settings',
 
         loadComponent: () =>
-          import('../features/settings/settings-page').then(
-            (m) => m.SettingsPage,
-          ),
+          import('../features/settings/settings-page').then((m) => m.SettingsPage),
       },
     ],
   },

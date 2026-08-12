@@ -18,6 +18,7 @@ import { ProductsService } from './products.service';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { ResponseUtil } from 'src/common/utils/response.util';
+import { Public } from 'src/auth/decorators/public.decorator';
 
 interface QueryDto {
   page?: string;
@@ -36,6 +37,7 @@ export class ProductsController {
     return this.service.create(dto);
   }
 
+  @Public()
   @Get()
   findAll(@Query() query: QueryDto) {
     return this.service.findAll(

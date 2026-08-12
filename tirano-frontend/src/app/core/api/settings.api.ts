@@ -13,7 +13,7 @@ export class SettingApi {
   }
 
   update(data: Partial<Setting>) {
-    return this.api.put<Setting>('settings', 1, data);
+    return this.api.putPath<Setting>('settings', data);
   }
 
   uploadLogo(file: File) {

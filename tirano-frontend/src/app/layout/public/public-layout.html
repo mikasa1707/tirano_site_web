@@ -30,14 +30,14 @@
       <!-- PRODUITS -->
       <section id="produits" class="min-vh-100 py-5 d-flex align-items-center container-page">
         <div class="container">
-          <app-product-list-page></app-product-list-page>
+          <app-product-list-page (imageZoom)="openImage($event)"></app-product-list-page>
         </div>
       </section>
 
       <!-- ACTUALITÉS -->
       <section id="actualites" class="min-vh-100 py-5 d-flex align-items-center container-page">
         <div class="container">
-          <app-article-list-page (articleOpen)="openArticle($event)" ></app-article-list-page>
+          <app-article-list-page (articleOpen)="openArticle($event)"></app-article-list-page>
         </div>
       </section>
 
@@ -75,3 +75,10 @@
   [article]="selectedArticle"
   (closed)="closeArticleViewer()"
 ></app-article-viewer>
+
+<app-image-zoom
+  [image]="selectedImage"
+  [title]="selectedProductName"
+  [alt]="selectedProductName"
+  (closed)="closeImage()"
+/>

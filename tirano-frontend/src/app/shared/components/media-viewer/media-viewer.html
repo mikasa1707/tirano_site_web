@@ -1,10 +1,10 @@
 @if (media) {
   @if (media.type === 'IMAGE') {
-    <img [src]="media.url" class="w-100" style="max-height: 90vh; object-fit: contain" />
+    <img [src]="api.backend_url + media.url" class="w-100" style="max-height: 90vh; object-fit: contain" />
 
   } @else if (media.type === 'VIDEO') {
     <video controls autoplay class="w-100" style="max-height: 90vh">
-      <source [src]="media.url" />
+      <source [src]="api.backend_url + media.url" />
     </video>
 
   } @else {

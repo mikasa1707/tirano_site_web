@@ -2,5 +2,7 @@
 </app-detail-view>
 
 @if (showMedia) {
-  <app-media-viewer [media]="selectedMedia" (closed)="closeMedia()"> </app-media-viewer>
+  <app-modal size="lg" [title]="''" [show]="showMedia" (closed)="closeMedia()">
+    <app-media-viewer [media]="selectedMedia"> </app-media-viewer>
+  </app-modal>
 }

@@ -31,12 +31,16 @@ export class UserListPage implements OnInit {
   load() {
     this.userApi
       .findAll({
+        limit:1000,
         sortBy: 'created_at',
         sortOrder: 'DESC',
       })
       .subscribe({
         next: (response: any) => {
-          this.users = response.data.data;
+          const users = response.data.data ?? [];
+
+          this.users = users.filter((user: any) => user.role !== 'ADMIN');
+
           console.log(this.users);
           this.cdr.detectChanges();
         },
@@ -65,6 +69,6 @@ export class UserListPage implements OnInit {
   }
 
   getUserImage(user: User): string {
-      return this.settings.getImage(user.medias?.[0]?.url, 'user');
-    }
+    return this.settings.getImage(user.medias?.[0]?.url, 'user');
+  }
 }

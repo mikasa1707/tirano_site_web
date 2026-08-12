@@ -16,7 +16,6 @@
       </div>
 
       <button type="button" class="gallery-close" aria-label="Fermer la galerie" (click)="close()">
-        <span>Fermer</span>
         <i class="fa-solid fa-xmark"></i>
       </button>
     </header>
@@ -59,7 +58,7 @@
                   @if (media.thumbnail) {
                     <img [src]="media.thumbnail" [alt]="getMediaName(media)" loading="lazy" />
                   } @else {
-                    <video [src]="media.url" preload="metadata" muted playsinline></video>
+                    <video [src]="api.backend_url + media.url" preload="metadata" muted playsinline></video>
                   }
 
                   <div class="video-overlay">
@@ -139,7 +138,7 @@
           @for (document of documents; track document.id) {
             <a
               class="document-item"
-              [href]="document.url"
+              [href]="api.backend_url + document.url"
               target="_blank"
               rel="noopener noreferrer"
               download

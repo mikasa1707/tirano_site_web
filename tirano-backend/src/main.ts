@@ -20,6 +20,8 @@ async function bootstrap() {
     origin: (origin, callback) => {
       const allowedOrigins = [
         'http://localhost:4200',
+        'http://127.0.0.1:4200',
+        'http://192.168.88.29:4200',
         process.env.FRONTEND_URL,
       ];
 
@@ -36,7 +38,7 @@ async function bootstrap() {
   app.useGlobalInterceptors(new ResponseInterceptor());
   app.useGlobalFilters(new HttpExceptionFilter());
   app.setGlobalPrefix('api');
-  await app.listen(process.env.APP_PORT || 3000);
+  await app.listen(process.env.APP_PORT || 3000, '0.0.0.0');
 }
 
 void bootstrap();

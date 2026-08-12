@@ -4,6 +4,7 @@ import { RouterLink } from '@angular/router';
 
 import { SiteSettingsService } from '../../../core/services/site-settings.service';
 import { Setting } from '../../../core/models/setting';
+import { ApiService } from '../../../core/api/api.service';
 
 @Component({
   selector: 'app-public-navbar',
@@ -21,6 +22,7 @@ export class Navbar implements AfterViewInit, OnDestroy, OnInit {
   private observer?: IntersectionObserver;
 
   constructor(
+    public readonly api: ApiService,
     public readonly siteSettings: SiteSettingsService,
     private cdr: ChangeDetectorRef,
   ) {}

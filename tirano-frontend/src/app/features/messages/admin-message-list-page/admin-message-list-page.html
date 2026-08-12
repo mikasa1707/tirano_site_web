@@ -2,22 +2,10 @@
   <app-search-bar (searchChange)="onSearch($event)"> </app-search-bar>
 </app-page-header>
 
-<!-- <app-data-table
-  [columns]="columns"
-  [data]="messages"
-  [loading]="loading"
-  (action)="onAction($event)"
->
-</app-data-table>
-
-<app-pagination [page]="page" [totalPages]="totalPages" (pageChange)="onPageChange($event)">
-</app-pagination> -->
-
 <div class="container-fluid">
   @if (loading) {
     <app-loading></app-loading>
   } @else {
-    <!-- <h1>ADMIN SERVICE LIST CHARGE {{ testimonials.length }}</h1> -->
     @if (messages.length > 0) {
       <app-data-table
         [columns]="columns"
@@ -36,6 +24,7 @@
 
       <app-pagination
         [page]="page"
+        [totalPages]="totalPages"
         [total]="total"
         [limit]="limit"
         (pageChange)="onPageChange($event)"
@@ -47,12 +36,11 @@
   }
 </div>
 
+<!-- =========================================================
+     MESSAGE DETAIL
+========================================================= -->
 
-<app-modal
-  size="xl"
-  [show]="show"
-  title="{{ selected?.fullname }}"
-  (closed)="show = false"
->
-  <app-admin-message-detail-page [message]="selected"></app-admin-message-detail-page>
+<app-modal size="xl" [show]="show" [title]="selected?.fullname ?? 'Message'" (closed)="close()">
+  <app-admin-message-detail-page [message]="selected" (messageChanged)="onMessageChanged($event)">
+  </app-admin-message-detail-page>
 </app-modal>

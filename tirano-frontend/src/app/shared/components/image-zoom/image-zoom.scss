@@ -1,0 +1,196 @@
+/* =========================================================
+   OVERLAY
+========================================================= */
+
+.image-zoom-overlay {
+  position: fixed;
+
+  inset: 0;
+
+  z-index: 99999;
+
+  width: 100%;
+  height: 100%;
+
+  padding: 2rem;
+
+  background: rgba(0, 0, 0, 0.88);
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  cursor: zoom-out;
+
+  animation: imageZoomFadeIn 0.2s ease;
+}
+
+/* =========================================================
+   CONTAINER
+========================================================= */
+
+.image-zoom-container {
+  position: relative;
+
+  max-width: 92vw;
+  max-height: 92vh;
+
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+  justify-content: center;
+}
+
+/* =========================================================
+   IMAGE
+========================================================= */
+
+.image-zoom-image {
+  display: block;
+
+  max-width: 90vw;
+  max-height: 82vh;
+
+  width: auto;
+  height: auto;
+
+  object-fit: contain;
+
+  border-radius: 8px;
+
+  box-shadow: 0 20px 70px rgba(0, 0, 0, 0.5);
+
+  cursor: default;
+
+  animation: imageZoomScale 0.25s ease;
+}
+
+/* =========================================================
+   CLOSE
+========================================================= */
+
+.image-zoom-close {
+  position: absolute;
+
+  top: -1.25rem;
+  right: -1.25rem;
+
+  z-index: 5;
+
+  width: 44px;
+  height: 44px;
+
+  border: none;
+
+  border-radius: 50%;
+
+  background: #fff;
+
+  color: #222;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  font-size: 1.2rem;
+
+  cursor: pointer;
+
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.25);
+
+  transition:
+    transform 0.2s ease,
+    background 0.2s ease;
+}
+
+.image-zoom-close:hover {
+  transform: scale(1.08);
+
+  background: #f2f2f2;
+}
+
+/* =========================================================
+   TITLE
+========================================================= */
+
+.image-zoom-title {
+  margin-top: 1rem;
+
+  color: #fff;
+
+  font-size: 1.1rem;
+
+  font-weight: 600;
+
+  text-align: center;
+
+  line-height: 1.4;
+}
+
+/* =========================================================
+   ANIMATION
+========================================================= */
+
+@keyframes imageZoomFadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes imageZoomScale {
+  from {
+    opacity: 0;
+    transform: scale(0.92);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 576px) {
+  .image-zoom-overlay {
+    padding: 1rem;
+  }
+
+  .image-zoom-container {
+    max-width: 96vw;
+    max-height: 94vh;
+  }
+
+  .image-zoom-image {
+    max-width: 94vw;
+    max-height: 80vh;
+
+    border-radius: 6px;
+  }
+
+  .image-zoom-close {
+    top: -0.75rem;
+    right: -0.5rem;
+
+    width: 38px;
+    height: 38px;
+
+    font-size: 1rem;
+  }
+
+  .image-zoom-title {
+    margin-top: 0.75rem;
+
+    font-size: 1rem;
+  }
+}

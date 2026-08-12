@@ -31,6 +31,7 @@ export class TestimonialListPage implements OnInit {
   load() {
     this.testimonialApi
       .findAll({
+        limit:1000,
         sortBy: 'created_at',
         sortOrder: 'DESC',
       })

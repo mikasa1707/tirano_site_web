@@ -1,16 +1,11 @@
-import {
-  ChangeDetectorRef,
-  Component,
-  EventEmitter,
-  OnInit,
-  Output,
-} from '@angular/core';
+import { ChangeDetectorRef, Component, EventEmitter, OnInit, Output } from '@angular/core';
 
 import { ProjectApi } from '../../../core/api/project.api';
 import { SiteSettingsService } from '../../../core/services/site-settings.service';
 import { GalleryData, Media, GalleryMedia } from '../../../core/models/media';
 import { Project } from '../../../core/models/project';
 import { CommonModule } from '@angular/common';
+import { ApiService } from '../../../core/api/api.service';
 
 @Component({
   selector: 'app-project-list-page',
@@ -39,6 +34,7 @@ export class ProjectListPage implements OnInit {
 
   constructor(
     private readonly projectApi: ProjectApi,
+    private readonly api: ApiService,
     private readonly cdr: ChangeDetectorRef,
     public readonly settings: SiteSettingsService,
   ) {}
@@ -50,6 +46,7 @@ export class ProjectListPage implements OnInit {
   load(): void {
     this.projectApi
       .findAll({
+        limit: 1000,
         sortBy: 'created_at',
         sortOrder: 'DESC',
       })
@@ -115,9 +112,7 @@ export class ProjectListPage implements OnInit {
     this.projectColumns = columns;
   }
 
-  setFilter(
-    filter: 'ALL' | 'EN_COURS' | 'TERMINE' | 'A_VENIR',
-  ): void {
+  setFilter(filter: 'ALL' | 'EN_COURS' | 'TERMINE' | 'A_VENIR'): void {
     this.activeFilter = filter;
     this.showAllProjects = false;
     this.applyFilter();
@@ -145,24 +140,18 @@ export class ProjectListPage implements OnInit {
     this.buildProjectColumns();
   }
 
-  isFilterActive(
-    filter: 'ALL' | 'EN_COURS' | 'TERMINE' | 'A_VENIR',
-  ): boolean {
+  isFilterActive(filter: 'ALL' | 'EN_COURS' | 'TERMINE' | 'A_VENIR'): boolean {
     return this.activeFilter === filter;
   }
 
-  openGallery(
-    title: string,
-    description: string,
-    medias?: Media[],
-  ): void {
+  openGallery(title: string, description: string, medias?: Media[]): void {
     if (!medias?.length) {
       return;
     }
 
     const galleryMedias: GalleryMedia[] = medias.map((media) => ({
       id: media.id,
-      url: media.url,
+      url: this.api.backend_url + media.url,
       type: media.type,
       originalName: media.title ?? media.filename ?? '',
     }));
@@ -174,9 +163,7 @@ export class ProjectListPage implements OnInit {
     });
   }
 
-  private getMediaType(
-    media: Media,
-  ): 'IMAGE' | 'VIDEO' | 'PDF' | 'DOCUMENT' {
+  private getMediaType(media: Media): 'IMAGE' | 'VIDEO' | 'PDF' | 'DOCUMENT' {
     const mimeType = media.type ?? '';
 
     if (mimeType.startsWith('image/')) {
@@ -197,12 +184,11 @@ export class ProjectListPage implements OnInit {
   }
 
   getProjectImage(project: Project): string {
-    const image = project.medias?.find((media: Media) => {
-      const type = media.type ?? '';
-      return type.startsWith('image/');
-    });
+    const image = project.medias?.find(
+      (media: Media) => String(media.type ?? '').toUpperCase() === 'IMAGE',
+    );
 
-    return image?.url ?? 'assets/images/default-project.png';
+    return image?.url ? this.api.backend_url + image.url : 'assets/images/default-project.png';
   }
 
   hasMedia(project: Project): boolean {

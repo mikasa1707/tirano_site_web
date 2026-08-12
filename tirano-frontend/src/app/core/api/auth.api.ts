@@ -10,20 +10,28 @@ const TOKEN_KEY = 'token_tirano';
 })
 export class AuthService {
   constructor(
-    private api: ApiService,
-    private router: Router,
+    private readonly api: ApiService,
+    private readonly router: Router,
   ) {}
+
+  // =========================================================
+  // LOGIN
+  // =========================================================
 
   login(data: any) {
     return this.api.post<any>('auth/login', data);
   }
 
-  saveToken(token: string) {
+  // =========================================================
+  // TOKEN
+  // =========================================================
+
+  saveToken(token: string): void {
     if (typeof window === 'undefined') {
       return;
     }
 
-    window.localStorage.setItem(TOKEN_KEY, token);
+    localStorage.setItem(TOKEN_KEY, token);
   }
 
   getToken(): string | null {
@@ -31,18 +39,73 @@ export class AuthService {
       return null;
     }
 
-    return window.localStorage.getItem(TOKEN_KEY);
+    return localStorage.getItem(TOKEN_KEY);
   }
+
+  // =========================================================
+  // TOKEN VALIDITY
+  // =========================================================
+
+  isTokenValid(): boolean {
+    const token = this.getToken();
+
+    if (!token) {
+      return false;
+    }
+
+    try {
+      const parts = token.split('.');
+
+      if (parts.length !== 3) {
+        return false;
+      }
+
+      const payload = JSON.parse(atob(parts[1].replace(/-/g, '+').replace(/_/g, '/')));
+
+      /*
+       * Le backend utilise :
+       *
+       * expiresIn: '15m'
+       *
+       * JWT exp est exprimé en secondes.
+       */
+
+      if (!payload.exp) {
+        return false;
+      }
+
+      return payload.exp * 1000 > Date.now();
+    } catch {
+      return false;
+    }
+  }
+
+  // =========================================================
+  // AUTHENTICATED
+  // =========================================================
 
   isAuthenticated(): boolean {
-    const token = this.getToken();
-    return !!token;
+    return this.isTokenValid();
   }
 
-  logout() {
-    if (typeof window !== 'undefined') {
-      window.localStorage.removeItem(TOKEN_KEY);
+  // =========================================================
+  // CLEAR
+  // =========================================================
+
+  clearToken(): void {
+    if (typeof window === 'undefined') {
+      return;
     }
+
+    localStorage.removeItem(TOKEN_KEY);
+  }
+
+  // =========================================================
+  // LOGOUT
+  // =========================================================
+
+  logout(): void {
+    this.clearToken();
 
     this.router.navigate(['/admin/login']);
   }

@@ -4,10 +4,11 @@ import { Media } from '../../../core/models/media';
 import { Product } from '../../../core/models/product';
 import { DetailViewComponent } from "../../../shared/components/detail-view/detail-view";
 import { MediaViewer } from "../../../shared/components/media-viewer/media-viewer";
+import { ModalComponent } from "../../../shared/components/modal/modal";
 
 @Component({
   selector: 'app-admin-product-detail-page',
-  imports: [DetailViewComponent, MediaViewer],
+  imports: [DetailViewComponent, MediaViewer, ModalComponent],
   templateUrl: './admin-product-detail-page.html',
   styleUrl: './admin-product-detail-page.scss',
 })

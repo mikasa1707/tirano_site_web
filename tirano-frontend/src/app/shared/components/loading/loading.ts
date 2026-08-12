@@ -1,9 +1,12 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 
 @Component({
   selector: 'app-loading',
-  imports: [],
+  standalone: true,
   templateUrl: './loading.html',
   styleUrl: './loading.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class Loading {}
+export class Loading {
+  @Input() message = 'Chargement...';
+}

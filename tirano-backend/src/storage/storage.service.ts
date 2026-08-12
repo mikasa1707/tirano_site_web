@@ -58,7 +58,8 @@ export class StorageService {
 
       path: filepath,
 
-      url: `${process.env.BACKEND_URL ?? 'http://localhost:3000'}/uploads/${folder}/${filename}`,
+      // Chemin relatif uniquement
+      url: `/uploads/${folder}/${filename}`,
 
       type: this.getType(extension),
     };
