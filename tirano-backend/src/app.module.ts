@@ -2,6 +2,8 @@ import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { APP_GUARD } from '@nestjs/core';
 import { ThrottlerModule, ThrottlerGuard } from '@nestjs/throttler';
+import { ServeStaticModule } from '@nestjs/serve-static';
+import { join } from 'path';
 
 import appConfig from './config/app.config';
 import databaseConfig from './config/database.config';
@@ -20,7 +22,6 @@ import { MessagesModule } from './messages/messages.module';
 import { MediaModule } from './media/media.module';
 import { SettingsModule } from './settings/settings.module';
 import { DashboardModule } from './dashboard/dashboard.module';
-
 import { DatabaseModule } from './database/database.module';
 import { StorageModule } from './storage/storage.module';
 import { ProductsModule } from './products/products.module';
@@ -28,20 +29,31 @@ import { AuthModule } from './auth/auth.module';
 import { JwtGuard } from './auth/guards/jwt.guard';
 import { RolesGuard } from './auth/guards/roles.guard';
 import { SeedModule } from './database/seed/seed.module';
-import { ServeStaticModule } from '@nestjs/serve-static';
-import { join } from 'path';
 import { NotificationsModule } from './notifications/notifications.module';
 
 @Module({
   imports: [
+    /**
+     * =========================================================
+     * ANGULAR FRONTEND
+     * =========================================================
+     */
     ServeStaticModule.forRoot({
-      rootPath: join(process.cwd(), 'uploads'),
-      serveRoot: '/uploads',
+      rootPath: join(__dirname, '..', 'public', 'frontend'),
     }),
+
+    /**
+     * =========================================================
+     * UPLOADS
+     * =========================================================
+     */
+    // ServeStaticModule.forRoot({
+    //   rootPath: join(process.cwd(), 'uploads'),
+    //   serveRoot: '/uploads',
+    // }),
 
     ConfigModule.forRoot({
       isGlobal: true,
-
       load: [appConfig, databaseConfig, jwtConfig, storageConfig],
     }),
 
@@ -66,9 +78,7 @@ import { NotificationsModule } from './notifications/notifications.module';
     MediaModule,
     SettingsModule,
     DashboardModule,
-
     StorageModule,
-
     AuthModule,
     SeedModule,
     NotificationsModule,
@@ -78,14 +88,17 @@ import { NotificationsModule } from './notifications/notifications.module';
 
   providers: [
     AppService,
+
     {
       provide: APP_GUARD,
       useClass: JwtGuard,
     },
+
     {
       provide: APP_GUARD,
       useClass: RolesGuard,
     },
+
     {
       provide: APP_GUARD,
       useClass: ThrottlerGuard,
